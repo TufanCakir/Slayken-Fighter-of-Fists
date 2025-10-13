@@ -19,7 +19,6 @@ struct ShowdownView: View {
 
     // MARK: - JSON Data
     @State private var bosses: [Boss] = Bundle.main.decode("bosses.json")
-    @State private var backgrounds: [Background] = Bundle.main.decode("backgrounds.json")
 
     // MARK: - Managers
     @EnvironmentObject private var coinManager: CoinManager
@@ -33,6 +32,7 @@ struct ShowdownView: View {
     var body: some View {
         ZStack {
             backgroundLayer
+
             stageSelectionView
                 .opacity(showBattle ? 0 : 1)
                 .animation(.easeInOut(duration: 0.35), value: showBattle)
@@ -70,17 +70,12 @@ extension ShowdownView {
     /// Hintergrund mit sanftem Fade (ohne Bild)
     private var backgroundLayer: some View {
         LinearGradient(
-            colors: [
-                .black,
-                .blue,
-                .black
-            ],
+            colors: [.black, .blue, .black],
             startPoint: .top,
             endPoint: .bottom
         )
         .ignoresSafeArea()
     }
-
 
     /// Stage-Auswahl (horizontales Scroll-Layout)
     private var stageSelectionView: some View {
@@ -131,7 +126,6 @@ extension ShowdownView {
                     .foregroundColor(.white)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 10)
-                
             }
             .padding(20)
         }

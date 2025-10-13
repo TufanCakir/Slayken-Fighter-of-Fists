@@ -16,13 +16,13 @@ struct StageProgress: Identifiable, Hashable {
     var stars: Int
 }
 
-struct Boss: Identifiable, Hashable, Codable {
+struct Boss: Identifiable, Codable {
     let id: String
     let name: String
     let image: String
-    let background: String
+    let background: String?
+    let element: String?   // <–– neu, optional!
     let hp: Int
-    let defense: Int
 }
 
 // MARK: - JSON Loader (global!)

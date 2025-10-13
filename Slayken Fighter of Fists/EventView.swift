@@ -4,7 +4,6 @@ struct EventView: View {
     // MARK: - JSON Data
     @State private var events: [Event] = Bundle.main.decode("events.json")
     @State private var bosses: [Boss] = Bundle.main.decode("eventBosses.json")
-    @State private var backgrounds: [Background] = Bundle.main.decode("backgrounds.json")
 
     // MARK: - States
     @State private var selectedEvent: Event?
@@ -68,7 +67,7 @@ extension EventView {
     /// Hintergrund (Soft Gradient)
     private var backgroundLayer: some View {
         LinearGradient(
-            colors: [.black, .blue.opacity(0.5), .black],
+            colors: [.black, .blue, .black],
             startPoint: .top,
             endPoint: .bottom
         )
@@ -170,7 +169,6 @@ extension EventView {
     @ViewBuilder
     private func eventImage(for name: String) -> some View {
         if name.lowercased().hasPrefix("http") {
-            // Online fallback
             AsyncImage(url: URL(string: name)) { phase in
                 switch phase {
                 case .empty:
@@ -182,13 +180,11 @@ extension EventView {
                 }
             }
         } else {
-            // Lokales Asset
             Image(name)
                 .resizable()
                 .scaledToFit() // <-- skaliert gleichmäßig, sodass alles sichtbar bleibt
                 .frame(width: 350, height: 150)
                 .clipShape(Circle())
-
         }
     }
 }

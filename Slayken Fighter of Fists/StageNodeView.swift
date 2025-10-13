@@ -153,13 +153,14 @@ struct StageNodeView: View {
             boss: Boss(
                 id: "boss_1",
                 name: "Sly",
-                image: "character1", // 🔹 Lokaler Asset-Name statt URL
+                image: "character1",
                 background: "",
-                hp: 100,
-                defense: 10
+                element: "fire",   // 🔥 <-- das fehlende Argument hinzufügen!
+                hp: 100
             ),
             onSelect: { print("Stage tapped!") }
         )
         .padding()
     }
 }
+
