@@ -1,0 +1,24 @@
+[
+  {
+    "id": "single",
+    "title": "Single Summon",
+    "crystal": 5,
+    "type": "single",
+    "icon":  "diamond.fill",
+    "iconColor": "#0096FF",
+    "colorStart": "#000000",
+    "colorMiddle": "#0096FF",
+    "colorEnd": "#000000"
+  },
+  {
+    "id": "multi",
+    "title": "Consecutive Summon (x10)",
+    "crystal": 50,
+    "type": "multi",
+    "icon":  "diamond.fill",
+    "iconColor": "#0096FF",
+    "colorStart": "#000000",
+    "colorMiddle": "#0096FF",
+    "colorEnd": "#000000"
+  }
+]

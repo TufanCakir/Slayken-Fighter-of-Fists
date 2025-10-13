@@ -1,0 +1,11 @@
+[
+  {
+    "id": "boss_1",
+    "name": "Sly",
+    "hp": 100,
+    "defense": 15,
+    "image": "character1",
+    "background": "https://raw.githubusercontent.com/tufancakir/slayken-assets/main/backgrounds/background7.png"
+  },
+
+]

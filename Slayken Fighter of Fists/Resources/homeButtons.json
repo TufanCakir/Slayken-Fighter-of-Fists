@@ -1,0 +1,30 @@
+[
+  {
+    "id": "1",
+    "title": "Battle",
+    "icon": "arcade.stick.console",
+    "color": "#0096FF",
+    "destination": "ShowdownView"
+  },
+  {
+    "id": "2",
+    "title": "Event",
+    "icon": "gamecontroller",
+    "color": "#0096FF",
+    "destination": "EventView"
+  },
+  {
+    "id": "3",
+    "title": "News",
+    "icon": "newspaper",
+    "color": "#0096FF",
+    "destination": "NewsView"
+  },
+  {
+    "id": "4",
+    "title": "Settings",
+    "icon": "gear",
+    "color": "#0096FF",
+    "destination": "SettingsView"
+  },
+]

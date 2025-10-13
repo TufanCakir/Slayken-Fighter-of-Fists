@@ -1,0 +1,30 @@
+[
+  {
+    "id": "1",
+    "title": "Home",
+    "icon": "house.fill",
+    "color": "#00BFFF",
+    "destination": "HomeView"
+  },
+  {
+    "id": "2",
+    "title": "Team",
+    "icon": "person.3.fill",
+    "color": "#0096FF",
+    "destination": "TeamView"
+  },
+  {
+    "id": "3",
+    "title": "Summon",
+    "icon": "sparkles",
+    "color": "#FF6A00",
+    "destination": "SummonView"
+  },
+  {
+    "id": "4",
+    "title": "Shop",
+    "icon": "cart.fill",
+    "color": "#32CD32",
+    "destination": "ShopView"
+  },
+]

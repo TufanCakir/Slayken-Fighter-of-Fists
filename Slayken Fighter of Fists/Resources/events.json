@@ -1,0 +1,9 @@
+[
+  {
+    "id": 1,
+    "name": "Sly",
+    "description": "Kämpfe gegen Sly den Slayken Fighter of Fist.",
+    "bossId": "boss_1",
+    "image": "character1"
+  },
+]

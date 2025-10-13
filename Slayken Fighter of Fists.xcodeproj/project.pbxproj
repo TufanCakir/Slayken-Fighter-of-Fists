@@ -1,0 +1,583 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXContainerItemProxy section */
+		2B8F1A9B2E9D87BC00412C5C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2B8F1A852E9D87BB00412C5C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2B8F1A8C2E9D87BB00412C5C;
+			remoteInfo = "Slayken Fighter of Fists";
+		};
+		2B8F1AA52E9D87BC00412C5C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2B8F1A852E9D87BB00412C5C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2B8F1A8C2E9D87BB00412C5C;
+			remoteInfo = "Slayken Fighter of Fists";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		2B8F1A8D2E9D87BB00412C5C /* Slayken Fighter of Fists.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Slayken Fighter of Fists.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2B8F1A9A2E9D87BC00412C5C /* Slayken Fighter of FistsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Slayken Fighter of FistsTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2B8F1AA42E9D87BC00412C5C /* Slayken Fighter of FistsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Slayken Fighter of FistsUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		2B8F1A8F2E9D87BB00412C5C /* Slayken Fighter of Fists */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Slayken Fighter of Fists";
+			sourceTree = "<group>";
+		};
+		2B8F1A9D2E9D87BC00412C5C /* Slayken Fighter of FistsTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Slayken Fighter of FistsTests";
+			sourceTree = "<group>";
+		};
+		2B8F1AA72E9D87BC00412C5C /* Slayken Fighter of FistsUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Slayken Fighter of FistsUITests";
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2B8F1A8A2E9D87BB00412C5C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2B8F1A972E9D87BC00412C5C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2B8F1AA12E9D87BC00412C5C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		2B8F1A842E9D87BB00412C5C = {
+			isa = PBXGroup;
+			children = (
+				2B8F1A8F2E9D87BB00412C5C /* Slayken Fighter of Fists */,
+				2B8F1A9D2E9D87BC00412C5C /* Slayken Fighter of FistsTests */,
+				2B8F1AA72E9D87BC00412C5C /* Slayken Fighter of FistsUITests */,
+				2B8F1A8E2E9D87BB00412C5C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		2B8F1A8E2E9D87BB00412C5C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2B8F1A8D2E9D87BB00412C5C /* Slayken Fighter of Fists.app */,
+				2B8F1A9A2E9D87BC00412C5C /* Slayken Fighter of FistsTests.xctest */,
+				2B8F1AA42E9D87BC00412C5C /* Slayken Fighter of FistsUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		2B8F1A8C2E9D87BB00412C5C /* Slayken Fighter of Fists */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2B8F1AAE2E9D87BC00412C5C /* Build configuration list for PBXNativeTarget "Slayken Fighter of Fists" */;
+			buildPhases = (
+				2B8F1A892E9D87BB00412C5C /* Sources */,
+				2B8F1A8A2E9D87BB00412C5C /* Frameworks */,
+				2B8F1A8B2E9D87BB00412C5C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				2B8F1A8F2E9D87BB00412C5C /* Slayken Fighter of Fists */,
+			);
+			name = "Slayken Fighter of Fists";
+			packageProductDependencies = (
+			);
+			productName = "Slayken Fighter of Fists";
+			productReference = 2B8F1A8D2E9D87BB00412C5C /* Slayken Fighter of Fists.app */;
+			productType = "com.apple.product-type.application";
+		};
+		2B8F1A992E9D87BC00412C5C /* Slayken Fighter of FistsTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2B8F1AB12E9D87BC00412C5C /* Build configuration list for PBXNativeTarget "Slayken Fighter of FistsTests" */;
+			buildPhases = (
+				2B8F1A962E9D87BC00412C5C /* Sources */,
+				2B8F1A972E9D87BC00412C5C /* Frameworks */,
+				2B8F1A982E9D87BC00412C5C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2B8F1A9C2E9D87BC00412C5C /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				2B8F1A9D2E9D87BC00412C5C /* Slayken Fighter of FistsTests */,
+			);
+			name = "Slayken Fighter of FistsTests";
+			packageProductDependencies = (
+			);
+			productName = "Slayken Fighter of FistsTests";
+			productReference = 2B8F1A9A2E9D87BC00412C5C /* Slayken Fighter of FistsTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		2B8F1AA32E9D87BC00412C5C /* Slayken Fighter of FistsUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2B8F1AB42E9D87BC00412C5C /* Build configuration list for PBXNativeTarget "Slayken Fighter of FistsUITests" */;
+			buildPhases = (
+				2B8F1AA02E9D87BC00412C5C /* Sources */,
+				2B8F1AA12E9D87BC00412C5C /* Frameworks */,
+				2B8F1AA22E9D87BC00412C5C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2B8F1AA62E9D87BC00412C5C /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				2B8F1AA72E9D87BC00412C5C /* Slayken Fighter of FistsUITests */,
+			);
+			name = "Slayken Fighter of FistsUITests";
+			packageProductDependencies = (
+			);
+			productName = "Slayken Fighter of FistsUITests";
+			productReference = 2B8F1AA42E9D87BC00412C5C /* Slayken Fighter of FistsUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		2B8F1A852E9D87BB00412C5C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2600;
+				LastUpgradeCheck = 2600;
+				TargetAttributes = {
+					2B8F1A8C2E9D87BB00412C5C = {
+						CreatedOnToolsVersion = 26.0.1;
+					};
+					2B8F1A992E9D87BC00412C5C = {
+						CreatedOnToolsVersion = 26.0.1;
+						TestTargetID = 2B8F1A8C2E9D87BB00412C5C;
+					};
+					2B8F1AA32E9D87BC00412C5C = {
+						CreatedOnToolsVersion = 26.0.1;
+						TestTargetID = 2B8F1A8C2E9D87BB00412C5C;
+					};
+				};
+			};
+			buildConfigurationList = 2B8F1A882E9D87BB00412C5C /* Build configuration list for PBXProject "Slayken Fighter of Fists" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 2B8F1A842E9D87BB00412C5C;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 2B8F1A8E2E9D87BB00412C5C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				2B8F1A8C2E9D87BB00412C5C /* Slayken Fighter of Fists */,
+				2B8F1A992E9D87BC00412C5C /* Slayken Fighter of FistsTests */,
+				2B8F1AA32E9D87BC00412C5C /* Slayken Fighter of FistsUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		2B8F1A8B2E9D87BB00412C5C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2B8F1A982E9D87BC00412C5C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2B8F1AA22E9D87BC00412C5C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2B8F1A892E9D87BB00412C5C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2B8F1A962E9D87BC00412C5C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2B8F1AA02E9D87BC00412C5C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		2B8F1A9C2E9D87BC00412C5C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2B8F1A8C2E9D87BB00412C5C /* Slayken Fighter of Fists */;
+			targetProxy = 2B8F1A9B2E9D87BC00412C5C /* PBXContainerItemProxy */;
+		};
+		2B8F1AA62E9D87BC00412C5C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2B8F1A8C2E9D87BB00412C5C /* Slayken Fighter of Fists */;
+			targetProxy = 2B8F1AA52E9D87BC00412C5C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		2B8F1AAC2E9D87BC00412C5C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = HN763R468M;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		2B8F1AAD2E9D87BC00412C5C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = HN763R468M;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		2B8F1AAF2E9D87BC00412C5C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = HN763R468M;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.tufancakir.Slayken-Fighter-of-Fists";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		2B8F1AB02E9D87BC00412C5C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = HN763R468M;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.tufancakir.Slayken-Fighter-of-Fists";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		2B8F1AB22E9D87BC00412C5C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = HN763R468M;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.tufancakir.Slayken-Fighter-of-FistsTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Slayken Fighter of Fists.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Slayken Fighter of Fists";
+			};
+			name = Debug;
+		};
+		2B8F1AB32E9D87BC00412C5C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = HN763R468M;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.tufancakir.Slayken-Fighter-of-FistsTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Slayken Fighter of Fists.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Slayken Fighter of Fists";
+			};
+			name = Release;
+		};
+		2B8F1AB52E9D87BC00412C5C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = HN763R468M;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.tufancakir.Slayken-Fighter-of-FistsUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "Slayken Fighter of Fists";
+			};
+			name = Debug;
+		};
+		2B8F1AB62E9D87BC00412C5C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = HN763R468M;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.tufancakir.Slayken-Fighter-of-FistsUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "Slayken Fighter of Fists";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2B8F1A882E9D87BB00412C5C /* Build configuration list for PBXProject "Slayken Fighter of Fists" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2B8F1AAC2E9D87BC00412C5C /* Debug */,
+				2B8F1AAD2E9D87BC00412C5C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2B8F1AAE2E9D87BC00412C5C /* Build configuration list for PBXNativeTarget "Slayken Fighter of Fists" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2B8F1AAF2E9D87BC00412C5C /* Debug */,
+				2B8F1AB02E9D87BC00412C5C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2B8F1AB12E9D87BC00412C5C /* Build configuration list for PBXNativeTarget "Slayken Fighter of FistsTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2B8F1AB22E9D87BC00412C5C /* Debug */,
+				2B8F1AB32E9D87BC00412C5C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2B8F1AB42E9D87BC00412C5C /* Build configuration list for PBXNativeTarget "Slayken Fighter of FistsUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2B8F1AB52E9D87BC00412C5C /* Debug */,
+				2B8F1AB62E9D87BC00412C5C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 2B8F1A852E9D87BB00412C5C /* Project object */;
+}
