@@ -8,35 +8,54 @@ struct SettingsView: View {
     @EnvironmentObject var summonManager: SummonManager
     @EnvironmentObject var teamManager: TeamManager
     @EnvironmentObject var themeManager: ThemeManager
+    @EnvironmentObject var musicManager: MusicManager
 
     // MARK: - Local State
     @State private var showResetAlert = false
     @State private var showResetConfirmation = false
     @State private var resetAnimation = false
 
+    // MARK: - Body
     var body: some View {
         NavigationStack {
             ZStack {
-                // MARK: Hintergrund (Theme-Gradient)
-                LinearGradient(
-                    colors: [.black, .blue, .black],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-                .ignoresSafeArea()
+                // Hintergrund
+                LinearGradient(colors: [.black, .blue, .black],
+                               startPoint: .topLeading,
+                               endPoint: .bottomTrailing)
+                    .ignoresSafeArea()
 
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 32) {
-
-       
+                        // MARK: - Audio Section
+                        settingsSection(title: "Audio") {
+                            Toggle(isOn: $musicManager.isMusicOn) {
+                                Label("Musik", systemImage: musicManager.isMusicOn ? "music.note" : "speaker.slash")
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                            }
+                            .tint(.orange)
+                            .padding(.horizontal, 8)
+                            .onChange(of: musicManager.isMusicOn) { _, newValue in
+                                // optionales sanftes Fade beim Umschalten
+                                withAnimation(.easeInOut(duration: 0.3)) {
+                                    if newValue {
+                                        musicManager.toggleMusic()
+                                    } else {
+                                        musicManager.toggleMusic()
+                                    }
+                                }
+                            }
+                        }
 
                         // MARK: - Account Overview
                         settingsSection(title: "Account Overview") {
                             HStack(spacing: 22) {
-                                StatBox(icon: "star", title: "Level", value: "\(accountManager.level)", color: .green)
+                                StatBox(icon: "star.fill", title: "Level", value: "\(accountManager.level)", color: .green)
                                 StatBox(icon: "diamond.fill", title: "Crystals", value: "\(crystalManager.crystals)", color: .blue)
-                                StatBox(icon: "c.circle", title: "Coins", value: "\(coinManager.coins)", color: .yellow)
+                                StatBox(icon: "c.circle.fill", title: "Coins", value: "\(coinManager.coins)", color: .yellow)
                             }
+                            .frame(maxWidth: .infinity)
                         }
 
                         // MARK: - Data & Storage
@@ -55,7 +74,7 @@ struct SettingsView: View {
                                     .cornerRadius(16)
                                     .shadow(color: .red.opacity(0.4), radius: 6)
                             }
-                            .padding(.horizontal, 20)
+                            .padding(.horizontal, 8)
                         }
 
                         // MARK: - Appearance
@@ -70,52 +89,52 @@ struct SettingsView: View {
                                     .cornerRadius(16)
                                     .shadow(color: .blue.opacity(0.4), radius: 6)
                             }
-                            .padding(.horizontal, 20)
+                            .padding(.horizontal, 8)
                         }
 
-                        Spacer(minLength: 60)
+                        Spacer(minLength: 80)
                     }
-                    .padding(.horizontal)
+                    .padding(.horizontal, 20)
                     .padding(.bottom, 40)
                 }
             }
+            .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)
             .alert("⚠️ Reset all progress?", isPresented: $showResetAlert) {
                 Button("Cancel", role: .cancel) {}
-                Button("Reset", role: .destructive) {
-                    performReset()
-                }
+                Button("Reset", role: .destructive) { performReset() }
             } message: {
                 Text("This will permanently delete your progress, characters and team setup.")
             }
-            .overlay(
-                // Optional: kleine visuelle Bestätigung nach Reset
-                Group {
-                    if showResetConfirmation {
-                        VStack(spacing: 8) {
-                            Image(systemName: "checkmark.seal.fill")
-                                .font(.largeTitle)
-                                .foregroundColor(.green)
-                                .scaleEffect(resetAnimation ? 1.2 : 0.8)
-                                .animation(.spring(), value: resetAnimation)
-                            Text("Progress Reset")
-                                .foregroundColor(.white)
-                                .font(.headline)
-                        }
-                        .padding()
-                        .background(.ultraThinMaterial)
-                        .cornerRadius(16)
-                        .shadow(color: .green.opacity(0.4), radius: 10)
-                        .transition(.scale.combined(with: .opacity))
-                    }
-                }
-            )
+            .overlay(resetConfirmationOverlay)
         }
     }
 
-    // MARK: - Helper Functions
+    // MARK: - Reset Overlay
+    private var resetConfirmationOverlay: some View {
+        Group {
+            if showResetConfirmation {
+                VStack(spacing: 8) {
+                    Image(systemName: "checkmark.seal.fill")
+                        .font(.largeTitle)
+                        .foregroundColor(.green)
+                        .scaleEffect(resetAnimation ? 1.15 : 0.8)
+                        .animation(.spring(), value: resetAnimation)
+                    Text("Progress Reset")
+                        .foregroundColor(.white)
+                        .font(.headline)
+                }
+                .padding()
+                .background(.ultraThinMaterial)
+                .cornerRadius(16)
+                .shadow(color: .green.opacity(0.4), radius: 10)
+                .transition(.scale.combined(with: .opacity))
+            }
+        }
+    }
+
+    // MARK: - Reset Logic
     private func performReset() {
-        // Haptics
         let generator = UINotificationFeedbackGenerator()
         generator.notificationOccurred(.success)
 
@@ -130,7 +149,6 @@ struct SettingsView: View {
             resetAnimation = true
         }
 
-        // Animation ausblenden
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.8) {
             withAnimation {
                 showResetConfirmation = false
@@ -140,9 +158,12 @@ struct SettingsView: View {
         print("🧩 All saved data cleared successfully.")
     }
 
-    // MARK: - Helper UI Sections
+    // MARK: - Section Wrapper
     @ViewBuilder
-    private func settingsSection<Content: View>(title: String, @ViewBuilder content: () -> Content) -> some View {
+    private func settingsSection<Content: View>(
+        title: String,
+        @ViewBuilder content: () -> Content
+    ) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             Text(title)
                 .font(.headline)
@@ -150,7 +171,7 @@ struct SettingsView: View {
             content()
         }
         .padding()
-        .background(Color.white.opacity(0.05))
+        .background(Color.white.opacity(0.06))
         .cornerRadius(16)
         .shadow(color: .black.opacity(0.3), radius: 5)
     }
@@ -178,7 +199,7 @@ private struct StatBox: View {
         .frame(width: 90, height: 90)
         .background(Color.white.opacity(0.08))
         .cornerRadius(16)
-        .shadow(color: color.opacity(0.4), radius: 6)
+        .shadow(color: color.opacity(0.5), radius: 6)
     }
 }
 
@@ -190,5 +211,6 @@ private struct StatBox: View {
         .environmentObject(SummonManager.shared)
         .environmentObject(TeamManager.shared)
         .environmentObject(ThemeManager.shared)
+        .environmentObject(MusicManager())
         .preferredColorScheme(.dark)
 }

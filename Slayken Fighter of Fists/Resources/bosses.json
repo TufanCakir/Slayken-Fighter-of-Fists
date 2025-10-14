@@ -1,10 +1,73 @@
 [
+    {
+      "id": "boss_1",
+      "name": "Sly",
+      "image": "character1",
+      "background": "https://raw.githubusercontent.com/tufancakir/slayken-assets/main/backgrounds/background1.png",
+      "element": "fire",
+      "hp": 100,
+      "defense": 10
+    },
   {
-    "id": "boss_1",
+    "id": "boss_2",
     "name": "Keyo",
     "image": "character2",
     "background": "https://raw.githubusercontent.com/tufancakir/slayken-assets/main/backgrounds/background1.png",
+    "element": "ice",
+    "hp": 100,
+    "defense": 10
+  },
+  {
+      "id": "boss_3",
+    "name": "Kenix",
+    "image": "character3",
+    "background": "https://raw.githubusercontent.com/tufancakir/slayken-assets/main/backgrounds/background1.png",
+    "element": "void",
+    "hp": 100,
+    "defense": 10
+  },
+  {
+    "id": "boss_4",
+    "name": "Senix",
+    "image": "character4",
+    "background": "https://raw.githubusercontent.com/tufancakir/slayken-assets/main/backgrounds/background1.png",
+    "element": "nature",
+    "hp": 100,
+    "defense": 10
+  },
+  {
+    "id": "boss_5",
+    "name": "Ley",
+    "image": "character5",
+    "background": "https://raw.githubusercontent.com/tufancakir/slayken-assets/main/backgrounds/background1.png",
     "element": "fire",
+    "hp": 100,
+    "defense": 10
+  },
+  {
+    "id": "boss_6",
+    "name": "Len",
+    "image": "character6",
+    "background": "https://raw.githubusercontent.com/tufancakir/slayken-assets/main/backgrounds/background1.png",
+    "element": "ice",
+    "hp": 100,
+    "defense": 10
+  },
+  {
+    "id": "boss_7",
+    "name": "Gen",
+    "image": "character7",
+    "background": "https://raw.githubusercontent.com/tufancakir/slayken-assets/main/backgrounds/background1.png",
+    "element": "void",
+    "hp": 100,
+    "defense": 10
+  },
+  {
+    "id": "boss_8",
+    "name": "Ganix",
+    "image": "character8",
+    "background": "https://raw.githubusercontent.com/tufancakir/slayken-assets/main/backgrounds/background1.png",
+    "element": "nature",
     "hp": 100,
     "defense": 10
   },

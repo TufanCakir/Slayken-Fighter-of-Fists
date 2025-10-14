@@ -1,26 +1,20 @@
 import SwiftUI
 
 struct ShowdownView: View {
-    // MARK: - State
+    // MARK: - Stage Setup
     @State private var stages: [Stage] = [
-        .init(id: 1, name: "Inferno Rise", bossId: "boss_1", type: "boss"),
-        .init(id: 2, name: "Crimson Cave", bossId: "boss_2", type: "boss")
+        .init(id: 1, name: "Slayken Fighter of Fists", bossId: "boss_1", type: "boss"),
+        .init(id: 2, name: "Ice Rise", bossId: "boss_2", type: "boss"),
+        .init(id: 3, name: "Void Cave", bossId: "boss_3", type: "boss"),
+        .init(id: 4, name: "Crimson Cave", bossId: "boss_4", type: "boss"),
+        .init(id: 5, name: "Snow Arena", bossId: "boss_5", type: "boss"),
+        .init(id: 6, name: "Void Land", bossId: "boss_6", type: "boss"),
+        .init(id: 7, name: "Inferno Rise", bossId: "boss_7", type: "boss"),
+        .init(id: 8, name: "Snow Land", bossId: "boss_8", type: "boss")
     ]
     
-    @State private var progress: [StageProgress] = [
-        .init(id: 1, unlocked: true, completed: false, stars: 0),
-        .init(id: 2, unlocked: false, completed: false, stars: 0)
-    ]
-    
-    @State private var selectedStage: Stage?
-    @State private var showBattle = false
-    @State private var showModal = false
-    @State private var modalText = ""
-
-    // MARK: - JSON Data
-    @State private var bosses: [Boss] = Bundle.main.decode("bosses.json")
-
     // MARK: - Managers
+    @EnvironmentObject private var progressManager: StageProgressManager
     @EnvironmentObject private var coinManager: CoinManager
     @EnvironmentObject private var crystalManager: CrystalManager
     @EnvironmentObject private var accountManager: AccountLevelManager
@@ -28,21 +22,34 @@ struct ShowdownView: View {
     @EnvironmentObject private var summonManager: SummonManager
     @EnvironmentObject private var teamManager: TeamManager
 
+    // MARK: - Local UI State
+    @State private var selectedStage: Stage?
+    @State private var showBattle = false
+    @State private var showModal = false
+    @State private var modalText = ""
+
+    // MARK: - Data
+    @State private var bosses: [Boss] = Bundle.main.decode("bosses.json")
+
     // MARK: - Body
     var body: some View {
         ZStack {
             backgroundLayer
 
-            stageSelectionView
-                .opacity(showBattle ? 0 : 1)
-                .animation(.easeInOut(duration: 0.35), value: showBattle)
-            
+            if !showBattle {
+                stageSelectionView
+                    .transition(.opacity.combined(with: .scale))
+            }
+
             if showModal {
                 victoryModal
                     .zIndex(10)
                     .transition(.scale.combined(with: .opacity))
             }
         }
+        .animation(.easeInOut(duration: 0.35), value: showBattle)
+        .navigationTitle("Showdown")
+        .navigationBarTitleDisplayMode(.inline)
         .fullScreenCover(isPresented: $showBattle) {
             if let stage = selectedStage,
                let boss = bosses.first(where: { $0.id == stage.bossId }) {
@@ -59,25 +66,21 @@ struct ShowdownView: View {
                     .ignoresSafeArea()
             }
         }
-        .navigationTitle("Showdown")
-        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
-// MARK: - Subviews
+ // MARK: - Subviews
 extension ShowdownView {
     
-    /// Hintergrund mit sanftem Fade (ohne Bild)
+    /// Hintergrund mit weichem Farbverlauf
     private var backgroundLayer: some View {
-        LinearGradient(
-            colors: [.black, .blue, .black],
-            startPoint: .top,
-            endPoint: .bottom
-        )
-        .ignoresSafeArea()
+        LinearGradient(colors: [.black, .blue, .black],
+                       startPoint: .top,
+                       endPoint: .bottom)
+            .ignoresSafeArea()
     }
 
-    /// Stage-Auswahl (horizontales Scroll-Layout)
+    /// Stage-Auswahl
     private var stageSelectionView: some View {
         VStack(spacing: 36) {
             Text("Choose a Stage")
@@ -88,29 +91,36 @@ extension ShowdownView {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 30) {
                     Spacer(minLength: 40)
+
                     ForEach(stages, id: \.id) { stage in
-                        let p = progress.first(where: { $0.id == stage.id })
-                            ?? StageProgress(id: stage.id, unlocked: false, completed: false, stars: 0)
+                        let progressData = progressManager.progress.first(where: { $0.id == stage.id })
+                            ?? StageProgress(id: stage.id, unlocked: stage.id == 1, completed: false, stars: 0)
                         let boss = bosses.first(where: { $0.id == stage.bossId })
                         
-                        StageNodeView(stage: stage, progress: p, boss: boss) {
+                        StageNodeView(stage: stage, progress: progressData, boss: boss) {
                             startBattle(for: stage, with: boss)
                         }
-                        
+
                         if stage.id != stages.last?.id {
-                            Rectangle()
-                                .fill(Color.white.opacity(0.3))
-                                .frame(width: 34, height: 4)
-                                .cornerRadius(2)
-                                .offset(y: 50)
+                            connectorLine
                         }
                     }
+
                     Spacer(minLength: 40)
                 }
                 .padding(.bottom, 40)
             }
         }
         .padding(.horizontal, 20)
+    }
+
+    /// Linie zwischen Stages
+    private var connectorLine: some View {
+        Rectangle()
+            .fill(Color.white.opacity(0.3))
+            .frame(width: 34, height: 4)
+            .cornerRadius(2)
+            .offset(y: 50)
     }
 
     /// Sieg-Modal
@@ -134,8 +144,7 @@ extension ShowdownView {
 
 // MARK: - Logic
 extension ShowdownView {
-    
-    /// Controller-Erstellung mit Callback-Verbindungen
+
     private func makeController(for boss: Boss, stage: Stage) -> BattleSceneController {
         let team = teamManager.selectedTeam.isEmpty
             ? [summonManager.ownedCharacters.first ?? GameCharacter.example]
@@ -163,8 +172,7 @@ extension ShowdownView {
         
         return controller
     }
-
-    /// Kampf starten
+    
     private func startBattle(for stage: Stage, with boss: Boss?) {
         guard boss != nil else { return }
         selectedStage = stage
@@ -172,8 +180,7 @@ extension ShowdownView {
             showBattle = true
         }
     }
-
-    /// Kampfende + Fortschritt aktualisieren
+    
     private func endBattle(victoryText: String, for stage: Stage) {
         withAnimation(.easeInOut(duration: 0.3)) {
             modalText = victoryText
@@ -181,18 +188,12 @@ extension ShowdownView {
             showBattle = false
         }
 
-        guard let idx = progress.firstIndex(where: { $0.id == stage.id }) else { return }
-        progress[idx].completed = true
-        progress[idx].stars = 3
-        
-        // Nächste Stage freischalten
-        if idx + 1 < progress.count {
-            progress[idx + 1].unlocked = true
-        }
+        // Fortschritt zentral im Manager speichern
+        progressManager.updateProgress(for: stage.id, completed: true, stars: 3)
     }
 }
 
-// MARK: - Helper für Environment-Übergabe
+// MARK: - Environment Helper
 private extension View {
     func environmentObjects(
         _ coin: CoinManager,
@@ -215,6 +216,7 @@ private extension View {
 #Preview {
     NavigationStack {
         ShowdownView()
+            .environmentObject(StageProgressManager.shared)
             .environmentObject(CoinManager.shared)
             .environmentObject(CrystalManager.shared)
             .environmentObject(AccountLevelManager.shared)

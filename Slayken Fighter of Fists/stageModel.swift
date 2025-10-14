@@ -9,12 +9,6 @@ struct Stage: Identifiable, Hashable {
     let type: String
 }
 
-struct StageProgress: Identifiable, Hashable {
-    let id: Int
-    var unlocked: Bool
-    var completed: Bool
-    var stars: Int
-}
 
 struct Boss: Identifiable, Codable {
     let id: String

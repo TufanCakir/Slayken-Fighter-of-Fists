@@ -16,6 +16,8 @@ struct Slayken_Fighter_of_Fists_App: App {
     @StateObject private var themeManager = ThemeManager.shared
     @StateObject private var summonManager = SummonManager.shared
     @StateObject private var teamManager = TeamManager.shared
+    @StateObject private var musicManager = MusicManager()
+    @StateObject private var progressManager = StageProgressManager.shared
 
 
     var body: some Scene {
@@ -28,6 +30,9 @@ struct Slayken_Fighter_of_Fists_App: App {
                 .environmentObject(themeManager)
                 .environmentObject(summonManager)
                 .environmentObject(teamManager)
+                .environmentObject(musicManager)
+                .environmentObject(progressManager)
+
         }
     }
 }

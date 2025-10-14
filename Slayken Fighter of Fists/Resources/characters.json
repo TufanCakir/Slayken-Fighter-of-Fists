@@ -8,5 +8,35 @@
     "id": "character_2",
     "name": "keyo",
     "image": "character2"
-  }
+  },
+  {
+      "id": "character_3",
+    "name": "Kenix",
+    "image": "character3",
+  },
+  {
+      "id": "character_4",
+    "name": "Senix",
+    "image": "character4",
+  },
+  {
+    "id": "character_5",
+    "name": "Ley",
+    "image": "character5",
+  },
+  {
+    "id": "character_6",
+    "name": "Len",
+    "image": "character6",
+  },
+  {
+    "id": "character_7",
+    "name": "Gen",
+    "image": "character7",
+  },
+  {
+    "id": "character_8",
+    "name": "Ganix",
+    "image": "character8",
+  },
 ]
