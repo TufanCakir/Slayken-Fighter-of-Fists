@@ -2,22 +2,16 @@
 
 import Foundation
 
-struct Stage: Identifiable, Hashable {
+struct Stage: Identifiable, Codable {
     let id: Int
     let name: String
     let bossId: String
     let type: String
+    let world: Int   // 🌍 Neu hinzugefügt
 }
 
 
-struct Boss: Identifiable, Codable {
-    let id: String
-    let name: String
-    let image: String
-    let background: String?
-    let element: String?   // <–– neu, optional!
-    let hp: Int
-}
+
 
 // MARK: - JSON Loader (global!)
 

@@ -15,37 +15,22 @@ struct SettingsView: View {
     @State private var showResetConfirmation = false
     @State private var resetAnimation = false
 
-    // MARK: - Body
     var body: some View {
         NavigationStack {
             ZStack {
                 // Hintergrund
-                LinearGradient(colors: [.black, .blue, .black],
+                LinearGradient(colors: [.black, .blue.opacity(0.8), .black],
                                startPoint: .topLeading,
                                endPoint: .bottomTrailing)
                     .ignoresSafeArea()
 
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 32) {
+
                         // MARK: - Audio Section
                         settingsSection(title: "Audio") {
-                            Toggle(isOn: $musicManager.isMusicOn) {
-                                Label("Musik", systemImage: musicManager.isMusicOn ? "music.note" : "speaker.slash")
-                                    .font(.headline)
-                                    .foregroundColor(.white)
-                            }
-                            .tint(.orange)
-                            .padding(.horizontal, 8)
-                            .onChange(of: musicManager.isMusicOn) { _, newValue in
-                                // optionales sanftes Fade beim Umschalten
-                                withAnimation(.easeInOut(duration: 0.3)) {
-                                    if newValue {
-                                        musicManager.toggleMusic()
-                                    } else {
-                                        musicManager.toggleMusic()
-                                    }
-                                }
-                            }
+                            MusicToggleButton()
+                                .environmentObject(musicManager)
                         }
 
                         // MARK: - Account Overview
@@ -70,9 +55,9 @@ struct SettingsView: View {
                                     .foregroundColor(.white)
                                     .padding()
                                     .frame(maxWidth: .infinity)
-                                    .background(Color.red.opacity(0.7))
+                                    .background(.red.gradient.opacity(0.7))
                                     .cornerRadius(16)
-                                    .shadow(color: .red.opacity(0.4), radius: 6)
+                                    .shadow(color: .red.opacity(0.5), radius: 6)
                             }
                             .padding(.horizontal, 8)
                         }
@@ -85,9 +70,9 @@ struct SettingsView: View {
                                     .foregroundColor(.white)
                                     .padding()
                                     .frame(maxWidth: .infinity)
-                                    .background(Color.blue.opacity(0.6))
+                                    .background(.blue.gradient.opacity(0.6))
                                     .cornerRadius(16)
-                                    .shadow(color: .blue.opacity(0.4), radius: 6)
+                                    .shadow(color: .blue.opacity(0.5), radius: 6)
                             }
                             .padding(.horizontal, 8)
                         }
@@ -110,7 +95,7 @@ struct SettingsView: View {
         }
     }
 
-    // MARK: - Reset Overlay
+    // MARK: - Reset Confirmation Overlay
     private var resetConfirmationOverlay: some View {
         Group {
             if showResetConfirmation {
@@ -120,6 +105,7 @@ struct SettingsView: View {
                         .foregroundColor(.green)
                         .scaleEffect(resetAnimation ? 1.15 : 0.8)
                         .animation(.spring(), value: resetAnimation)
+
                     Text("Progress Reset")
                         .foregroundColor(.white)
                         .font(.headline)
@@ -143,6 +129,8 @@ struct SettingsView: View {
         accountManager.reset()
         summonManager.removeAll()
         teamManager.removeAll()
+        CharacterLevelManager.shared.reset() // 🔹 Charaktere zurücksetzen
+        StageProgressManager.shared.resetProgress()
 
         withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
             showResetConfirmation = true
@@ -155,8 +143,10 @@ struct SettingsView: View {
             }
         }
 
-        print("🧩 All saved data cleared successfully.")
+        print("🧩 All saved data cleared successfully (including Character Progress).")
     }
+
+
 
     // MARK: - Section Wrapper
     @ViewBuilder
@@ -174,6 +164,53 @@ struct SettingsView: View {
         .background(Color.white.opacity(0.06))
         .cornerRadius(16)
         .shadow(color: .black.opacity(0.3), radius: 5)
+    }
+}
+
+// MARK: - MusicToggleButton Component
+struct MusicToggleButton: View {
+    @EnvironmentObject var musicManager: MusicManager
+    @State private var iconScale = 1.0
+
+    var body: some View {
+        Button {
+            withAnimation(.easeInOut(duration: 0.25)) {
+                musicManager.isMusicOn.toggle()
+                iconScale = 1.2
+            }
+
+            // kleine Rückfederung
+            withAnimation(.spring(response: 0.4, dampingFraction: 0.5, blendDuration: 0.2).delay(0.1)) {
+                iconScale = 1.0
+            }
+
+            Task { await musicManager.handleMusicToggleExternally() }
+        } label: {
+            HStack(spacing: 12) {
+                Image(systemName: musicManager.isMusicOn ? "music.note" : "speaker.slash.fill")
+                    .font(.title3.bold())
+                    .foregroundColor(.orange)
+                    .scaleEffect(iconScale)
+                    .shadow(color: .orange.opacity(0.5), radius: 5)
+
+                Text(musicManager.isMusicOn ? "Music On" : "Music Off")
+                    .font(.headline)
+                    .foregroundColor(.white)
+            }
+            .frame(maxWidth: .infinity)
+            .padding()
+            .background(.thinMaterial)
+            .cornerRadius(14)
+            .shadow(color: .orange.opacity(0.3), radius: 6)
+        }
+    }
+}
+
+// MARK: - Erweiterung für externen Music-Call
+extension MusicManager {
+    @MainActor
+    func handleMusicToggleExternally() async {
+        await handleMusicToggle()
     }
 }
 

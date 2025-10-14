@@ -2,10 +2,146 @@
   {
     "id": "boss_1",
     "name": "Sly",
-    "hp": 100,
-    "defense": 15,
     "image": "character1",
-    "background": "https://raw.githubusercontent.com/tufancakir/slayken-assets/main/backgrounds/background7.png",
     "element": "fire",
+    "hp": 100,
+    "defense": 10,
+    "filter": { "r": 1.0, "g": 0.4, "b": 0.1, "a": 1.0 }
   },
+  {
+    "id": "boss_2",
+    "name": "Keyo",
+    "image": "character2",
+    "element": "ice",
+    "hp": 100,
+    "defense": 10,
+    "filter": { "r": 0.6, "g": 0.9, "b": 1.0, "a": 1.0 }
+  },
+  {
+    "id": "boss_3",
+    "name": "Kenix",
+    "image": "character3",
+    "element": "void",
+    "hp": 100,
+    "defense": 10,
+    "filter": { "r": 0.3, "g": 0.0, "b": 0.5, "a": 1.0 }
+  },
+  {
+    "id": "boss_4",
+    "name": "Senix",
+    "image": "character4",
+    "element": "nature",
+    "hp": 100,
+    "defense": 10,
+    "filter": { "r": 0.3, "g": 0.8, "b": 0.4, "a": 1.0 }
+  },
+  {
+    "id": "boss_5",
+    "name": "Ley",
+    "image": "character5",
+    "element": "fire",
+    "hp": 100,
+    "defense": 10,
+    "filter": { "r": 1.0, "g": 0.4, "b": 0.1, "a": 1.0 }
+  },
+  {
+    "id": "boss_6",
+    "name": "Len",
+    "image": "character6",
+    "element": "ice",
+    "hp": 100,
+    "defense": 10,
+    "filter": { "r": 0.6, "g": 0.9, "b": 1.0, "a": 1.0 }
+  },
+  {
+    "id": "boss_7",
+    "name": "Gen",
+    "image": "character7",
+    "element": "void",
+    "hp": 100,
+    "defense": 10,
+    "filter": { "r": 0.3, "g": 0.0, "b": 0.5, "a": 1.0 }
+  },
+  {
+    "id": "boss_8",
+    "name": "Ganix",
+    "image": "character8",
+    "element": "nature",
+    "hp": 100,
+    "defense": 10,
+    "filter": { "r": 0.3, "g": 0.8, "b": 0.4, "a": 1.0 }
+  },
+
+  {
+    "id": "boss_9",
+    "name": "Dark Sly",
+    "image": "character1",
+    "element": "fire",
+    "hp": 120,
+    "defense": 20,
+    "filter": { "r": 0.8, "g": 0.0, "b": 0.0, "a": 1.0 }
+  },
+  {
+    "id": "boss_10",
+    "name": "Frozen Keyo",
+    "image": "character2",
+    "element": "ice",
+    "hp": 120,
+    "defense": 20,
+    "filter": { "r": 0.3, "g": 0.6, "b": 1.0, "a": 1.0 }
+  },
+  {
+    "id": "boss_11",
+    "name": "Shadow Kenix",
+    "image": "character3",
+    "element": "void",
+    "hp": 120,
+    "defense": 20,
+    "filter": { "r": 0.6, "g": 0.0, "b": 0.8, "a": 1.0 }
+  },
+  {
+    "id": "boss_12",
+    "name": "Toxic Senix",
+    "image": "character4",
+    "element": "nature",
+    "hp": 120,
+    "defense": 20,
+    "filter": { "r": 0.0, "g": 0.9, "b": 0.3, "a": 1.0 }
+  },
+  {
+    "id": "boss_13",
+    "name": "Crimson Ley",
+    "image": "character5",
+    "element": "fire",
+    "hp": 120,
+    "defense": 20,
+    "filter": { "r": 1.0, "g": 0.1, "b": 0.1, "a": 1.0 }
+  },
+  {
+    "id": "boss_14",
+    "name": "Glacier Len",
+    "image": "character6",
+    "element": "ice",
+    "hp": 120,
+    "defense": 20,
+    "filter": { "r": 0.5, "g": 0.8, "b": 1.0, "a": 1.0 }
+  },
+  {
+    "id": "boss_15",
+    "name": "Abyss Gen",
+    "image": "character7",
+    "element": "void",
+    "hp": 120,
+    "defense": 20,
+    "filter": { "r": 0.15, "g": 0.0, "b": 0.3, "a": 1.0 }
+  },
+  {
+    "id": "boss_16",
+    "name": "Verdant Ganix",
+    "image": "character8",
+    "element": "nature",
+    "hp": 120,
+    "defense": 20,
+    "filter": { "r": 0.1, "g": 1.0, "b": 0.2, "a": 1.0 }
+  }
 ]

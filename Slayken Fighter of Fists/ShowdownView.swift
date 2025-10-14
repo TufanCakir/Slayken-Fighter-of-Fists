@@ -3,14 +3,25 @@ import SwiftUI
 struct ShowdownView: View {
     // MARK: - Stage Setup
     @State private var stages: [Stage] = [
-        .init(id: 1, name: "Slayken Fighter of Fists", bossId: "boss_1", type: "boss"),
-        .init(id: 2, name: "Ice Rise", bossId: "boss_2", type: "boss"),
-        .init(id: 3, name: "Void Cave", bossId: "boss_3", type: "boss"),
-        .init(id: 4, name: "Crimson Cave", bossId: "boss_4", type: "boss"),
-        .init(id: 5, name: "Snow Arena", bossId: "boss_5", type: "boss"),
-        .init(id: 6, name: "Void Land", bossId: "boss_6", type: "boss"),
-        .init(id: 7, name: "Inferno Rise", bossId: "boss_7", type: "boss"),
-        .init(id: 8, name: "Snow Land", bossId: "boss_8", type: "boss")
+        // 🌍 World 1 — Original Bosse
+        .init(id: 1, name: "Slayken Fighter of Fists", bossId: "boss_1", type: "boss", world: 1),
+        .init(id: 2, name: "Ice Rise", bossId: "boss_2", type: "boss", world: 1),
+        .init(id: 3, name: "Void Cave", bossId: "boss_3", type: "boss", world: 1),
+        .init(id: 4, name: "Crimson Cave", bossId: "boss_4", type: "boss", world: 1),
+        .init(id: 5, name: "Snow Arena", bossId: "boss_5", type: "boss", world: 1),
+        .init(id: 6, name: "Void Land", bossId: "boss_6", type: "boss", world: 1),
+        .init(id: 7, name: "Inferno Rise", bossId: "boss_7", type: "boss", world: 1),
+        .init(id: 8, name: "Snow Land", bossId: "boss_8", type: "boss", world: 1),
+
+        // 🌍 World 2 — Varianten / Elite-Versionen
+        .init(id: 9, name: "Dark Sly", bossId: "boss_9", type: "boss", world: 2),
+        .init(id: 10, name: "Frozen Keyo", bossId: "boss_10", type: "boss", world: 2),
+        .init(id: 11, name: "Shadow Kenix", bossId: "boss_11", type: "boss", world: 2),
+        .init(id: 12, name: "Toxic Senix", bossId: "boss_12", type: "boss", world: 2),
+        .init(id: 13, name: "Crimson Ley", bossId: "boss_13", type: "boss", world: 2),
+        .init(id: 14, name: "Glacier Len", bossId: "boss_14", type: "boss", world: 2),
+        .init(id: 15, name: "Abyss Gen", bossId: "boss_15", type: "boss", world: 2),
+        .init(id: 16, name: "Verdant Ganix", bossId: "boss_16", type: "boss", world: 2)
     ]
     
     // MARK: - Managers
@@ -27,6 +38,8 @@ struct ShowdownView: View {
     @State private var showBattle = false
     @State private var showModal = false
     @State private var modalText = ""
+    @State private var currentWorld = 1
+    @State private var justUnlockedWorld2 = false
 
     // MARK: - Data
     @State private var bosses: [Boss] = Bundle.main.decode("bosses.json")
@@ -36,9 +49,9 @@ struct ShowdownView: View {
         ZStack {
             backgroundLayer
 
-            if !showBattle {
-                stageSelectionView
-                    .transition(.opacity.combined(with: .scale))
+            VStack(spacing: 24) {
+                worldSelector
+                stageGrid(for: currentWorld)
             }
 
             if showModal {
@@ -50,6 +63,9 @@ struct ShowdownView: View {
         .animation(.easeInOut(duration: 0.35), value: showBattle)
         .navigationTitle("Showdown")
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            checkWorldUnlock()
+        }
         .fullScreenCover(isPresented: $showBattle) {
             if let stage = selectedStage,
                let boss = bosses.first(where: { $0.id == stage.bossId }) {
@@ -69,60 +85,85 @@ struct ShowdownView: View {
     }
 }
 
- // MARK: - Subviews
+ // MARK: - UI-Abschnitte
 extension ShowdownView {
     
-    /// Hintergrund mit weichem Farbverlauf
     private var backgroundLayer: some View {
-        LinearGradient(colors: [.black, .blue, .black],
-                       startPoint: .top,
-                       endPoint: .bottom)
+        LinearGradient(colors: [.black, .blue.opacity(0.8), .black],
+                       startPoint: .topLeading,
+                       endPoint: .bottomTrailing)
             .ignoresSafeArea()
     }
+    
+    /// 🌍 Welt-Auswahl (Tabs + Unlock)
+    private var worldSelector: some View {
+        HStack(spacing: 12) {
+            ForEach(1...2, id: \.self) { world in
+                let allWorld1Completed = progressManager.progress
+                    .filter { $0.id <= 8 }
+                    .allSatisfy { $0.completed }
 
-    /// Stage-Auswahl
-    private var stageSelectionView: some View {
-        VStack(spacing: 36) {
-            Text("Choose a Stage")
-                .font(.title2.bold())
-                .foregroundColor(.white)
-                .padding(.top, 20)
-            
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 30) {
-                    Spacer(minLength: 40)
+                let isLocked = (world == 2 && !allWorld1Completed)
 
-                    ForEach(stages, id: \.id) { stage in
-                        let progressData = progressManager.progress.first(where: { $0.id == stage.id })
-                            ?? StageProgress(id: stage.id, unlocked: stage.id == 1, completed: false, stars: 0)
-                        let boss = bosses.first(where: { $0.id == stage.bossId })
-                        
-                        StageNodeView(stage: stage, progress: progressData, boss: boss) {
-                            startBattle(for: stage, with: boss)
-                        }
-
-                        if stage.id != stages.last?.id {
-                            connectorLine
+                Button {
+                    if !isLocked {
+                        withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
+                            currentWorld = world
                         }
                     }
-
-                    Spacer(minLength: 40)
+                } label: {
+                    HStack(spacing: 6) {
+                        if isLocked {
+                            Image(systemName: "lock.fill")
+                                .foregroundColor(.gray)
+                        }
+                        Text("World \(world)")
+                            .font(.headline.bold())
+                    }
+                    .foregroundColor(isLocked ? .gray.opacity(0.6) : (currentWorld == world ? .white : .gray))
+                    .padding(.vertical, 8)
+                    .padding(.horizontal, 18)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(currentWorld == world
+                                  ? Color.blue.opacity(0.6)
+                                  : Color.black.opacity(0.4))
+                    )
+                    .overlay(
+                        // ✨ Unlock Glow-Effekt
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(Color.cyan.opacity(justUnlockedWorld2 ? 0.8 : 0),
+                                    lineWidth: 2)
+                            .shadow(color: .cyan.opacity(justUnlockedWorld2 ? 0.7 : 0),
+                                    radius: 6)
+                            .animation(.easeInOut(duration: 1.2).repeatCount(3, autoreverses: true),
+                                       value: justUnlockedWorld2)
+                    )
                 }
-                .padding(.bottom, 40)
+                .disabled(isLocked)
             }
         }
-        .padding(.horizontal, 20)
+        .padding(.top, 12)
     }
-
-    /// Linie zwischen Stages
-    private var connectorLine: some View {
-        Rectangle()
-            .fill(Color.white.opacity(0.3))
-            .frame(width: 34, height: 4)
-            .cornerRadius(2)
-            .offset(y: 50)
+    
+    /// Gitter für Stages (nach Welt gefiltert)
+    private func stageGrid(for world: Int) -> some View {
+        ScrollView {
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 120), spacing: 16)]) {
+                ForEach(stages.filter { $0.world == world }) { stage in
+                    let progressData = progressManager.progress.first(where: { $0.id == stage.id })
+                        ?? StageProgress(id: stage.id, unlocked: stage.id == 1, completed: false, stars: 0)
+                    let boss = bosses.first(where: { $0.id == stage.bossId })
+                    
+                    StageNodeView(stage: stage, progress: progressData, boss: boss) {
+                        startBattle(for: stage, with: boss)
+                    }
+                }
+            }
+            .padding()
+        }
     }
-
+    
     /// Sieg-Modal
     private var victoryModal: some View {
         InfoModalView(visible: showModal, onClose: { showModal = false }) {
@@ -130,7 +171,6 @@ extension ShowdownView {
                 Text("Victory")
                     .font(.title.bold())
                     .foregroundColor(.white)
-                
                 Text(modalText)
                     .font(.headline)
                     .foregroundColor(.white)
@@ -142,7 +182,7 @@ extension ShowdownView {
     }
 }
 
-// MARK: - Logic
+// MARK: - Logik
 extension ShowdownView {
 
     private func makeController(for boss: Boss, stage: Stage) -> BattleSceneController {
@@ -188,8 +228,26 @@ extension ShowdownView {
             showBattle = false
         }
 
-        // Fortschritt zentral im Manager speichern
+        // Fortschritt speichern
         progressManager.updateProgress(for: stage.id, completed: true, stars: 3)
+
+        // 🔓 Prüfen, ob World 2 jetzt freigeschaltet wird
+        checkWorldUnlock()
+    }
+    
+    private func checkWorldUnlock() {
+        let allWorld1Completed = progressManager.progress
+            .filter { $0.id <= 8 }
+            .allSatisfy { $0.completed }
+
+        if allWorld1Completed && !justUnlockedWorld2 {
+            withAnimation(.easeInOut(duration: 1.2)) {
+                justUnlockedWorld2 = true
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                justUnlockedWorld2 = false
+            }
+        }
     }
 }
 

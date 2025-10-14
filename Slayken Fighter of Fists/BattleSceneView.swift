@@ -25,15 +25,8 @@ struct BattleSceneView: View {
 
                     Spacer()
 
-                    ZStack {
-                        characterSection
-                            .offset(x: -geo.size.width * 0.22, y: 40)
-
-                        bossSection
-                            .offset(x: geo.size.width * 0.22, y: -10)
-                    }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .zIndex(1)
+                    battleArea(size: geo.size)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
 
                     teamFooter
                         .padding(.bottom, 20)
@@ -44,20 +37,20 @@ struct BattleSceneView: View {
                     .contentShape(Rectangle())
                     .onTapGesture { controller.performAttack() }
             }
-            .animation(.easeInOut(duration: 0.3), value: controller.bossHp)
             .ignoresSafeArea(edges: .top)
+            .animation(.easeInOut(duration: 0.25), value: controller.bossHp)
         }
     }
 }
 
-// MARK: - Unteransichten & Komponenten
+// MARK: - Background
 extension BattleSceneView {
-
-    // MARK: - Hintergrund mit dynamischem Metal
     private func backgroundLayer(size: CGSize) -> some View {
-        MetalBackgroundView(
-            topColor: colorFor(element: controller.boss.element ?? "default").top,
-            bottomColor: colorFor(element: controller.boss.element ?? "default").bottom
+        let elementColors = colorFor(element: controller.boss.element)
+        return MetalBackgroundView(
+            topColor: elementColors.top,
+            bottomColor: elementColors.bottom,
+            bossColor: controller.boss.filter.simd
         )
         .ignoresSafeArea()
         .overlay(
@@ -69,41 +62,23 @@ extension BattleSceneView {
         )
     }
 
-    // MARK: - Element-Farbdefinition
     private func colorFor(element: String) -> (top: SIMD4<Float>, bottom: SIMD4<Float>) {
         switch element.lowercased() {
-        case "fire":
-            return (
-                SIMD4<Float>(1.0, 0.4, 0.1, 1.0), // oben: orange
-                SIMD4<Float>(0.3, 0.0, 0.0, 1.0)  // unten: rot
-            )
-        case "ice":
-            return (
-                SIMD4<Float>(0.6, 0.9, 1.0, 1.0), // oben: hellblau
-                SIMD4<Float>(0.0, 0.2, 0.4, 1.0)  // unten: dunkelblau
-            )
-        case "void":
-            return (
-                SIMD4<Float>(0.3, 0.0, 0.5, 1.0), // oben: violett
-                SIMD4<Float>(0.05, 0.0, 0.15, 1.0) // unten: schwarzlila
-            )
-        case "nature":
-            return (
-                SIMD4<Float>(0.3, 0.8, 0.4, 1.0), // oben: grün
-                SIMD4<Float>(0.0, 0.2, 0.05, 1.0)  // unten: dunkelgrün
-            )
-        default:
-            return (
-                SIMD4<Float>(0.4, 0.4, 0.4, 1.0), // neutraler Himmel
-                SIMD4<Float>(0.0, 0.0, 0.0, 1.0)  // Boden dunkel
-            )
+        case "fire": return (SIMD4(1.0, 0.4, 0.1, 1.0), SIMD4(0.3, 0.0, 0.0, 1.0))
+        case "ice": return (SIMD4(0.6, 0.9, 1.0, 1.0), SIMD4(0.0, 0.2, 0.4, 1.0))
+        case "void": return (SIMD4(0.3, 0.0, 0.5, 1.0), SIMD4(0.05, 0.0, 0.15, 1.0))
+        case "nature": return (SIMD4(0.3, 0.8, 0.4, 1.0), SIMD4(0.0, 0.2, 0.05, 1.0))
+        default: return (SIMD4(0.4, 0.4, 0.4, 1.0), SIMD4(0.0, 0.0, 0.0, 1.0))
         }
     }
+}
 
-    // MARK: - HUD (EXP & HP)
+// MARK: - Top Bars (HUD)
+extension BattleSceneView {
     private var topBars: some View {
         HStack {
-            VStack(alignment: .leading, spacing: 4) {
+            // Player Side
+            VStack(alignment: .leading, spacing: 6) {
                 Text("Lv. \(characterManager.getLevel(for: controller.activeCharacter.id))")
                     .font(.caption.bold())
                     .foregroundColor(.white)
@@ -112,7 +87,8 @@ extension BattleSceneView {
 
             Spacer()
 
-            VStack(alignment: .trailing, spacing: 4) {
+            // Boss Side
+            VStack(alignment: .trailing, spacing: 6) {
                 Text(controller.boss.name)
                     .font(.caption.bold())
                     .foregroundColor(.white)
@@ -122,10 +98,9 @@ extension BattleSceneView {
         .padding(.horizontal, 24)
         .padding(.vertical, 10)
         .background(
-            LinearGradient(colors: [.black.opacity(0.6), .black.opacity(0.1)],
+            LinearGradient(colors: [.black.opacity(0.7), .black.opacity(0.3)],
                            startPoint: .top, endPoint: .bottom)
                 .blur(radius: 10)
-                .ignoresSafeArea(edges: .top)
         )
     }
 
@@ -134,33 +109,29 @@ extension BattleSceneView {
             .compactMap { ($0 as? UIWindowScene)?.windows.first?.safeAreaInsets.top }
             .first ?? 0
     }
+}
 
-    // MARK: - Boss HP-Bar
-    private var bossHpBar: some View {
-        GeometryReader { geo in
-            let width = max(CGFloat(controller.bossHp) / 100, 0)
-            ZStack(alignment: .leading) {
-                Capsule().fill(Color.white.opacity(0.15))
-                Capsule()
-                    .fill(LinearGradient(colors: [.red, .orange],
-                                         startPoint: .leading, endPoint: .trailing))
-                    .frame(width: geo.size.width * width)
-                    .shadow(color: .red.opacity(0.5), radius: 3)
-            }
+// MARK: - Battle Area
+extension BattleSceneView {
+    private func battleArea(size: CGSize) -> some View {
+        ZStack {
+            characterSection
+                .offset(x: -size.width * 0.25, y: 40)
+
+            bossSection
+                .offset(x: size.width * 0.25, y: -10)
         }
-        .frame(width: 180, height: 8)
-        .animation(.easeInOut(duration: 0.3), value: controller.bossHp)
+        .allowsHitTesting(false)
     }
 
-    // MARK: - Charakter & Boss Sektionen
+    // MARK: - Character
     private var characterSection: some View {
         let char = controller.activeCharacter
-
         return ZStack {
             MetalAuraView()
                 .frame(width: 240, height: 240)
-                .opacity(0.85)
-                .blur(radius: 28)
+                .opacity(0.9)
+                .blur(radius: 30)
                 .blendMode(.screen)
                 .scaleEffect(controller.showHitEffect ? 1.1 : 1.0)
                 .animation(.easeInOut(duration: 0.25), value: controller.showHitEffect)
@@ -169,24 +140,25 @@ extension BattleSceneView {
                 .resizable()
                 .scaledToFit()
                 .frame(width: 160)
-                .shadow(color: .cyan.opacity(0.7), radius: 12)
+                .shadow(color: .cyan.opacity(0.6), radius: 10)
 
             Ellipse()
-                .fill(Color.black.opacity(0.45))
+                .fill(Color.black.opacity(0.5))
                 .frame(width: 90, height: 25)
                 .blur(radius: 15)
                 .offset(y: 70)
         }
     }
 
+    // MARK: - Boss
     private var bossSection: some View {
         ZStack {
             MetalAuraView()
                 .frame(width: 260, height: 260)
-                .opacity(0.9)
+                .opacity(0.85)
                 .blur(radius: 35)
                 .blendMode(.screen)
-                .colorMultiply(.red)
+                .colorMultiply(controller.boss.filter.color)
                 .scaleEffect(controller.showHitEffect ? 1.1 : 1.0)
                 .animation(.easeInOut(duration: 0.25), value: controller.showHitEffect)
 
@@ -194,9 +166,10 @@ extension BattleSceneView {
                 .resizable()
                 .scaledToFit()
                 .frame(width: 180)
-                .shadow(color: .red.opacity(0.8), radius: 20)
-                .opacity(controller.showHitEffect ? 0.6 : 1)
+                .colorMultiply(controller.boss.filter.color)
+                .opacity(controller.showHitEffect ? 0.7 : 1)
                 .scaleEffect(controller.showHitEffect ? 1.05 : 1)
+                .shadow(color: controller.boss.filter.color.opacity(0.6), radius: 12)
 
             Ellipse()
                 .fill(Color.black.opacity(0.55))
@@ -213,17 +186,37 @@ extension BattleSceneView {
             }
         }
     }
+}
 
-    // MARK: - EXP-Bar
+// MARK: - UI Bars
+extension BattleSceneView {
+    private var bossHpBar: some View {
+        GeometryReader { geo in
+            let hpRatio = max(CGFloat(controller.bossHp) / 100, 0)
+            ZStack(alignment: .leading) {
+                Capsule().fill(Color.white.opacity(0.15))
+                Capsule()
+                    .fill(LinearGradient(colors: [.red, .orange],
+                                         startPoint: .leading, endPoint: .trailing))
+                    .frame(width: geo.size.width * hpRatio)
+                    .shadow(color: .red.opacity(0.5), radius: 3)
+            }
+        }
+        .frame(width: 180, height: 8)
+        .animation(.easeInOut(duration: 0.3), value: controller.bossHp)
+    }
+
     private func expBar(for characterId: String) -> some View {
         let progress = progressFor(characterId: characterId)
-        return ZStack(alignment: .leading) {
-            Capsule().fill(Color.white.opacity(0.15))
-            Capsule()
-                .fill(LinearGradient(colors: [.blue, .cyan],
-                                     startPoint: .leading, endPoint: .trailing))
-                .frame(width: 180 * progress)
-                .shadow(color: .cyan.opacity(0.4), radius: 4)
+        return GeometryReader { geo in
+            ZStack(alignment: .leading) {
+                Capsule().fill(Color.white.opacity(0.15))
+                Capsule()
+                    .fill(LinearGradient(colors: [.blue, .cyan],
+                                         startPoint: .leading, endPoint: .trailing))
+                    .frame(width: geo.size.width * progress)
+                    .shadow(color: .cyan.opacity(0.4), radius: 4)
+            }
         }
         .frame(width: 180, height: 8)
     }
@@ -233,8 +226,10 @@ extension BattleSceneView {
         let expToNext = Double(char.level * 100)
         return min(Double(char.exp) / expToNext, 1.0)
     }
+}
 
-    // MARK: - Team Footer
+// MARK: - Team Footer
+extension BattleSceneView {
     private var teamFooter: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 20) {
@@ -249,11 +244,9 @@ extension BattleSceneView {
                                 Circle().strokeBorder(
                                     index == controller.activeIndex
                                     ? LinearGradient(colors: [.cyan, .blue],
-                                                     startPoint: .top,
-                                                     endPoint: .bottom)
+                                                     startPoint: .top, endPoint: .bottom)
                                     : LinearGradient(colors: [.white.opacity(0.25)],
-                                                     startPoint: .top,
-                                                     endPoint: .bottom),
+                                                     startPoint: .top, endPoint: .bottom),
                                     lineWidth: index == controller.activeIndex ? 3 : 1
                                 )
                             )

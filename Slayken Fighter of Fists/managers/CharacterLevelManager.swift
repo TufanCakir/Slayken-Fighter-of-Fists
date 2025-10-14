@@ -40,6 +40,12 @@ final class CharacterLevelManager: ObservableObject {
     func getLevel(for id: String) -> Int {
         characters.first(where: { $0.id == id })?.level ?? 1
     }
+    
+    func reset() {
+        characters.removeAll()
+        UserDefaults.standard.removeObject(forKey: saveKey)
+        print("🧩 Character progress reset.")
+    }
 
     private func save() {
         if let data = try? JSONEncoder().encode(characters) {
