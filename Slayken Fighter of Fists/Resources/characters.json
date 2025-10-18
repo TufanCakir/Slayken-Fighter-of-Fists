@@ -2,41 +2,161 @@
   {
     "id": "character_1",
     "name": "Sly",
-    "image": "character1"
+    "image": "character1",
+    "element": "fire",
+    "auraColor": "#FF4500",
+    "gradient": {
+      "top": "#FF8000",
+      "bottom": "#400000"
+    },
+    "particle": {
+      "type": "flame",
+      "speed": 1.2,
+      "size": 6.0
+    },
+    "skills": [
+      "Inferno Punch",
+      "Blazing Kick"
+    ]
   },
   {
     "id": "character_2",
-    "name": "keyo",
-    "image": "character2"
+    "name": "Keyo",
+    "image": "character2",
+    "element": "ice",
+    "auraColor": "#00C8FF",
+    "gradient": {
+      "top": "#A0E8FF",
+      "bottom": "#002040"
+    },
+    "particle": {
+      "type": "snow",
+      "speed": 0.6,
+      "size": 5.0
+    },
+    "skills": [
+      "Frost Smash",
+      "Glacial Wall"
+    ]
   },
   {
-      "id": "character_3",
+    "id": "character_3",
     "name": "Kenix",
     "image": "character3",
+    "element": "void",
+    "auraColor": "#9A00FF",
+    "gradient": {
+      "top": "#5A00A0",
+      "bottom": "#0C0018"
+    },
+    "particle": {
+      "type": "dark",
+      "speed": 0.8,
+      "size": 7.0
+    },
+    "skills": [
+      "Void Strike",
+      "Dark Collapse"
+    ]
   },
   {
-      "id": "character_4",
+    "id": "character_4",
     "name": "Senix",
     "image": "character4",
+    "element": "thunder",
+    "auraColor": "#FFD300",
+    "gradient": {
+      "top": "#FFF176",
+      "bottom": "#2B1A00"
+    },
+    "particle": {
+      "type": "lightning",
+      "speed": 1.4,
+      "size": 6.0
+    },
+    "skills": [
+      "Thunder Break",
+      "Lightning Flash"
+    ]
   },
   {
     "id": "character_5",
     "name": "Ley",
     "image": "character5",
+    "element": "nature",
+    "auraColor": "#00FF66",
+    "gradient": {
+      "top": "#33FF99",
+      "bottom": "#003300"
+    },
+    "particle": {
+      "type": "leaf",
+      "speed": 0.7,
+      "size": 5.5
+    },
+    "skills": [
+      "Healing Bloom",
+      "Nature Vines"
+    ]
   },
   {
     "id": "character_6",
     "name": "Len",
     "image": "character6",
+    "element": "wind",
+    "auraColor": "#D0FFFF",
+    "gradient": {
+      "top": "#C2F2FF",
+      "bottom": "#002C33"
+    },
+    "particle": {
+      "type": "wind",
+      "speed": 1.0,
+      "size": 5.0
+    },
+    "skills": [
+      "Gale Slash",
+      "Air Cutter"
+    ]
   },
   {
     "id": "character_7",
     "name": "Gen",
     "image": "character7",
+    "element": "water",
+    "auraColor": "#007FFF",
+    "gradient": {
+      "top": "#33BFFF",
+      "bottom": "#001933"
+    },
+    "particle": {
+      "type": "wave",
+      "speed": 0.9,
+      "size": 5.5
+    },
+    "skills": [
+      "Aqua Burst",
+      "Tidal Wave"
+    ]
   },
   {
     "id": "character_8",
     "name": "Ganix",
     "image": "character8",
-  },
+    "element": "shadow",
+    "auraColor": "#2A0033",
+    "gradient": {
+      "top": "#660099",
+      "bottom": "#000000"
+    },
+    "particle": {
+      "type": "shadow",
+      "speed": 1.1,
+      "size": 7.0
+    },
+    "skills": [
+      "Night Slash",
+      "Phantom Pulse"
+    ]
+  }
 ]
