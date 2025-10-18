@@ -2,9 +2,11 @@
   {
     "id": "character_1",
     "name": "Sly",
+    "skillIDs": ["skill_fire_001", "skill_ice_001", "skill_void_001"]
     "image": "character1",
     "element": "fire",
     "auraColor": "#FF4500",
+    "attack": 100,
     "gradient": {
       "top": "#FF8000",
       "bottom": "#400000"
@@ -16,15 +18,17 @@
     },
     "skills": [
       "Inferno Punch",
-      "Blazing Kick"
+      "Frost Kick"
     ]
   },
   {
     "id": "character_2",
     "name": "Keyo",
+    "skillIDs": ["skill_ice_001", "skill_void_001"],
     "image": "character2",
     "element": "ice",
     "auraColor": "#00C8FF",
+    "attack": 100,
     "gradient": {
       "top": "#A0E8FF",
       "bottom": "#002040"
@@ -35,16 +39,18 @@
       "size": 5.0
     },
     "skills": [
-      "Frost Smash",
-      "Glacial Wall"
+      "Frost Kick",
+      "Abyss Surge"
     ]
   },
   {
     "id": "character_3",
     "name": "Kenix",
+    "skillIDs": ["skill_void_001", "skill_fire_001"],
     "image": "character3",
     "element": "void",
     "auraColor": "#9A00FF",
+    "attack": 100,
     "gradient": {
       "top": "#5A00A0",
       "bottom": "#0C0018"
@@ -55,16 +61,18 @@
       "size": 7.0
     },
     "skills": [
-      "Void Strike",
-      "Dark Collapse"
+      "Abyss Surge",
+      "Inferno Punch"
     ]
   },
   {
     "id": "character_4",
     "name": "Senix",
+    "skillIDs": ["skill_thunder_001", "skill_fire_001"],
     "image": "character4",
     "element": "thunder",
     "auraColor": "#FFD300",
+    "attack": 100,
     "gradient": {
       "top": "#FFF176",
       "bottom": "#2B1A00"
@@ -76,15 +84,17 @@
     },
     "skills": [
       "Thunder Break",
-      "Lightning Flash"
+      "Inferno Punch"
     ]
   },
   {
     "id": "character_5",
     "name": "Ley",
+    "skillIDs": ["skill_nature_001", "skill_ice_001"],
     "image": "character5",
     "element": "nature",
     "auraColor": "#00FF66",
+    "attack": 100,
     "gradient": {
       "top": "#33FF99",
       "bottom": "#003300"
@@ -96,15 +106,17 @@
     },
     "skills": [
       "Healing Bloom",
-      "Nature Vines"
+      "Frost Heal"
     ]
   },
   {
     "id": "character_6",
     "name": "Len",
+    "skillIDs": ["skill_wind_001", "skill_void_001"],
     "image": "character6",
     "element": "wind",
     "auraColor": "#D0FFFF",
+    "attack": 100,
     "gradient": {
       "top": "#C2F2FF",
       "bottom": "#002C33"
@@ -116,15 +128,17 @@
     },
     "skills": [
       "Gale Slash",
-      "Air Cutter"
+      "Abyss Surge"
     ]
   },
   {
     "id": "character_7",
     "name": "Gen",
+    "skillIDs": ["skill_water_001", "skill_ice_001"],
     "image": "character7",
     "element": "water",
     "auraColor": "#007FFF",
+    "attack": 100,
     "gradient": {
       "top": "#33BFFF",
       "bottom": "#001933"
@@ -136,15 +150,17 @@
     },
     "skills": [
       "Aqua Burst",
-      "Tidal Wave"
+      "Frost Heal"
     ]
   },
   {
     "id": "character_8",
     "name": "Ganix",
+    "skillIDs": ["skill_void_001", "skill_shadow_001"],
     "image": "character8",
     "element": "shadow",
     "auraColor": "#2A0033",
+    "attack": 100,
     "gradient": {
       "top": "#660099",
       "bottom": "#000000"
@@ -155,7 +171,7 @@
       "size": 7.0
     },
     "skills": [
-      "Night Slash",
+      "Abyss Surge",
       "Phantom Pulse"
     ]
   }

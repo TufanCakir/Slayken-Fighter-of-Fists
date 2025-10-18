@@ -1,30 +1,34 @@
 import SwiftUI
 
 struct SummonView: View {
+    // MARK: - Environment
     @EnvironmentObject private var crystalManager: CrystalManager
     @EnvironmentObject private var summonManager: SummonManager
 
+    // MARK: - States
     @State private var summonOptions: [SummonOption] = Bundle.main.decode("summonData.json")
     @State private var featuredCharacter: GameCharacter = .example
+    @State private var allCharacters: [GameCharacter] = CharacterLoader.loadCharacters()
+    @State private var summonedCharacters: [GameCharacter] = []
+
     @State private var message: String?
     @State private var isAnimating = false
     @State private var showResult = false
-    @State private var summonedCharacters: [GameCharacter] = []
 
+    // MARK: - Body
     var body: some View {
         NavigationStack {
             ZStack {
-                // MARK: - Hintergrund
-                LinearGradient(colors: [.black, .blue.opacity(0.9), .black],
-                               startPoint: .top,
-                               endPoint: .bottom)
+                // 🔹 Hintergrund mit sanftem Farbverlauf
+                LinearGradient(colors: [.black, .blue.opacity(0.85), .black],
+                               startPoint: .topLeading,
+                               endPoint: .bottomTrailing)
                     .ignoresSafeArea()
 
                 VStack(spacing: 26) {
-
                     // MARK: - Titel
                     Text("Summon Heroes")
-                        .font(.largeTitle.bold())
+                        .font(.system(size: 36, weight: .bold, design: .rounded))
                         .foregroundStyle(
                             LinearGradient(colors: [.white, .cyan],
                                            startPoint: .top,
@@ -33,28 +37,13 @@ struct SummonView: View {
                         .shadow(color: .cyan.opacity(0.5), radius: 10)
                         .padding(.top, 12)
 
-                    // MARK: - Banner des Featured Characters
+                    // MARK: - Featured Banner
                     bannerView(for: featuredCharacter)
                         .padding(.horizontal, 24)
                         .padding(.bottom, 4)
 
                     // MARK: - Crystal-Anzeige
-                    if let first = summonOptions.first {
-                        HStack(spacing: 6) {
-                            Image(systemName: first.icon)
-                                .font(.title3)
-                                .foregroundColor(first.iconColorValue)
-                                .shadow(color: first.iconColorValue.opacity(0.6), radius: 6)
-                            Text("\(crystalManager.crystals)")
-                                .font(.headline.bold())
-                                .foregroundColor(.white)
-                        }
-                        .padding(.vertical, 6)
-                        .padding(.horizontal, 14)
-                        .background(.ultraThinMaterial)
-                        .cornerRadius(12)
-                        .shadow(color: first.iconColorValue.opacity(0.4), radius: 6)
-                    }
+                    crystalDisplay
 
                     // MARK: - Buttons
                     VStack(spacing: 18) {
@@ -68,78 +57,107 @@ struct SummonView: View {
                         Text(message)
                             .font(.headline.bold())
                             .foregroundColor(.yellow)
-                            .padding(.top, 12)
                             .transition(.opacity.combined(with: .scale))
+                            .padding(.top, 12)
                     }
 
                     Spacer()
                 }
                 .padding(.horizontal, 24)
             }
-            .animation(.easeInOut(duration: 0.35), value: message)
             .navigationDestination(isPresented: $showResult) {
                 SummonResultView(characters: summonedCharacters)
             }
             .onAppear {
-                // Optional: zufälligen Charakter als Banner wählen
-                if let random = summonManager.ownedCharacters.randomElement() {
-                    featuredCharacter = random
-                }
+                // Zufälligen Featured Character auswählen
+                featuredCharacter = allCharacters.randomElement() ?? .example
             }
+            .animation(.easeInOut(duration: 0.35), value: message)
         }
     }
+}
 
-    // MARK: - Banner
+// MARK: - Banner View
+extension SummonView {
     private func bannerView(for char: GameCharacter) -> some View {
         ZStack(alignment: .bottomLeading) {
             Image(char.image)
                 .resizable()
                 .scaledToFit()
                 .frame(maxWidth: .infinity)
-                .clipShape(RoundedRectangle(cornerRadius: 16))
-                .shadow(color: .cyan.opacity(0.4), radius: 10)
+                .clipShape(RoundedRectangle(cornerRadius: 20))
+                .shadow(color: .cyan.opacity(0.3), radius: 10)
                 .overlay(
                     LinearGradient(
-                        colors: [.black.opacity(0.6), .clear, .black.opacity(0.6)],
+                        colors: [.black.opacity(0.6), .clear, .black.opacity(0.7)],
                         startPoint: .bottom,
                         endPoint: .top
                     )
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
                 )
-   
 
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: 6) {
                 Text(char.name)
-                    .font(.title2.bold())
+                    .font(.title.bold())
                     .foregroundColor(.white)
-                    .font(.subheadline)
+
+                Text(char.element.capitalized)
+                    .font(.subheadline.weight(.semibold))
                     .foregroundColor(.cyan.opacity(0.8))
             }
             .padding(16)
         }
         .frame(height: 220)
         .background(
-            RoundedRectangle(cornerRadius: 16)
+            RoundedRectangle(cornerRadius: 20)
                 .fill(Color.black.opacity(0.25))
         )
         .overlay(
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(Color.cyan.opacity(0.3), lineWidth: 1.2)
+            RoundedRectangle(cornerRadius: 20)
+                .stroke(Color.cyan.opacity(0.4), lineWidth: 1.5)
         )
         .shadow(color: .cyan.opacity(0.3), radius: 8, y: 4)
     }
+}
 
-    // MARK: - Button
+// MARK: - Crystal Display
+extension SummonView {
+    private var crystalDisplay: some View {
+        if let first = summonOptions.first {
+            return AnyView(
+                HStack(spacing: 6) {
+                    Image(systemName: first.icon)
+                        .font(.title3)
+                        .foregroundColor(first.iconColorValue)
+                        .shadow(color: first.iconColorValue.opacity(0.6), radius: 6)
+                    Text("\(crystalManager.crystals)")
+                        .font(.headline.bold())
+                        .foregroundColor(.white)
+                }
+                .padding(.vertical, 6)
+                .padding(.horizontal, 14)
+                .background(.ultraThinMaterial)
+                .cornerRadius(12)
+                .shadow(color: first.iconColorValue.opacity(0.4), radius: 6)
+            )
+        } else {
+            return AnyView(EmptyView())
+        }
+    }
+}
+
+// MARK: - Summon Buttons
+extension SummonView {
     private func summonButton(for option: SummonOption) -> some View {
         Button {
-            summon(option)
+            performSummon(option)
         } label: {
             HStack(spacing: 12) {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(option.title)
                         .font(.headline.bold())
                         .foregroundColor(.white)
-                    HStack(spacing: 12) {
+                    HStack(spacing: 10) {
                         Image(systemName: option.icon)
                             .font(.subheadline)
                             .foregroundColor(option.iconColorValue)
@@ -163,37 +181,54 @@ struct SummonView: View {
         }
         .buttonStyle(.plain)
     }
+}
 
-    // MARK: - Logic
-    private func summon(_ option: SummonOption) {
+// MARK: - Summon Logic
+extension SummonView {
+    private func performSummon(_ option: SummonOption) {
+        // Kurze Button-Animation
         withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
             isAnimating = true
         }
-
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
             withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
                 isAnimating = false
             }
         }
 
-        if crystalManager.spendCrystals(option.crystal) {
-            message = "You summoned a new hero!"
+        // Prüfen, ob genug Kristalle da sind
+        guard crystalManager.spendCrystals(option.crystal) else {
+            withAnimation {
+                message = "Not enough crystals 💎"
+            }
+            clearMessage(after: 1.5)
+            return
+        }
 
-            let newChars = summonManager.summon(
-                from: [GameCharacter.example],
-                count: option.type == "multi" ? 10 : 1
-            )
+        // Summon durchführen
+        withAnimation {
+            message = "Summoning..."
+        }
 
-            summonedCharacters = newChars
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+            let count = option.type == "multi" ? 10 : 1
+            summonedCharacters = summonManager.summon(from: allCharacters, count: count)
 
+            withAnimation(.spring()) {
+                message = "You summoned a new hero!"
+            }
+
+            // Ergebnis anzeigen
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
                 showResult = true
             }
-        } else {
-            message = "Not enough crystals."
-        }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.8) {
+            clearMessage(after: 2.0)
+        }
+    }
+
+    private func clearMessage(after delay: Double) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
             withAnimation(.easeOut(duration: 0.3)) {
                 message = nil
             }

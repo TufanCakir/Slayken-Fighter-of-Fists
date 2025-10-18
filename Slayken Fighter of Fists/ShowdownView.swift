@@ -3,7 +3,7 @@ import SwiftUI
 struct ShowdownView: View {
     // MARK: - Stage Setup
     @State private var stages: [Stage] = [
-        // 🌍 World 1 — Original Bosse
+        // 🌍 World 1
         .init(id: 1, name: "Slayken Fighter of Fists", bossId: "boss_1", type: "boss", world: 1),
         .init(id: 2, name: "Ice Rise", bossId: "boss_2", type: "boss", world: 1),
         .init(id: 3, name: "Void Cave", bossId: "boss_3", type: "boss", world: 1),
@@ -13,7 +13,7 @@ struct ShowdownView: View {
         .init(id: 7, name: "Inferno Rise", bossId: "boss_7", type: "boss", world: 1),
         .init(id: 8, name: "Snow Land", bossId: "boss_8", type: "boss", world: 1),
 
-        // 🌍 World 2 — Varianten / Elite-Versionen
+        // 🌍 World 2 — Elite
         .init(id: 9, name: "Dark Sly", bossId: "boss_9", type: "boss", world: 2),
         .init(id: 10, name: "Frozen Keyo", bossId: "boss_10", type: "boss", world: 2),
         .init(id: 11, name: "Shadow Kenix", bossId: "boss_11", type: "boss", world: 2),
@@ -24,7 +24,7 @@ struct ShowdownView: View {
         .init(id: 16, name: "Verdant Ganix", bossId: "boss_16", type: "boss", world: 2)
     ]
     
-    // MARK: - Managers
+    // MARK: - Environment Managers
     @EnvironmentObject private var progressManager: StageProgressManager
     @EnvironmentObject private var coinManager: CoinManager
     @EnvironmentObject private var crystalManager: CrystalManager
@@ -32,8 +32,9 @@ struct ShowdownView: View {
     @EnvironmentObject private var characterManager: CharacterLevelManager
     @EnvironmentObject private var summonManager: SummonManager
     @EnvironmentObject private var teamManager: TeamManager
+    @EnvironmentObject private var skillManager: SkillManager
 
-    // MARK: - Local UI State
+    // MARK: - Local State
     @State private var selectedStage: Stage?
     @State private var showBattle = false
     @State private var showModal = false
@@ -60,12 +61,10 @@ struct ShowdownView: View {
                     .transition(.scale.combined(with: .opacity))
             }
         }
-        .animation(.easeInOut(duration: 0.35), value: showBattle)
         .navigationTitle("Showdown")
         .navigationBarTitleDisplayMode(.inline)
-        .onAppear {
-            checkWorldUnlock()
-        }
+        .animation(.easeInOut(duration: 0.35), value: showBattle)
+        .onAppear(perform: checkWorldUnlock)
         .fullScreenCover(isPresented: $showBattle) {
             if let stage = selectedStage,
                let boss = bosses.first(where: { $0.id == stage.bossId }) {
@@ -76,7 +75,8 @@ struct ShowdownView: View {
                         accountManager,
                         characterManager,
                         summonManager,
-                        teamManager
+                        teamManager,
+                        skillManager
                     )
                     .background(Color.black)
                     .ignoresSafeArea()
@@ -89,10 +89,12 @@ struct ShowdownView: View {
 extension ShowdownView {
     
     private var backgroundLayer: some View {
-        LinearGradient(colors: [.black, .blue.opacity(0.8), .black],
-                       startPoint: .topLeading,
-                       endPoint: .bottomTrailing)
-            .ignoresSafeArea()
+        LinearGradient(
+            colors: [.black, .blue.opacity(0.8), .black],
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        )
+        .ignoresSafeArea()
     }
     
     /// 🌍 Welt-Auswahl (Tabs + Unlock)
@@ -106,10 +108,9 @@ extension ShowdownView {
                 let isLocked = (world == 2 && !allWorld1Completed)
 
                 Button {
-                    if !isLocked {
-                        withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
-                            currentWorld = world
-                        }
+                    guard !isLocked else { return }
+                    withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
+                        currentWorld = world
                     }
                 } label: {
                     HStack(spacing: 6) {
@@ -120,7 +121,8 @@ extension ShowdownView {
                         Text("World \(world)")
                             .font(.headline.bold())
                     }
-                    .foregroundColor(isLocked ? .gray.opacity(0.6) : (currentWorld == world ? .white : .gray))
+                    .foregroundColor(isLocked ? .gray.opacity(0.6) :
+                        (currentWorld == world ? .white : .gray))
                     .padding(.vertical, 8)
                     .padding(.horizontal, 18)
                     .background(
@@ -130,14 +132,14 @@ extension ShowdownView {
                                   : Color.black.opacity(0.4))
                     )
                     .overlay(
-                        // ✨ Unlock Glow-Effekt
                         RoundedRectangle(cornerRadius: 12)
                             .stroke(Color.cyan.opacity(justUnlockedWorld2 ? 0.8 : 0),
                                     lineWidth: 2)
                             .shadow(color: .cyan.opacity(justUnlockedWorld2 ? 0.7 : 0),
                                     radius: 6)
-                            .animation(.easeInOut(duration: 1.2).repeatCount(3, autoreverses: true),
-                                       value: justUnlockedWorld2)
+                            .animation(.easeInOut(duration: 1.2)
+                                .repeatCount(3, autoreverses: true),
+                                value: justUnlockedWorld2)
                     )
                 }
                 .disabled(isLocked)
@@ -197,7 +199,8 @@ extension ShowdownView {
             coinManager: coinManager,
             crystalManager: crystalManager,
             accountManager: accountManager,
-            characterManager: characterManager
+            characterManager: characterManager,
+            skillManager: skillManager
         )
         
         controller.onFight = {
@@ -259,7 +262,8 @@ private extension View {
         _ account: AccountLevelManager,
         _ character: CharacterLevelManager,
         _ summon: SummonManager,
-        _ team: TeamManager
+        _ team: TeamManager,
+        _ skill: SkillManager
     ) -> some View {
         self.environmentObject(coin)
             .environmentObject(crystal)
@@ -267,6 +271,7 @@ private extension View {
             .environmentObject(character)
             .environmentObject(summon)
             .environmentObject(team)
+            .environmentObject(skill)
     }
 }
 
@@ -281,6 +286,7 @@ private extension View {
             .environmentObject(CharacterLevelManager.shared)
             .environmentObject(SummonManager.shared)
             .environmentObject(TeamManager.shared)
+            .environmentObject(SkillManager()) // ✅ hinzugefügt
             .preferredColorScheme(.dark)
     }
 }

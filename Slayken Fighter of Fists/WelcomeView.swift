@@ -88,7 +88,7 @@ struct WelcomeView: View {
             }
             // MARK: - Navigation
             .fullScreenCover(isPresented: $navigateToHome) {
-                FooterView()
+                FooterTabView()
             }
         }
     }

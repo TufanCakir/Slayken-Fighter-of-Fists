@@ -1,0 +1,161 @@
+[
+  {
+    "id": "skill_fire_001",
+    "name": "Inferno Punch",
+    "type": "damage",
+    "element": "fire",
+    "description": "Ein feuriger Schlag, der massiven Schaden verursacht.",
+    "cooldown": 3.0,
+    "minDamage": 10,
+    "maxDamage": 10
+  },
+  {
+    "id": "skill_fire_002",
+    "name": "Blazing Kick",
+    "type": "damage",
+    "element": "fire",
+    "description": "Ein brennender Tritt, der Flammen hinterlässt.",
+    "cooldown": 3.0,
+    "minDamage": 20,
+    "maxDamage": 40
+  },
+  {
+    "id": "skill_ice_001",
+    "name": "Frost Kick",
+    "type": "damage",
+    "element": "ice",
+    "description": "Ein eisiger Schlag, der massiven Schaden verursacht.",
+    "cooldown": 3.0,
+    "minDamage": 10,
+    "maxDamage": 10
+  },
+  {
+    "id": "skill_ice_002",
+    "name": "Glacial Wall",
+    "type": "damage",
+    "element": "ice",
+    "description": "Erzeugt eine Frostbarriere, die Schaden reduziert.",
+    "cooldown": 3.0,
+    "minDamage": 0,
+    "maxDamage": 0
+  },
+  {
+    "id": "skill_void_001",
+    "name": "Abyss Surge",
+    "type": "damage",
+    "element": "void",
+    "description": "Ein Angriff aus der Leere, der jede Verteidigung durchdringt.",
+    "cooldown": 3.0,
+    "minDamage": 20,
+    "maxDamage": 20
+  },
+  {
+    "id": "skill_void_002",
+    "name": "Dark Collapse",
+    "type": "damage",
+    "element": "void",
+    "description": "Zieht Gegner in eine dunkle Implosion.",
+    "cooldown": 5.0,
+    "minDamage": 30,
+    "maxDamage": 45
+  },
+  {
+    "id": "skill_thunder_001",
+    "name": "Thunder Break",
+    "type": "damage",
+    "element": "thunder",
+    "description": "Ein mächtiger Donnerschlag, der den Boden erschüttert.",
+    "cooldown": 3.5,
+    "minDamage": 24,
+    "maxDamage": 38
+  },
+  {
+    "id": "skill_thunder_002",
+    "name": "Lightning Flash",
+    "type": "damage",
+    "element": "thunder",
+    "description": "Ein blitzschneller Angriff, der mehrfach trifft.",
+    "cooldown": 4.5,
+    "minDamage": 26,
+    "maxDamage": 42
+  },
+  {
+    "id": "skill_nature_001",
+    "name": "Healing Bloom",
+    "type": "damage",
+    "element": "nature",
+    "description": "Lässt heilende Blumen wachsen, die Lebenspunkte regenerieren.",
+    "cooldown": 4.5,
+    "healAmount": 30
+  },
+  {
+    "id": "skill_nature_002",
+    "name": "Nature Vines",
+    "type": "damage",
+    "element": "nature",
+    "description": "Schlingt Gegner mit dornigen Ranken ein.",
+    "cooldown": 5.0,
+    "minDamage": 22,
+    "maxDamage": 36
+  },
+  {
+    "id": "skill_wind_001",
+    "name": "Gale Slash",
+    "type": "damage",
+    "element": "wind",
+    "description": "Ein schneller Schnitt mit der Kraft des Windes.",
+    "cooldown": 3.0,
+    "minDamage": 18,
+    "maxDamage": 32
+  },
+  {
+    "id": "skill_wind_002",
+    "name": "Air Cutter",
+    "type": "damage",
+    "element": "wind",
+    "description": "Schneidet durch die Luft und fügt präzisen Schaden zu.",
+    "cooldown": 4.0,
+    "minDamage": 20,
+    "maxDamage": 34
+  },
+  {
+    "id": "skill_water_001",
+    "name": "Aqua Burst",
+    "type": "damage",
+    "element": "water",
+    "description": "Ein konzentrierter Wasserstoß, der Gegner zurückdrängt.",
+    "cooldown": 3.5,
+    "minDamage": 22,
+    "maxDamage": 37
+  },
+  {
+    "id": "skill_water_002",
+    "name": "Tidal Wave",
+    "type": "damage",
+    "element": "water",
+    "description": "Eine mächtige Welle, die alles hinwegspült.",
+    "cooldown": 5.0,
+    "minDamage": 26,
+    "maxDamage": 42
+  },
+  {
+    "id": "skill_shadow_001",
+    "name": "Night Slash",
+    "type": "damage",
+    "element": "shadow",
+    "description": "Ein lautloser Schlag aus der Dunkelheit.",
+    "cooldown": 3.5,
+    "minDamage": 25,
+    "maxDamage": 38
+  },
+  {
+    "id": "skill_shadow_002",
+    "name": "Phantom Pulse",
+    "type": "damage",
+    "element": "shadow",
+    "description": "Eine Schattenwelle, die die Seele des Gegners trifft.",
+    "cooldown": 5.0,
+    "minDamage": 30,
+    "maxDamage": 45
+  }
+]

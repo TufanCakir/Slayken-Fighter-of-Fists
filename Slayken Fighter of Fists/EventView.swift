@@ -17,6 +17,7 @@ struct EventView: View {
     @EnvironmentObject private var characterManager: CharacterLevelManager
     @EnvironmentObject private var summonManager: SummonManager
     @EnvironmentObject private var teamManager: TeamManager
+    @EnvironmentObject private var skillManager: SkillManager
 
     var body: some View {
         ZStack {
@@ -203,7 +204,8 @@ extension EventView {
             coinManager: coinManager,
             crystalManager: crystalManager,
             accountManager: accountManager,
-            characterManager: characterManager
+            characterManager: characterManager,
+            skillManager: skillManager
         )
 
         controller.onFight = {

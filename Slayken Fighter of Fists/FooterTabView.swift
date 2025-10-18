@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct FooterView: View {
+struct FooterTabView: View {
     @EnvironmentObject var theme: ThemeManager
     @State private var tabs: [FooterTab] = Bundle.main.decode("footerTabs.json")
     @State private var selectedTab: String = "HomeView"
@@ -67,5 +67,6 @@ struct FooterView: View {
 }
 
 #Preview {
-    FooterView()
+    FooterTabView()
 }
+

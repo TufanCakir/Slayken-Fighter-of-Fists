@@ -1,37 +1,31 @@
 import SwiftUI
 
 /// Eine zentrale Factory, die anhand eines Namens automatisch den passenden Screen erzeugt.
-/// Verhindert lange Switch-Logik in HomeView, FooterView und NavigationLinks.
+/// So bleibt HomeView, FooterView und NavigationView übersichtlich und flexibel.
 @MainActor
 struct ScreenFactory {
-    
-    /// Erzeugt eine beliebige View anhand ihres Namens.
+
+    /// Erzeugt eine beliebige View anhand ihres registrierten Namens.
     static func make(_ name: String) -> AnyView {
         switch name {
-        
-        // MARK: - Hauptviews
-        
-     
-   
-      
+
+        // MARK: - Hauptscreens
         case "SettingsView":
             AnyView(SettingsView())
-            
-     
+
         case "NewsView":
             AnyView(NewsView())
-            
+
         // MARK: - Kampfsystem
         case "ShowdownView":
             AnyView(ShowdownView())
-            
+
         case "EventView":
             AnyView(EventView())
-            
-        // MARK: - Direkter Battle-Test (z. B. im Debug)
+
         case "BattleSceneView":
             makeBattleSceneView()
-            
+
         // MARK: - Fallback
         default:
             AnyView(fallbackView(for: name))
@@ -39,20 +33,22 @@ struct ScreenFactory {
     }
 }
 
+//
 // MARK: - Erweiterungen
+//
 extension ScreenFactory {
-    
-    /// Erzeugt eine BattleScene mit Beispielteam und Boss aus JSON.
+
+    /// Erstellt eine Beispiel-BattleScene mit Boss & Team aus JSON-Dateien.
     private static func makeBattleSceneView() -> AnyView {
         let bosses: [Boss] = Bundle.main.decode("bosses.json")
         let summonManager = SummonManager.shared
         let teamManager = TeamManager.shared
-        
+
         guard let boss = bosses.first else {
             return AnyView(fallbackView(for: "BattleScene (keine Bossdaten)"))
         }
-        
-        // Teamquelle: erst echtes Team, dann Summons, dann Beispiel
+
+        // MARK: - Teamquelle bestimmen
         let team: [GameCharacter] = {
             if !teamManager.selectedTeam.isEmpty {
                 return teamManager.selectedTeam
@@ -62,17 +58,20 @@ extension ScreenFactory {
                 return [GameCharacter.example]
             }
         }()
-        
+
+        // MARK: - BattleController erzeugen
         let controller = BattleSceneController(
             boss: boss,
             bossHp: boss.hp,
             team: team,
-            coinManager: CoinManager.shared,
-            crystalManager: CrystalManager.shared,
-            accountManager: AccountLevelManager.shared,
-            characterManager: CharacterLevelManager.shared
+            coinManager: .shared,
+            crystalManager: .shared,
+            accountManager: .shared,
+            characterManager: .shared,
+            skillManager: .shared
         )
-        
+
+        // MARK: - Scene aufbauen
         return AnyView(
             BattleSceneView(controller: controller)
                 .environmentObject(teamManager)
@@ -81,24 +80,32 @@ extension ScreenFactory {
                 .environmentObject(CrystalManager.shared)
                 .environmentObject(AccountLevelManager.shared)
                 .environmentObject(CharacterLevelManager.shared)
+                .environmentObject(SkillManager.shared)
         )
     }
-    
-    /// Universeller Fallback für unbekannte Screen-Namen.
+
+    /// Universeller Fallback für ungültige Screen-Namen.
     private static func fallbackView(for name: String) -> some View {
-        VStack(spacing: 14) {
+        VStack(spacing: 16) {
             Image(systemName: "exclamationmark.triangle.fill")
-                .font(.system(size: 44))
+                .font(.system(size: 48))
                 .foregroundColor(.yellow)
-            
-            Text("🚧 Screen '\(name)' not found")
+
+            Text("Screen „\(name)“ nicht gefunden")
                 .font(.headline)
                 .foregroundColor(.gray)
+
+            Text("Bitte überprüfe den Namen oder füge ihn in der ScreenFactory hinzu.")
+                .font(.subheadline)
+                .multilineTextAlignment(.center)
+                .foregroundColor(.secondary)
+                .padding(.horizontal)
         }
-        .padding()
+        .padding(32)
         .background(
             RoundedRectangle(cornerRadius: 16)
-                .fill(Color.black.opacity(0.15))
+                .fill(Color.black.opacity(0.2))
+                .shadow(color: .black.opacity(0.3), radius: 6)
         )
         .padding()
     }
