@@ -81,10 +81,10 @@
   },
   {
     "id": "skill_nature_001",
-    "name": "Healing Bloom",
+    "name": "Wind Slash",
     "type": "damage",
     "element": "nature",
-    "description": "Lässt heilende Blumen wachsen, die Lebenspunkte regenerieren.",
+    "description": "Lässt den Wind den, Gegner schneiden.",
     "cooldown": 4.5,
     "healAmount": 30
   },
@@ -157,5 +157,25 @@
     "cooldown": 5.0,
     "minDamage": 30,
     "maxDamage": 45
+  },
+  {
+    "id": "shadow_clone",
+    "name": "Shadow Clone",
+    "element": "shadowclone",
+    "type": "shadowclone",
+    "cooldown": 10,
+    "minDamage": 30,
+    "maxDamage": 45,
+    "description": "Beschwört einen Schattenklon, der den Gegner angreift."
+  },
+  {
+    "id": "skill_tornado_001",
+    "name": "Tornado",
+    "element": "tornado",
+    "type": "damage",
+    "cooldown": 10,
+    "minDamage": 30,
+    "maxDamage": 45,
+    "description": "Erzeugt einen mächtigen Luftwirbel, der Gegner fortbläst."
   }
 ]

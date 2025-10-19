@@ -4,6 +4,10 @@ struct SkillButtonView: View {
     let skill: Skill
     @ObservedObject var controller: BattleSceneController
 
+    // 🔧 Dynamische Button-Größe (Skaliert automatisch bei wenig Platz)
+    @Environment(\.horizontalSizeClass) private var sizeClass
+    private var buttonSize: CGFloat { sizeClass == .compact ? 60 : 72 }
+
     var body: some View {
         ZStack {
             baseTile
@@ -13,56 +17,67 @@ struct SkillButtonView: View {
             }
             content
         }
-        .frame(width: 72, height: 72)
+        .frame(width: buttonSize, height: buttonSize)
+        .contentShape(Rectangle())
         .onTapGesture {
             guard !controller.isSkillOnCooldown(skill.name) else { return }
             controller.useSkill(skill.name)
         }
-        .contentShape(Rectangle())
+        .animation(.easeInOut(duration: 0.25), value: controller.cooldownRemaining[skill.name.lowercased()])
+        .accessibilityLabel(Text(skill.name))
+        .accessibilityHint(Text("Aktiviere Fähigkeit"))
     }
+}
 
-    // MARK: - Base
-    private var baseTile: some View {
+//
+// MARK: - Tile & Hintergrund
+//
+private extension SkillButtonView {
+    var baseTile: some View {
         RoundedRectangle(cornerRadius: 14)
             .fill(
                 LinearGradient(
-                    colors: [.black.opacity(0.95), .gray.opacity(0.3)],
+                    colors: [.black.opacity(0.9), .gray.opacity(0.35)],
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
                 )
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 14)
-                    .stroke(
-                        LinearGradient(
-                            colors: [.yellow.opacity(0.85), .orange.opacity(0.65)],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        ),
-                        lineWidth: 2
-                    )
-            )
-            .shadow(color: .black.opacity(0.9), radius: 6, y: 3)
-            .overlay(
-                RoundedRectangle(cornerRadius: 14)
-                    .stroke(
+                    .strokeBorder(
                         LinearGradient(
                             colors: controller.isSkillOnCooldown(skill.name)
-                            ? [.clear, .clear]
-                            : [.yellow.opacity(0.8), .white.opacity(0.6)],
+                            ? [.gray.opacity(0.2), .gray.opacity(0.1)]
+                            : [.yellow.opacity(0.9), .orange.opacity(0.6)],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
                         ),
-                        lineWidth: controller.isSkillOnCooldown(skill.name) ? 0 : 3
+                        lineWidth: controller.isSkillOnCooldown(skill.name) ? 1 : 2
                     )
-                    .blur(radius: 3)
-                    .opacity(controller.isSkillOnCooldown(skill.name) ? 0 : 0.8)
-                    .animation(.easeInOut(duration: 0.6), value: controller.isSkillOnCooldown(skill.name))
+                    .shadow(color: .black.opacity(0.8), radius: 3)
+            )
+            .shadow(color: .black.opacity(0.6), radius: 6, y: 3)
+            .overlay(
+                // Glüheffekt bei aktivem Skill
+                RoundedRectangle(cornerRadius: 14)
+                    .stroke(
+                        LinearGradient(colors: [.white.opacity(0.8), .yellow.opacity(0.8)],
+                                       startPoint: .topLeading,
+                                       endPoint: .bottomTrailing),
+                        lineWidth: 3
+                    )
+                    .blur(radius: 4)
+                    .opacity(controller.showSkillParticles ? 0.9 : 0)
+                    .animation(.easeInOut(duration: 0.4), value: controller.showSkillParticles)
             )
     }
+}
 
-    // MARK: - Element Glow
-    private var elementGlow: some View {
+//
+// MARK: - Element Glow
+//
+private extension SkillButtonView {
+    var elementGlow: some View {
         Circle()
             .fill(
                 LinearGradient(
@@ -71,27 +86,33 @@ struct SkillButtonView: View {
                     endPoint: .bottomTrailing
                 )
             )
-            .frame(width: 58, height: 58)
-            .shadow(color: .white.opacity(0.3), radius: 6)
+            .frame(width: buttonSize * 0.8, height: buttonSize * 0.8)
+            .shadow(color: gradientFor(element: skill.element).first!.opacity(0.5), radius: 10)
             .overlay(Circle().strokeBorder(Color.white.opacity(0.25), lineWidth: 1))
+            .opacity(controller.isSkillOnCooldown(skill.name) ? 0.3 : 1)
     }
+}
 
-    // MARK: - Cooldown
-    private var cooldownOverlay: some View {
+//
+// MARK: - Cooldown Overlay
+//
+private extension SkillButtonView {
+    var cooldownOverlay: some View {
         ZStack {
             Circle()
                 .fill(Color.black.opacity(0.65))
-                .frame(width: 58, height: 58)
+                .frame(width: buttonSize * 0.8, height: buttonSize * 0.8)
             
             if let remaining = controller.cooldownRemaining[skill.name.lowercased()],
                remaining > 0 {
                 Text(String(format: "%.1f", remaining))
-                    .font(.system(size: 17, weight: .bold, design: .monospaced))
+                    .font(.system(size: buttonSize * 0.25, weight: .bold, design: .monospaced))
                     .foregroundColor(.white)
                     .shadow(color: .black.opacity(0.9), radius: 3)
-                    .animation(nil, value: remaining)
+                    .transition(.opacity)
             }
 
+            // Fortschrittsring
             Circle()
                 .trim(
                     from: 0,
@@ -102,53 +123,74 @@ struct SkillButtonView: View {
                 )
                 .stroke(
                     LinearGradient(
-                        colors: [.white.opacity(0.7), .gray.opacity(0.3)],
+                        colors: [.white.opacity(0.8), .gray.opacity(0.3)],
                         startPoint: .top,
                         endPoint: .bottom
                     ),
                     style: StrokeStyle(lineWidth: 4, lineCap: .round)
                 )
                 .rotationEffect(.degrees(-90))
-                .frame(width: 58, height: 58)
+                .frame(width: buttonSize * 0.8, height: buttonSize * 0.8)
                 .animation(.linear(duration: 0.2), value: controller.cooldownRemaining[skill.name.lowercased()])
         }
-        .transition(.opacity)
     }
+}
 
-    // MARK: - Text & Icon
-    private var content: some View {
+//
+// MARK: - Text & Icon
+//
+private extension SkillButtonView {
+    var content: some View {
         VStack(spacing: 3) {
             Image(systemName: iconFor(element: skill.element))
-                .font(.system(size: 26, weight: .medium))
+                .font(.system(size: buttonSize * 0.36, weight: .medium))
                 .foregroundColor(.white)
                 .shadow(color: .black.opacity(0.9), radius: 3, y: 1)
+                .opacity(controller.isSkillOnCooldown(skill.name) ? 0.6 : 1)
+            
             Text(skill.name)
                 .font(.caption2.bold())
                 .foregroundColor(.white.opacity(0.9))
                 .lineLimit(1)
+                .minimumScaleFactor(0.8)
                 .shadow(color: .black.opacity(0.8), radius: 2)
         }
+        .padding(.top, 2)
     }
+}
 
-    // MARK: - Helpers
-    private func gradientFor(element: String) -> [Color] {
+//
+// MARK: - Helper Functions
+//
+private extension SkillButtonView {
+    func gradientFor(element: String) -> [Color] {
         switch element.lowercased() {
         case "fire": return [.red, .orange]
         case "ice": return [.cyan, .blue]
         case "void": return [.purple, .black]
         case "thunder": return [.yellow, .orange]
         case "nature": return [.green, .mint]
+        case "shadow": return [.purple, .black]
+        case "shadowclone": return [.indigo, .indigo]
+        case "wind": return [.mint, .mint]
+        case "water": return [.blue, .blue]
+        case "tornado": return [.brown, .brown]
         default: return [.gray, .white.opacity(0.5)]
         }
     }
 
-    private func iconFor(element: String) -> String {
+    func iconFor(element: String) -> String {
         switch element.lowercased() {
         case "fire": return "flame.fill"
         case "ice": return "snowflake"
         case "void": return "circle.dashed"
         case "thunder": return "bolt.fill"
         case "nature": return "leaf.fill"
+        case "shadow": return "moon.fill"
+        case "shadowclone": return "person.2.fill"
+        case "wind": return "wind.circle"
+        case "water": return "drop.fill"
+        case "tornado": return "tornado.circle"
         default: return "sparkles"
         }
     }

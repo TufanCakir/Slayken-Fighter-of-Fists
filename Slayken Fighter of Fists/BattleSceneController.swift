@@ -4,7 +4,7 @@ import Combine
 @MainActor
 final class BattleSceneController: ObservableObject {
 
-    // MARK: - Published States (UI Binding)
+    // MARK: - Published UI States
     @Published var bossHp: Int
     @Published var showHitEffect = false
     @Published var rewardText: String?
@@ -13,22 +13,31 @@ final class BattleSceneController: ObservableObject {
     @Published var isBattleFinished = false
     @Published var activeIndex: Int = 0
 
-    // MARK: - Skill / Particle FX
+    // MARK: - Visual FX
     @Published var showSkillParticles = false
     @Published var activeSkillEffect: SkillEffect?
+    @Published var showShadowClone = false
+    @Published var shadowCloneOpacity: Double = 0.0
+    @Published var shadowCloneOffset: CGFloat = 0.0
+    @Published var backgroundTint: Color = .clear
 
-   
     // MARK: - Cooldowns
     @Published var cooldowns: [String: Bool] = [:]
     @Published var cooldownRemaining: [String: Double] = [:]
     @Published var cooldownDuration: [String: Double] = [:]
 
+    // MARK: - Model Structs
     struct SkillEffect {
         let element: String
         let name: String
+        let style: EffectStyle
+        
+        enum EffectStyle: String {
+            case burst, ring, beam, spiral, wave, tornado, shadowclone
+        }
     }
 
-    // MARK: - Team & Boss
+    // MARK: - Battle Entities
     @Published private(set) var team: [GameCharacter]
     var activeCharacter: GameCharacter { team[safe: activeIndex] ?? team.first ?? .example }
     let boss: Boss
@@ -40,7 +49,7 @@ final class BattleSceneController: ObservableObject {
     private let characterManager: CharacterLevelManager
     private let skillManager: SkillManager
 
-    // MARK: - Internal Logic
+    // MARK: - Logic
     private var cancellables = Set<AnyCancellable>()
     private let attackCooldown: TimeInterval = 0.5
     private var lastAttackTime: Date = .distantPast
@@ -72,15 +81,16 @@ final class BattleSceneController: ObservableObject {
     }
 }
 
-// MARK: - Gameplay Logic
+//
+// MARK: - Core Gameplay
+//
 extension BattleSceneController {
 
-    /// Führt einen normalen Basisangriff aus.
     func performAttack() {
         guard canAttack, bossHp > 0, !isBattleFinished else { return }
 
         startAttackCooldown()
-        triggerHitEffect(intensity: 1.0)
+        triggerHitEffect()
 
         let damage = Int.random(in: 12...26)
         applyDamage(damage)
@@ -88,70 +98,54 @@ extension BattleSceneController {
 
         checkBattleEnd()
     }
+    
+    private func effectStyle(for element: String) -> SkillEffect.EffectStyle {
+        switch element.lowercased() {
+        case "fire": return .burst
+        case "ice": return .ring
+        case "void": return .spiral
+        case "shadow": return .wave
+        case "shadowclone": return .shadowclone
+        case "thunder": return .beam
+        case "tornado": return .tornado
+        case "nature": return .ring
+        case "wind": return .beam
+        default: return .burst
+        }
+    }
 
-    // MARK: - Skill Interface
-    func useSkill(_ skillName: String) {
-        guard let skill = skillManager.skill(named: skillName),
-              !isSkillOnCooldown(skillName),
-              bossHp > 0 else { return }
 
-        startSkillCooldown(skillName, duration: skill.cooldown)
+    func useSkill(_ name: String) {
+        guard let skill = skillManager.skill(named: name) else { return }
 
+        // 🎨 Hintergrund-Farbimpuls
+        triggerBackgroundTint(for: skill.element)
+
+        
+        // ⚡ Aktiviere FX
+        let style = effectStyle(for: skill.element)
+        activeSkillEffect = SkillEffect(element: skill.element, name: skill.name, style: style)
+        showSkillParticles = true
+
+        // 🧠 Logik nach Typ
         switch skill.type.lowercased() {
         case "damage":
-            castDamageSkill(
-                name: skill.name,
-                element: skill.element,
-                damage: skill.damageRange ?? 20...30
-            )
-
+            castDamageSkill(name: skill.name, element: skill.element, damage: skill.damageRange ?? 20...30)
         case "heal":
-            castHealSkill(
-                name: skill.name,
-                element: skill.element,
-                heal: skill.healAmount ?? 20
-            )
-
+            castHealSkill(name: skill.name, element: skill.element, heal: skill.healAmount ?? 20)
+        case "shadowclone", "clone", "illusion":
+            castShadowCloneSkill(name: skill.name, element: skill.element)
         default:
             displayReward("✨ \(skill.name) aktiviert!")
         }
     }
-
-    // MARK: - Cooldowns
-    func isSkillOnCooldown(_ skill: String) -> Bool {
-        cooldowns[skill.lowercased()] ?? false
-    }
-
-    private func startSkillCooldown(_ skill: String, duration: TimeInterval) {
-        let key = skill.lowercased()
-        cooldowns[key] = true
-        cooldownRemaining[key] = duration
-        cooldownDuration[key] = duration
-
-        Task {
-            let start = Date()
-            while let remaining = cooldownRemaining[key], remaining > 0 {
-                try? await Task.sleep(nanoseconds: 200_000_000) // alle 0.2 Sek aktualisieren
-                let elapsed = Date().timeIntervalSince(start)
-                cooldownRemaining[key] = max(duration - elapsed, 0)
-            }
-            cooldowns[key] = false
-            cooldownRemaining[key] = nil
-            cooldownDuration[key] = nil
-        }
-    }
-
-
-    private func startAttackCooldown() {
-        canAttack = false
-        Task {
-            try? await Task.sleep(nanoseconds: UInt64(attackCooldown * 1_000_000_000))
-            canAttack = true
-        }
-    }
 }
 
+
+
+//
 // MARK: - Skill Actions
+//
 private extension BattleSceneController {
 
     func castDamageSkill(name: String, element: String, damage: ClosedRange<Int>) {
@@ -163,7 +157,6 @@ private extension BattleSceneController {
 
         triggerHitEffect(intensity: 1.3)
         deactivateSkillEffect(after: 1.2)
-
         checkBattleEnd()
     }
 
@@ -173,8 +166,58 @@ private extension BattleSceneController {
         deactivateSkillEffect(after: 1.2)
     }
 
+    func castShadowCloneSkill(name: String, element: String) {
+        guard !showShadowClone else { return }
+
+        activateSkillEffect(element: element, name: name)
+        showShadowClone = true
+        shadowCloneOpacity = 0.0
+        shadowCloneOffset = -60
+
+        withAnimation(.easeOut(duration: 0.3)) {
+            shadowCloneOpacity = 0.8
+            shadowCloneOffset = -40
+        }
+
+        // 🌀 Clone greift verzögert an
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            self.performAttack()
+        }
+
+        // 💨 Clone verblasst
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            withAnimation(.easeInOut(duration: 0.4)) {
+                self.shadowCloneOpacity = 0.0
+                self.shadowCloneOffset = -20
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                self.showShadowClone = false
+                self.deactivateSkillEffect(after: 0.3)
+            }
+        }
+
+        displayReward("🌀 Shadow Clone aktiviert!")
+    }
+}
+
+//
+// MARK: - Skill FX Handling
+//
+private extension BattleSceneController {
+
     func activateSkillEffect(element: String, name: String) {
-        activeSkillEffect = SkillEffect(element: element, name: name)
+        let style: SkillEffect.EffectStyle = switch element.lowercased() {
+        case "fire": .burst
+        case "ice": .ring
+        case "thunder": .beam
+        case "void": .spiral
+        case "shadow": .wave
+        case "tornado": .tornado
+        case "shadowclone": .shadowclone
+        default: .burst
+        }
+        
+        activeSkillEffect = SkillEffect(element: element, name: name, style: style)
         withAnimation(.easeOut(duration: 0.15)) { showSkillParticles = true }
     }
 
@@ -187,9 +230,36 @@ private extension BattleSceneController {
             }
         }
     }
+
+    func triggerBackgroundTint(for element: String) {
+        let tint = colorForElement(element)
+        withAnimation(.easeInOut(duration: 0.3)) { backgroundTint = tint }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+            withAnimation(.easeOut(duration: 0.8)) { self.backgroundTint = .clear }
+        }
+    }
+
+    func colorForElement(_ element: String) -> Color {
+        switch element.lowercased() {
+        case "fire": .red
+        case "ice": .cyan
+        case "void": .purple
+        case "shadow": .purple
+        case "thunder": .yellow
+        case "nature": .green
+        case "wind": .mint
+        case "water": .blue
+        case "tornado": .brown
+        case "shadowclone": .indigo
+        default: .clear
+        }
+    }
 }
 
-// MARK: - Damage / Heal / Rewards
+//
+// MARK: - Damage / Heal / Feedback
+//
 private extension BattleSceneController {
 
     func applyDamage(_ amount: Int) {
@@ -203,10 +273,8 @@ private extension BattleSceneController {
 
     func triggerHitEffect(intensity: Double = 1.0) {
         withAnimation(.easeOut(duration: 0.1)) { showHitEffect = true }
-
-        Task {
-            try? await Task.sleep(nanoseconds: 400_000_000)
-            withAnimation(.easeInOut(duration: 0.25)) { showHitEffect = false }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+            withAnimation(.easeInOut(duration: 0.25)) { self.showHitEffect = false }
         }
     }
 
@@ -214,25 +282,22 @@ private extension BattleSceneController {
         rewardText = text
         withAnimation(.easeInOut(duration: 0.3)) { rewardOpacity = 1 }
 
-        Task {
-            try? await Task.sleep(nanoseconds: 1_000_000_000)
-            withAnimation(.easeInOut(duration: 0.5)) { rewardOpacity = 0 }
-
-            try? await Task.sleep(nanoseconds: 600_000_000)
-            rewardText = nil
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            withAnimation(.easeInOut(duration: 0.5)) { self.rewardOpacity = 0 }
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.6) {
+            self.rewardText = nil
         }
     }
 }
 
-// MARK: - Battle End / Rewards
+//
+// MARK: - Battle End
+//
 private extension BattleSceneController {
 
     func checkBattleEnd() {
         guard bossHp <= 0, !isBattleFinished else { return }
-        battleFinished()
-    }
-
-    func battleFinished() {
         isBattleFinished = true
         triggerRewards()
         onBossDefeated?()
@@ -253,7 +318,49 @@ private extension BattleSceneController {
     }
 }
 
-// MARK: - Array Safe Index
+//
+// MARK: - Cooldowns
+//
+extension BattleSceneController {
+
+    func isSkillOnCooldown(_ skill: String) -> Bool {
+        cooldowns[skill.lowercased()] ?? false
+    }
+
+    func startSkillCooldown(_ skill: String, duration: TimeInterval) {
+        let key = skill.lowercased()
+        cooldowns[key] = true
+        cooldownRemaining[key] = duration
+        cooldownDuration[key] = duration
+
+        Task.detached(priority: .background) {
+            let start = Date()
+            while let remaining = await self.cooldownRemaining[key], remaining > 0 {
+                try? await Task.sleep(nanoseconds: 200_000_000)
+                let elapsed = Date().timeIntervalSince(start)
+                await MainActor.run {
+                    self.cooldownRemaining[key] = max(duration - elapsed, 0)
+                }
+            }
+            await MainActor.run {
+                self.cooldowns[key] = false
+                self.cooldownRemaining[key] = nil
+                self.cooldownDuration[key] = nil
+            }
+        }
+    }
+
+    func startAttackCooldown() {
+        canAttack = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + attackCooldown) {
+            self.canAttack = true
+        }
+    }
+}
+
+//
+// MARK: - Safe Array Access
+//
 private extension Array {
     subscript(safe index: Int) -> Element? {
         indices.contains(index) ? self[index] : nil

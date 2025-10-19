@@ -6,6 +6,9 @@ struct VertexOut {
     float pointSize [[point_size]];
 };
 
+
+
+
 vertex VertexOut basic_vertex(uint vid [[vertex_id]],
                               const device float2 *vertices [[buffer(0)]]) {
     VertexOut out;
