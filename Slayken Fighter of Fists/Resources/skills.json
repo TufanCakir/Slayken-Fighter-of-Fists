@@ -177,5 +177,16 @@
     "minDamage": 30,
     "maxDamage": 45,
     "description": "Erzeugt einen mächtigen Luftwirbel, der Gegner fortbläst."
+  },
+  {
+    "id": "skill_beamstrike_001",
+    "name": "Beam Strike",
+    "element": "beamstrike",
+    "type": "damage",
+    "cooldown": 10,
+    "minDamage": 30,
+    "maxDamage": 45,
+    "description": "Erzeugt einen mächtigen Beam, der Gegner fortbläst."
   }
 ]
+ 

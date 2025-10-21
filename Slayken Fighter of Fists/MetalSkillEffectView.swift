@@ -78,23 +78,24 @@ struct MetalSkillEffectView: UIViewRepresentable {
             fragment float4 basic_fragment(VertexOut in [[stage_in]]) {
                 float2 center = float2(0.5, 0.5);
                 float dist = distance(in.uv, center);
-                float glow = 1.0 - pow(dist, 1.4);
 
+                float glow = 1.6 - pow(dist, 3.5);
+                glow = clamp(glow, 0.0, 1.0);
+
+                float flicker = sin(in.position.x * 60.0 + in.position.y * 120.0 + dist * 15.0) * 0.4 + 0.6;
+                glow *= mix(0.9, 1.4, flicker);
+
+                // Farbmodifikatoren
                 float3 color = in.color.rgb;
+                if (color.r > 0.8 && color.g < 0.4)       { glow *= 2.0; color *= float3(1.0, 0.6, 0.3); } // Fire
+                else if (color.b > 0.8 && color.g > 0.6)  { glow *= 1.6; color *= float3(0.6, 0.9, 1.0); } // Ice
+                else if (color.r > 0.9 && color.g > 0.9)  { glow *= 2.2; color *= float3(1.2, 1.2, 0.6); } // Thunder
+                else if (color.b > 0.7 && color.r > 0.7)  { glow *= 1.8; color *= float3(0.9, 0.4, 1.2); } // Void
+                else if (color.r < 0.3 && color.g < 0.3)  { glow *= 1.1; color *= float3(0.4, 0.2, 0.5); } // Shadow
 
-                if (color.r > 0.8 && color.g < 0.4) {
-                    glow *= 1.8; color.rgb *= float3(1.0, 0.6, 0.3); // Fire
-                } else if (color.b > 0.8 && color.g > 0.6) {
-                    glow *= 1.3; color.rgb *= float3(0.6, 0.9, 1.0); // Ice
-                } else if (color.r > 0.9 && color.g > 0.9) {
-                    glow *= 2.0; color.rgb *= float3(1.2, 1.2, 0.5); // Thunder
-                } else if (color.b > 0.7 && color.r > 0.7) {
-                    glow *= 1.5; color.rgb *= float3(0.9, 0.4, 1.2); // Void
-                } else if (color.r < 0.3 && color.g < 0.3) {
-                    glow *= 1.0; color.rgb *= float3(0.4, 0.2, 0.5); // Shadow
-                }
-
-                return float4(color * glow * 1.3, in.color.a * (1.0 - dist));
+                // Bloom-ähnlicher Soft-Falloff
+                float fade = smoothstep(1.0, 0.0, dist);
+                return float4(color * glow * 1.5, in.color.a * fade);
             }
             """
 
@@ -141,18 +142,69 @@ struct MetalSkillEffectView: UIViewRepresentable {
             case "wind": return SIMD4(0.6, 1.0, 0.8, 1.0)
             case "water": return SIMD4(0.6, 1.0, 0.8, 1.0)
             case "tornado": return SIMD4(0.6, 1.0, 0.8, 1.0)
-
             case "shadowclone": return SIMD4(0.6, 1.0, 0.8, 1.0)
 
 
             default: return SIMD4(1, 1, 1, 1)
             }
         }
+        
+        private func generateBeamstrike(color: SIMD4<Float>) {
+            let beamDepthSteps = 60           // Wie viele "Tiefenebenen" der Strahl hat
+            let beamParticlesPerStep = 20     // Partikel pro Ebene
+            let zSpread: Float = 0.015        // Breitenverzerrung basierend auf Tiefe
+            let travelSpeed: Float = 0.08     // Geschwindigkeit des Beams (nach vorne)
+            let coreIntensity: Float = 1.3    // Leuchtkraft des Kerns
+
+            particles.removeAll(keepingCapacity: true)
+
+            // --- Simuliere Tiefe, von "Z = -1" (weit hinten) bis "Z = 0" (vorne) ---
+            for step in 0..<beamDepthSteps {
+                let depth = Float(step) / Float(beamDepthSteps)
+                let scaleZ = 1.0 + depth * 2.5      // Je näher, desto größer
+                let fadeZ = 1.0 - depth * 0.9       // Transparenz je nach Tiefe
+                let offsetY: Float = -0.5 + depth * 1.4  // Bewegung Richtung Kamera
+
+                for _ in 0..<beamParticlesPerStep {
+                    let spreadX = Float.random(in: -0.1...0.1) * scaleZ * (1.0 + depth * zSpread * 50.0)
+                    let spreadY = Float.random(in: -0.05...0.05)
+                    let pos = SIMD2<Float>(spreadX, offsetY + spreadY)
+
+                    let vel = SIMD2<Float>(0, travelSpeed * (1.2 - depth * 0.6))
+                    var c = color
+                    c.w = fadeZ * Float.random(in: 0.6...1.0)
+                    c *= SIMD4<Float>(coreIntensity, coreIntensity, coreIntensity, 1.0)
+
+                    particles.append(Particle(position: pos, velocity: vel, color: c))
+                }
+            }
+
+            // --- Extra: Lichtkern (intensiver Strahl vorne) ---
+            for _ in 0..<Int(80 * scale) {
+                let pos = SIMD2<Float>(
+                    Float.random(in: -0.02...0.02),
+                    Float.random(in: 0.3...0.5)
+                )
+                let vel = SIMD2<Float>(0, travelSpeed * 1.5)
+                var coreColor = SIMD4<Float>(1.0, 0.95, 0.8, 1.0)
+                coreColor *= color
+                particles.append(Particle(position: pos, velocity: vel, color: coreColor))
+            }
+        }
+
+
 
         // MARK: - Particle Patterns
         private func generatePattern(for style: String, color: SIMD4<Float>) {
             let count = Int(180 * scale)
             particles.removeAll(keepingCapacity: true)
+            
+            // ⚠️ Spezialfall BEAMSTRIKE direkt behandeln
+             if style == "beamstrike" {
+                 generateBeamstrike(color: color)
+                 return
+             }
+            
 
             for i in 0..<count {
                 var pos = SIMD2<Float>(0, -0.6)
@@ -218,6 +270,9 @@ struct MetalSkillEffectView: UIViewRepresentable {
                         0.35 + Float.random(in: 0.1...0.2),
                         1.0
                     )
+       
+
+
                     
                     // Manche Partikel sind leicht transparent für „Rauch“-Effekt
                     c.w = Float.random(in: 0.3...0.8)
@@ -240,16 +295,17 @@ struct MetalSkillEffectView: UIViewRepresentable {
                   let drawable = view.currentDrawable else { return }
 
             if life > 0 {
-                life -= 0.02
+                life -= 0.015
                 for i in 0..<particles.count {
                     particles[i].position += particles[i].velocity
-                    particles[i].velocity.x += Float.random(in: -0.0003...0.0003)
-                    particles[i].velocity.y += 0.0002
-                    particles[i].color.w = max(0, particles[i].color.w - 0.02)
+                    particles[i].velocity.x *= 0.98 // leichte Stabilisierung
+                    particles[i].velocity.y *= 1.01
+                    particles[i].color.w = max(0, particles[i].color.w - 0.015)
                 }
             } else {
                 particles.removeAll()
             }
+
 
             guard !particles.isEmpty else {
                 commandBuffer.present(drawable)

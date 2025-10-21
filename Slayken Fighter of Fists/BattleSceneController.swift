@@ -33,7 +33,7 @@ final class BattleSceneController: ObservableObject {
         let style: EffectStyle
         
         enum EffectStyle: String {
-            case burst, ring, beam, spiral, wave, tornado, shadowclone
+            case burst, ring, beam, spiral, wave, tornado, shadowclone, beamstrike
         }
     }
 
@@ -110,10 +110,11 @@ extension BattleSceneController {
         case "tornado": return .tornado
         case "nature": return .ring
         case "wind": return .beam
+        case "beamstrike": return .beamstrike
         default: return .burst
         }
     }
-
+    
 
     func useSkill(_ name: String) {
         guard let skill = skillManager.skill(named: name) else { return }
@@ -213,6 +214,7 @@ private extension BattleSceneController {
         case "void": .spiral
         case "shadow": .wave
         case "tornado": .tornado
+        case "beamstrike": .beamstrike
         case "shadowclone": .shadowclone
         default: .burst
         }
@@ -252,6 +254,7 @@ private extension BattleSceneController {
         case "water": .blue
         case "tornado": .brown
         case "shadowclone": .indigo
+        case "beamstrike": .green
         default: .clear
         }
     }

@@ -298,6 +298,7 @@ private extension BattleSceneView {
         case "wind": return .mint
         case "water": return .blue
         case "tornado": return .brown
+        case "beamstrike": return .green
         default: return .white
         }
     }

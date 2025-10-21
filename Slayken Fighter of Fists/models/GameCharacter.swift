@@ -32,7 +32,7 @@ extension GameCharacter {
         auraColor: "#FF4500",
         gradient: GradientColors(top: "#FF8000", bottom: "#400000"),
         particle: ParticleEffect(type: "flame", speed: 1.2, size: 6.0),
-        skillIDs: ["skill_fire_001", "skill_ice_001", "skill_void_001", "shadow_clone", "skill_tornado_001", "skill_nature_001", "skill_shadow_002", "skill_wind_001", "skill_water_001"],
+        skillIDs: ["skill_fire_001", "skill_ice_001", "skill_void_001", "shadow_clone", "skill_tornado_001", "skill_nature_001", "skill_shadow_002", "skill_wind_001", "skill_water_001", "skill_beamstrike_001"],
 
     )
 }
