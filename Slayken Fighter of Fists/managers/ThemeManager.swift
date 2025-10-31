@@ -7,6 +7,7 @@ final class ThemeManager: ObservableObject {
 
     @Published var current: AppTheme
     @Published var allThemes: [AppTheme]
+    @Published var activeCharacter: GameCharacter? = nil
 
     private let saveKey = "selectedThemeID"
 
@@ -37,5 +38,10 @@ final class ThemeManager: ObservableObject {
 
     var tintColor: Color {
         Color(hex: current.tint)
+    }
+    
+    func selectCharacter(_ character: GameCharacter) {
+        activeCharacter = character
+        print("🔥 Selected active character: \(character.name)")
     }
 }

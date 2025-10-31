@@ -1,3 +1,10 @@
+//
+//  SettingsView.swift
+//  Slayken Fighter of Fists
+//
+//  Created by Tufan Cakir on 2025-10-30.
+//
+
 import SwiftUI
 
 struct SettingsView: View {
@@ -5,8 +12,6 @@ struct SettingsView: View {
     @EnvironmentObject var coinManager: CoinManager
     @EnvironmentObject var crystalManager: CrystalManager
     @EnvironmentObject var accountManager: AccountLevelManager
-    @EnvironmentObject var summonManager: SummonManager
-    @EnvironmentObject var teamManager: TeamManager
     @EnvironmentObject var themeManager: ThemeManager
     @EnvironmentObject var musicManager: MusicManager
 
@@ -89,7 +94,7 @@ struct SettingsView: View {
                 Button("Cancel", role: .cancel) {}
                 Button("Reset", role: .destructive) { performReset() }
             } message: {
-                Text("This will permanently delete your progress, characters and team setup.")
+                Text("This will permanently delete your progress, characters, skins, and shop data.")
             }
             .overlay(resetConfirmationOverlay)
         }
@@ -124,14 +129,16 @@ struct SettingsView: View {
         let generator = UINotificationFeedbackGenerator()
         generator.notificationOccurred(.success)
 
+        // 🧹 Lokale Daten löschen
         coinManager.reset()
         crystalManager.reset()
         accountManager.reset()
-        summonManager.removeAll()
-        teamManager.removeAll()
-        CharacterLevelManager.shared.reset() // 🔹 Charaktere zurücksetzen
+        CharacterManager.shared.resetProgress()
         StageProgressManager.shared.resetProgress()
 
+
+
+        // 🎵 UI Feedback
         withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
             showResetConfirmation = true
             resetAnimation = true
@@ -143,10 +150,8 @@ struct SettingsView: View {
             }
         }
 
-        print("🧩 All saved data cleared successfully (including Character Progress).")
+        print("🧩 All saved data cleared successfully (coins, crystals, characters, skins, and shop).")
     }
-
-
 
     // MARK: - Section Wrapper
     @ViewBuilder
@@ -179,7 +184,6 @@ struct MusicToggleButton: View {
                 iconScale = 1.2
             }
 
-            // kleine Rückfederung
             withAnimation(.spring(response: 0.4, dampingFraction: 0.5, blendDuration: 0.2).delay(0.1)) {
                 iconScale = 1.0
             }
@@ -245,8 +249,6 @@ private struct StatBox: View {
         .environmentObject(CoinManager.shared)
         .environmentObject(CrystalManager.shared)
         .environmentObject(AccountLevelManager.shared)
-        .environmentObject(SummonManager.shared)
-        .environmentObject(TeamManager.shared)
         .environmentObject(ThemeManager.shared)
         .environmentObject(MusicManager())
         .preferredColorScheme(.dark)

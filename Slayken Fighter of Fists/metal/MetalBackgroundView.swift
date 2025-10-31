@@ -2,9 +2,11 @@ import SwiftUI
 import MetalKit
 
 struct MetalBackgroundView: UIViewRepresentable {
+    // MARK: - Eingabefarben
     let topColor: SIMD4<Float>
     let bottomColor: SIMD4<Float>
     var bossColor: SIMD4<Float> = SIMD4<Float>(0, 0, 0, 1)
+    var characterColor: SIMD4<Float> = SIMD4<Float>(1, 0, 0, 1) // 🔹 neu
     var intensity: Float = 0.4
 
     func makeCoordinator() -> Coordinator { Coordinator() }
@@ -24,9 +26,9 @@ struct MetalBackgroundView: UIViewRepresentable {
                                       top: topColor,
                                       bottom: bottomColor,
                                       boss: bossColor,
+                                      character: characterColor,
                                       intensity: intensity)
         }
-
         return mtkView
     }
 
@@ -34,6 +36,7 @@ struct MetalBackgroundView: UIViewRepresentable {
         context.coordinator.update(top: topColor,
                                    bottom: bottomColor,
                                    boss: bossColor,
+                                   character: characterColor,
                                    intensity: intensity)
     }
 
@@ -47,25 +50,29 @@ struct MetalBackgroundView: UIViewRepresentable {
         var uniformBuffer: MTLBuffer!
         var time: Float = 0
 
+        // MARK: - Structs
         struct GradientUniforms {
             var topColor: SIMD4<Float>
             var bottomColor: SIMD4<Float>
             var bossColor: SIMD4<Float>
+            var characterColor: SIMD4<Float> // 🔹 neu
             var intensity: Float
             var height: Float
             var time: Float
         }
 
+        // MARK: - Setup
         func setup(device: MTLDevice,
                    top: SIMD4<Float>,
                    bottom: SIMD4<Float>,
                    boss: SIMD4<Float>,
+                   character: SIMD4<Float>,
                    intensity: Float)
         {
             self.device = device
             commandQueue = device.makeCommandQueue()
 
-            // Fullscreen Quad (zwei Dreiecke)
+            // Fullscreen Quad
             let vertices: [SIMD2<Float>] = [
                 [-1, -1], [1, -1], [-1, 1],
                 [1, -1], [1, 1], [-1, 1]
@@ -73,7 +80,7 @@ struct MetalBackgroundView: UIViewRepresentable {
             vertexBuffer = device.makeBuffer(bytes: vertices,
                                              length: MemoryLayout<SIMD2<Float>>.stride * vertices.count)
 
-            // 🔹 Shader mit animiertem Noise und radialem Boss-Tint
+            // MARK: - Shader Source mit CharacterTint
             let shaderSource = """
             #include <metal_stdlib>
             using namespace metal;
@@ -87,6 +94,7 @@ struct MetalBackgroundView: UIViewRepresentable {
                 float4 topColor;
                 float4 bottomColor;
                 float4 bossColor;
+                float4 characterColor;
                 float intensity;
                 float height;
                 float time;
@@ -108,11 +116,11 @@ struct MetalBackgroundView: UIViewRepresentable {
                                           constant GradientUniforms& uniforms [[buffer(1)]]) {
                 float2 uv = in.uv;
 
-                // Vertikaler Basisverlauf
+                // Vertikaler Verlauf
                 float t = smoothstep(0.0, 1.0, uv.y);
                 float4 baseColor = mix(uniforms.bottomColor, uniforms.topColor, t);
 
-                // Leichtes Rauschen für Bewegung
+                // Animiertes Noise
                 float n = noise(uv * 8.0 + uniforms.time * 0.05);
                 float flicker = mix(0.95, 1.05, n);
 
@@ -120,10 +128,13 @@ struct MetalBackgroundView: UIViewRepresentable {
                 float2 center = float2(0.5, 0.4);
                 float dist = distance(uv, center);
                 float bossBlend = smoothstep(0.7, 0.0, dist) * uniforms.intensity;
-                float3 mixed = mix(baseColor.rgb, uniforms.bossColor.rgb, bossBlend);
 
-                // Kombination aus Noise + Lichtverlauf
-                float3 finalColor = mixed * flicker * mix(0.85, 1.0, t);
+                // 🔹 Charakter-Tönung (sanftes Overlay von oben)
+                float charBlend = smoothstep(1.0, 0.4, uv.y) * 0.4;
+                float3 bossMix = mix(baseColor.rgb, uniforms.bossColor.rgb, bossBlend);
+                float3 charMix = mix(bossMix, uniforms.characterColor.rgb, charBlend);
+
+                float3 finalColor = charMix * flicker * mix(0.85, 1.0, t);
                 return float4(finalColor, 1.0);
             }
             """
@@ -135,11 +146,11 @@ struct MetalBackgroundView: UIViewRepresentable {
             pipelineDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
             pipeline = try! device.makeRenderPipelineState(descriptor: pipelineDescriptor)
 
-            // Initial Uniforms
             var uniforms = GradientUniforms(
                 topColor: top,
                 bottomColor: bottom,
                 bossColor: boss,
+                characterColor: character,
                 intensity: intensity,
                 height: 800,
                 time: 0
@@ -148,9 +159,11 @@ struct MetalBackgroundView: UIViewRepresentable {
                                               length: MemoryLayout<GradientUniforms>.stride)
         }
 
+        // MARK: - Update
         func update(top: SIMD4<Float>,
                     bottom: SIMD4<Float>,
                     boss: SIMD4<Float>,
+                    character: SIMD4<Float>,
                     intensity: Float)
         {
             guard uniformBuffer != nil else { return }
@@ -158,6 +171,7 @@ struct MetalBackgroundView: UIViewRepresentable {
                 topColor: top,
                 bottomColor: bottom,
                 bossColor: boss,
+                characterColor: character,
                 intensity: intensity,
                 height: Float(view?.drawableSize.height ?? 800),
                 time: time
@@ -172,10 +186,6 @@ struct MetalBackgroundView: UIViewRepresentable {
 
             time += 1 / 60.0
             self.view = view
-            update(top: SIMD4(1, 1, 1, 1),
-                   bottom: SIMD4(0, 0, 0, 1),
-                   boss: SIMD4(0, 0, 0, 1),
-                   intensity: 0.3)
 
             let commandBuffer = commandQueue.makeCommandBuffer()!
             let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: pass)!

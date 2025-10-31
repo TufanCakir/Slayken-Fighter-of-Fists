@@ -8,17 +8,17 @@
   },
   {
     "id": "2",
-    "title": "Team",
-    "icon": "person.3.fill",
-    "color": "#0096FF",
-    "destination": "TeamView"
+    "title": "Create",
+    "icon": "person.crop.circle.badge.plus",
+    "color": "#FF6A00",
+    "destination": "CreateCharacterView"
   },
   {
     "id": "3",
-    "title": "Summon",
-    "icon": "sparkles",
-    "color": "#FF6A00",
-    "destination": "SummonView"
+    "title": "Overview",
+    "icon": "person.3.fill",
+    "color": "#0096FF",
+    "destination": "CharacterOverView"
   },
   {
     "id": "4",

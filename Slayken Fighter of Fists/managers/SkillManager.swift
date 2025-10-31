@@ -1,3 +1,10 @@
+//
+//  SkillManager.swift
+//  Slayken Fighter of Fists
+//
+//  Created by Tufan Cakir on 2025-10-31.
+//
+
 import Foundation
 import Combine
 
@@ -5,69 +12,109 @@ import Combine
 final class SkillManager: ObservableObject {
     // MARK: - Published Properties
     @Published private(set) var skills: [Skill] = []
-    @Published private(set) var isLoaded: Bool = false
+    @Published private(set) var isLoaded = false
 
     // MARK: - Singleton
     static let shared = SkillManager()
 
+    // MARK: - Private Cache
+    private var skillLookup: [String: Skill] = [:]
+
     // MARK: - Init
-    init() {
-        loadSkills()
+    private init() {
+        Task.detached(priority: .background) { [weak self] in
+            await self?.loadSkills()
+        }
     }
 
     // MARK: - Lade Skills aus JSON
-    private func loadSkills() {
+    private func loadSkills() async {
         guard let url = Bundle.main.url(forResource: "skills", withExtension: "json") else {
             print("⚠️ [SkillManager] skills.json nicht gefunden im Bundle.")
+            await MainActor.run { self.isLoaded = true }
             return
         }
 
         do {
             let data = try Data(contentsOf: url)
             let decoded = try JSONDecoder().decode([Skill].self, from: data)
-            skills = decoded
-            isLoaded = true
-            print("✅ [SkillManager] \(decoded.count) Skills erfolgreich geladen.")
+
+            await MainActor.run {
+                // ✅ Duplikate nach ID entfernen (manuell statt KeyPath)
+                var seen: Set<String> = []
+                let unique = decoded.filter { skill in
+                    let key = skill.id.lowercased()
+                    if seen.contains(key) { return false }
+                    seen.insert(key)
+                    return true
+                }
+
+                // ✅ Sortieren & speichern
+                self.skills = unique.sorted(by: { $0.id.lowercased() < $1.id.lowercased() })
+                self.isLoaded = true
+
+                // 🔍 Cache für schnelle Abfragen
+                self.skillLookup = Dictionary(uniqueKeysWithValues: unique.map {
+                    ($0.id.lowercased(), $0)
+                })
+
+                print("✅ [SkillManager] \(unique.count) Skills erfolgreich geladen.")
+            }
+
         } catch {
-            print("❌ [SkillManager] Fehler beim Laden der Skills: \(error.localizedDescription)")
+            await MainActor.run {
+                print("❌ [SkillManager] Fehler beim Laden: \(error.localizedDescription)")
+                self.skills = []
+                self.isLoaded = true
+            }
         }
     }
 
-    // MARK: - Skill Zugriff
-
-    /// Gibt einen Skill anhand des Namens zurück.
+    // MARK: - Zugriff per Name oder ID
     func skill(named name: String) -> Skill? {
         skills.first { $0.name.caseInsensitiveCompare(name) == .orderedSame }
     }
 
-    /// Gibt Skills anhand der IDs zurück (case-insensitive und tolerant).
+    func skill(id: String) -> Skill? {
+        skillLookup[id.lowercased()]
+    }
+
+    // MARK: - Mehrere Skills abrufen
     func getSkills(for ids: [String]) -> [Skill] {
-        let normalizedIDs = ids.map { $0.lowercased().trimmingCharacters(in: .whitespacesAndNewlines) }
+        guard !ids.isEmpty else { return [] }
 
-        let matched = skills.filter { skill in
-            normalizedIDs.contains(skill.id.lowercased())
-        }
+        let normalized = ids.map { $0.lowercased().trimmingCharacters(in: .whitespacesAndNewlines) }
 
-        // 🔍 Debug-Ausgabe (hilfreich bei fehlenden Skills)
-        let foundNames = matched.map { $0.name }
-        let missing = normalizedIDs.filter { id in !skills.contains { $0.id.lowercased() == id } }
+        let matched = normalized.compactMap { skillLookup[$0] }
 
+        let missing = normalized.filter { skillLookup[$0] == nil }
         if !missing.isEmpty {
-            print("⚠️ [SkillManager] Nicht gefundene Skills: \(missing.joined(separator: ", "))")
+            print("⚠️ [SkillManager] Fehlende Skill-IDs: \(missing.joined(separator: ", "))")
         }
 
-        print("✅ [SkillManager] Skills für Charakter geladen: \(foundNames.joined(separator: ", "))")
-
+        let foundNames = matched.map(\.name).joined(separator: ", ")
+        print("✅ [SkillManager] Gefundene Skills: \(foundNames)")
         return matched
     }
 
-    /// Gibt Skills eines bestimmten Elements zurück.
+    // MARK: - Skills nach Element
     func getSkills(forElement element: String) -> [Skill] {
-        skills.filter { $0.element.lowercased() == element.lowercased() }
+        let lower = element.lowercased()
+        let filtered = skills.filter { $0.element.lowercased() == lower }
+        print("🌪 [SkillManager] \(filtered.count) Skills für Element \(element.capitalized) gefunden.")
+        return filtered
     }
 
-    /// Prüft, ob ein Skill existiert (tolerant).
+    // MARK: - Existenzprüfung
     func contains(skillID id: String) -> Bool {
-        skills.contains { $0.id.lowercased() == id.lowercased() }
+        skillLookup[id.lowercased()] != nil
+    }
+
+    // MARK: - Debug-Ausgabe
+    func printAllSkills() {
+        print("📘 Alle Skills:")
+        for skill in skills {
+            print("• [\(skill.element.capitalized)] \(skill.name) (\(skill.id)) – Typ: \(skill.type)")
+        }
     }
 }

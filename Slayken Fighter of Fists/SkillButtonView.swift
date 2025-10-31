@@ -1,36 +1,59 @@
+//
+//  SkillButtonView.swift
+//  Slayken Fighter of Fists
+//
+//  Created by Tufan Cakir on 2025-10-31.
+//
+
 import SwiftUI
 
 struct SkillButtonView: View {
     let skill: Skill
     @ObservedObject var controller: BattleSceneController
 
-    // 🔧 Dynamische Button-Größe (Skaliert automatisch bei wenig Platz)
+    // MARK: - Dynamische Größe
     @Environment(\.horizontalSizeClass) private var sizeClass
     private var buttonSize: CGFloat { sizeClass == .compact ? 60 : 72 }
 
+    // MARK: - Berechnete States
+    private var isOnCooldown: Bool {
+        controller.isSkillOnCooldown(skill.name)
+    }
+
+    private var cooldownRemaining: Double {
+        controller.cooldownRemaining[skill.name.lowercased()] ?? 0
+    }
+
+    private var cooldownDuration: Double {
+        controller.cooldownDuration[skill.name.lowercased()] ?? 1
+    }
+
+    // MARK: - Body
     var body: some View {
         ZStack {
             baseTile
             elementGlow
-            if controller.isSkillOnCooldown(skill.name) {
+
+            if isOnCooldown {
                 cooldownOverlay
             }
+
             content
         }
         .frame(width: buttonSize, height: buttonSize)
         .contentShape(Rectangle())
         .onTapGesture {
-            guard !controller.isSkillOnCooldown(skill.name) else { return }
+            guard !isOnCooldown else { return }
             controller.useSkill(skill.name)
         }
-        .animation(.easeInOut(duration: 0.25), value: controller.cooldownRemaining[skill.name.lowercased()])
+        .animation(.easeInOut(duration: 0.25), value: cooldownRemaining)
         .accessibilityLabel(Text(skill.name))
         .accessibilityHint(Text("Aktiviere Fähigkeit"))
     }
 }
 
 //
-// MARK: - Tile & Hintergrund
+// MARK: - 🔳 Base Tile
 //
 private extension SkillButtonView {
     var baseTile: some View {
@@ -46,24 +69,26 @@ private extension SkillButtonView {
                 RoundedRectangle(cornerRadius: 14)
                     .strokeBorder(
                         LinearGradient(
-                            colors: controller.isSkillOnCooldown(skill.name)
-                            ? [.gray.opacity(0.2), .gray.opacity(0.1)]
-                            : [.yellow.opacity(0.9), .orange.opacity(0.6)],
+                            colors: isOnCooldown
+                            ? [.gray.opacity(0.25), .gray.opacity(0.1)]
+                            : [.yellow.opacity(0.9), .orange.opacity(0.7)],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
                         ),
-                        lineWidth: controller.isSkillOnCooldown(skill.name) ? 1 : 2
+                        lineWidth: isOnCooldown ? 1 : 2
                     )
                     .shadow(color: .black.opacity(0.8), radius: 3)
             )
             .shadow(color: .black.opacity(0.6), radius: 6, y: 3)
             .overlay(
-                // Glüheffekt bei aktivem Skill
+                // Glow bei aktivem Skill
                 RoundedRectangle(cornerRadius: 14)
                     .stroke(
-                        LinearGradient(colors: [.white.opacity(0.8), .yellow.opacity(0.8)],
-                                       startPoint: .topLeading,
-                                       endPoint: .bottomTrailing),
+                        LinearGradient(
+                            colors: [.white.opacity(0.8), .yellow.opacity(0.8)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        ),
                         lineWidth: 3
                     )
                     .blur(radius: 4)
@@ -74,27 +99,25 @@ private extension SkillButtonView {
 }
 
 //
-// MARK: - Element Glow
+// MARK: - ✴️ Element Glow
 //
 private extension SkillButtonView {
     var elementGlow: some View {
-        Circle()
-            .fill(
-                LinearGradient(
-                    colors: gradientFor(element: skill.element),
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-            )
+        let gradient = gradientFor(element: skill.element)
+
+        return Circle()
+            .fill(LinearGradient(colors: gradient, startPoint: .topLeading, endPoint: .bottomTrailing))
             .frame(width: buttonSize * 0.8, height: buttonSize * 0.8)
-            .shadow(color: gradientFor(element: skill.element).first!.opacity(0.5), radius: 10)
+            .shadow(color: gradient.first!.opacity(0.5), radius: 10)
             .overlay(Circle().strokeBorder(Color.white.opacity(0.25), lineWidth: 1))
-            .opacity(controller.isSkillOnCooldown(skill.name) ? 0.3 : 1)
+            .opacity(isOnCooldown ? 0.3 : 1)
+            .scaleEffect(isOnCooldown ? 0.95 : 1)
+            .animation(.spring(response: 0.4, dampingFraction: 0.7), value: isOnCooldown)
     }
 }
 
 //
-// MARK: - Cooldown Overlay
+// MARK: - ⏳ Cooldown Overlay
 //
 private extension SkillButtonView {
     var cooldownOverlay: some View {
@@ -102,10 +125,10 @@ private extension SkillButtonView {
             Circle()
                 .fill(Color.black.opacity(0.65))
                 .frame(width: buttonSize * 0.8, height: buttonSize * 0.8)
-            
-            if let remaining = controller.cooldownRemaining[skill.name.lowercased()],
-               remaining > 0 {
-                Text(String(format: "%.1f", remaining))
+
+            // Countdown Text
+            if cooldownRemaining > 0 {
+                Text(String(format: "%.1f", cooldownRemaining))
                     .font(.system(size: buttonSize * 0.25, weight: .bold, design: .monospaced))
                     .foregroundColor(.white)
                     .shadow(color: .black.opacity(0.9), radius: 3)
@@ -114,13 +137,7 @@ private extension SkillButtonView {
 
             // Fortschrittsring
             Circle()
-                .trim(
-                    from: 0,
-                    to: CGFloat(
-                        1 - ((controller.cooldownRemaining[skill.name.lowercased()] ?? 0)
-                             / (controller.cooldownDuration[skill.name.lowercased()] ?? 1))
-                    )
-                )
+                .trim(from: 0, to: CGFloat(1 - (cooldownRemaining / cooldownDuration)))
                 .stroke(
                     LinearGradient(
                         colors: [.white.opacity(0.8), .gray.opacity(0.3)],
@@ -131,13 +148,14 @@ private extension SkillButtonView {
                 )
                 .rotationEffect(.degrees(-90))
                 .frame(width: buttonSize * 0.8, height: buttonSize * 0.8)
-                .animation(.linear(duration: 0.2), value: controller.cooldownRemaining[skill.name.lowercased()])
+                .animation(.linear(duration: 0.2), value: cooldownRemaining)
         }
+        .transition(.opacity.combined(with: .scale))
     }
 }
 
 //
-// MARK: - Text & Icon
+// MARK: - 🧩 Icon + Text
 //
 private extension SkillButtonView {
     var content: some View {
@@ -146,8 +164,8 @@ private extension SkillButtonView {
                 .font(.system(size: buttonSize * 0.36, weight: .medium))
                 .foregroundColor(.white)
                 .shadow(color: .black.opacity(0.9), radius: 3, y: 1)
-                .opacity(controller.isSkillOnCooldown(skill.name) ? 0.6 : 1)
-            
+                .opacity(isOnCooldown ? 0.6 : 1)
+
             Text(skill.name)
                 .font(.caption2.bold())
                 .foregroundColor(.white.opacity(0.9))
@@ -160,7 +178,7 @@ private extension SkillButtonView {
 }
 
 //
-// MARK: - Helper Functions
+// MARK: - 🎨 Helper Functions
 //
 private extension SkillButtonView {
     func gradientFor(element: String) -> [Color] {
@@ -172,10 +190,10 @@ private extension SkillButtonView {
         case "nature": return [.green, .mint]
         case "shadow": return [.purple, .black]
         case "shadowclone": return [.indigo, .indigo]
-        case "wind": return [.mint, .mint]
+        case "wind": return [.mint, .teal]
+        case "water": return [.blue, .cyan]
         case "beamstrike": return [.green, .green]
-        case "water": return [.blue, .blue]
-        case "tornado": return [.brown, .brown]
+        case "tornado": return [.gray, .white.opacity(0.5)]
         default: return [.gray, .white.opacity(0.5)]
         }
     }
@@ -191,10 +209,9 @@ private extension SkillButtonView {
         case "shadowclone": return "person.2.fill"
         case "wind": return "wind.circle"
         case "water": return "drop.fill"
-        case "tornado": return "tornado.circle"
         case "beamstrike": return "headlight.high.beam.fill"
+        case "tornado": return "tornado.circle"
         default: return "sparkles"
         }
     }
 }
-

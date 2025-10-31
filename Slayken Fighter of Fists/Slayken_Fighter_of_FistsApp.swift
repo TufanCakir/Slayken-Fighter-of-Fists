@@ -14,9 +14,8 @@ struct SlaykenApp: App {
     @StateObject private var coinManager = CoinManager.shared
     @StateObject private var crystalManager = CrystalManager.shared
     @StateObject private var accountManager = AccountLevelManager.shared
-    @StateObject private var characterManager = CharacterLevelManager.shared
+    @StateObject private var characterManager = CharacterManager.shared
     @StateObject private var themeManager = ThemeManager.shared
-    @StateObject private var summonManager = SummonManager.shared
     @StateObject private var teamManager = TeamManager.shared
     @StateObject private var progressManager = StageProgressManager.shared
     @StateObject private var skillManager = SkillManager.shared
@@ -34,7 +33,6 @@ struct SlaykenApp: App {
                     accountManager,
                     characterManager,
                     themeManager,
-                    summonManager,
                     teamManager,
                     progressManager,
                     skillManager,
@@ -60,9 +58,8 @@ private extension View {
         _ coin: CoinManager,
         _ crystal: CrystalManager,
         _ account: AccountLevelManager,
-        _ character: CharacterLevelManager,
+        _ character: CharacterManager,
         _ theme: ThemeManager,
-        _ summon: SummonManager,
         _ team: TeamManager,
         _ progress: StageProgressManager,
         _ skill: SkillManager,
@@ -73,7 +70,6 @@ private extension View {
             .environmentObject(account)
             .environmentObject(character)
             .environmentObject(theme)
-            .environmentObject(summon)
             .environmentObject(team)
             .environmentObject(progress)
             .environmentObject(skill)

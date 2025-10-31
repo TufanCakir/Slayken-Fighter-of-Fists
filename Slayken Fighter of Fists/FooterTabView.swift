@@ -49,19 +49,17 @@ struct FooterTabView: View {
         case "HomeView":
             HomeView()
 
-        case "TeamView":
-            TeamView()
-
-        case "SummonView":
-            SummonView()
-
+        case "CharacterOverView":
+            CharacterOverView()
+            
+        case "CreateCharacterView":
+            CreateCharacterView()
+            
         case "ShopView":
             ShopView()
 
-        
-
         default:
-            ComingSoonView()
+            HomeView()
         }
     }
 }

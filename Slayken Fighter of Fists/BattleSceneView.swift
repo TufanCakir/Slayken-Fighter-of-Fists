@@ -12,12 +12,10 @@ struct BattleSceneView: View {
     @StateObject var controller: BattleSceneController
     
     // MARK: - Environment Managers
-    @EnvironmentObject private var characterManager: CharacterLevelManager
+    @EnvironmentObject private var characterManager: CharacterManager
     @EnvironmentObject private var coinManager: CoinManager
     @EnvironmentObject private var crystalManager: CrystalManager
     @EnvironmentObject private var accountManager: AccountLevelManager
-    @EnvironmentObject private var summonManager: SummonManager
-    @EnvironmentObject private var teamManager: TeamManager
     @EnvironmentObject private var skillManager: SkillManager
     
     // MARK: - Body
@@ -313,7 +311,6 @@ private extension BattleSceneView {
             Spacer()
             VStack(spacing: 14) {
                 actionBar
-                teamScroll
             }
             .padding(.bottom, safeBottomInset() + 10)
             .padding(.horizontal, 12)
@@ -334,7 +331,7 @@ private extension BattleSceneView {
         }
         .ignoresSafeArea(edges: .bottom)
     }
-
+    
     
     // In deiner BattleSceneView:
     var actionBar: some View {
@@ -359,46 +356,6 @@ private extension BattleSceneView {
         )
         .padding(.horizontal, 20)
         .offset(y: 10) // 👈 ganze ActionBar leicht nach unten verschoben
-    }
-
-
-    
-    var teamScroll: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 20) {
-                ForEach(Array(controller.team.enumerated()), id: \.offset) { index, member in
-                    VStack(spacing: 4) {
-                        Image(member.image)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 60, height: 60)
-                            .clipShape(Circle())
-                            .overlay(
-                                Circle().strokeBorder(
-                                    index == controller.activeIndex
-                                    ? LinearGradient(colors: [.cyan, .blue],
-                                                     startPoint: .top, endPoint: .bottom)
-                                    : LinearGradient(colors: [.white.opacity(0.25)],
-                                                     startPoint: .top, endPoint: .bottom),
-                                    lineWidth: index == controller.activeIndex ? 3 : 1
-                                )
-                            )
-                            .shadow(color: index == controller.activeIndex ? .blue.opacity(0.6) : .clear, radius: 8)
-                            .scaleEffect(index == controller.activeIndex ? 1.1 : 1)
-                            .onTapGesture {
-                                withAnimation(.easeInOut(duration: 0.25)) {
-                                    controller.activeIndex = index
-                                }
-                            }
-                        
-                        Text(member.name)
-                            .font(.caption2)
-                            .foregroundColor(.white.opacity(0.8))
-                    }
-                }
-            }
-            .padding(.horizontal, 20)
-        }
     }
 }
 

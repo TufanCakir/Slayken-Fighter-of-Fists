@@ -2,7 +2,7 @@
   {
     "id": "character_1",
     "name": "Sly",
-    "skillIDs": ["skill_fire_001", "skill_ice_001", "skill_void_001", "shadow_clone", "skill_tornado_001", "skill_nature_001", "skill_shadow_002", "skill_wind_001", "skill_water_001", "skill_beamstrike_001"],
+    "skillIDs": ["skill_fire_001", "skill_fire_002", "skill_ice_001", "skill_void_001", "shadow_clone", "skill_tornado_001", "skill_nature_001", "skill_shadow_002", "skill_wind_001", "skill_water_001", "skill_beamstrike_001"],
     "image": "character1",
     "element": "fire",
     "auraColor": "#FF4500",
