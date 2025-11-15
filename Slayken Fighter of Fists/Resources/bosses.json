@@ -10,210 +10,803 @@
   },
   {
     "id": "boss_2",
-    "name": "Keyo",
+    "name": "Feron",
     "image": "character2",
-    "element": "ice",
-    "hp": 100,
-    "defense": 10,
-    "filter": { "r": 0.6, "g": 0.9, "b": 1.0, "a": 1.0 }
+    "element": "fire",
+    "hp": 110,
+    "defense": 12,
+    "filter": { "r": 1.0, "g": 0.45, "b": 0.1, "a": 1.0 }
   },
   {
     "id": "boss_3",
-    "name": "Kenix",
+    "name": "Glacius",
     "image": "character3",
-    "element": "void",
-    "hp": 100,
-    "defense": 10,
-    "filter": { "r": 0.3, "g": 0.0, "b": 0.5, "a": 1.0 }
-  },
-  {
-    "id": "boss_4",
-    "name": "Senix",
-    "image": "character4",
-    "element": "nature",
-    "hp": 100,
-    "defense": 10,
-    "filter": { "r": 0.3, "g": 0.8, "b": 0.4, "a": 1.0 }
-  },
-  {
-    "id": "boss_5",
-    "name": "Ley",
-    "image": "character5",
-    "element": "fire",
-    "hp": 100,
-    "defense": 10,
-    "filter": { "r": 1.0, "g": 0.4, "b": 0.1, "a": 1.0 }
-  },
-  {
-    "id": "boss_6",
-    "name": "Len",
-    "image": "character6",
-    "element": "ice",
-    "hp": 100,
-    "defense": 10,
-    "filter": { "r": 0.6, "g": 0.9, "b": 1.0, "a": 1.0 }
-  },
-  {
-    "id": "boss_7",
-    "name": "Gen",
-    "image": "character7",
-    "element": "void",
-    "hp": 100,
-    "defense": 10,
-    "filter": { "r": 0.3, "g": 0.0, "b": 0.5, "a": 1.0 }
-  },
-  {
-    "id": "boss_8",
-    "name": "Ganix",
-    "image": "character8",
-    "element": "nature",
-    "hp": 100,
-    "defense": 10,
-    "filter": { "r": 0.3, "g": 0.8, "b": 0.4, "a": 1.0 }
-  },
-
-  {
-    "id": "boss_9",
-    "name": "Dark Sly",
-    "image": "character1",
-    "element": "fire",
-    "hp": 120,
-    "defense": 20,
-    "filter": { "r": 0.8, "g": 0.0, "b": 0.0, "a": 1.0 }
-  },
-  {
-    "id": "boss_10",
-    "name": "Frozen Keyo",
-    "image": "character2",
     "element": "ice",
     "hp": 120,
-    "defense": 20,
+    "defense": 14,
     "filter": { "r": 0.3, "g": 0.6, "b": 1.0, "a": 1.0 }
   },
   {
-    "id": "boss_11",
-    "name": "Shadow Kenix",
-    "image": "character3",
-    "element": "void",
-    "hp": 120,
+    "id": "boss_4",
+    "name": "Voltaris",
+    "image": "character4",
+    "element": "thunder",
+    "hp": 130,
+    "defense": 16,
+    "filter": { "r": 1.0, "g": 1.0, "b": 0.3, "a": 1.0 }
+  },
+  {
+    "id": "boss_5",
+    "name": "Terron",
+    "image": "character5",
+    "element": "earth",
+    "hp": 150,
     "defense": 20,
-    "filter": { "r": 0.6, "g": 0.0, "b": 0.8, "a": 1.0 }
+    "filter": { "r": 0.5, "g": 0.35, "b": 0.1, "a": 1.0 }
+  },
+  {
+    "id": "boss_6",
+    "name": "Shade",
+    "image": "character6",
+    "element": "dark",
+    "hp": 90,
+    "defense": 8,
+    "filter": { "r": 0.2, "g": 0.1, "b": 0.3, "a": 1.0 }
+  },
+  {
+    "id": "boss_7",
+    "name": "Lumira",
+    "image": "character7",
+    "element": "light",
+    "hp": 115,
+    "defense": 11,
+    "filter": { "r": 1.0, "g": 0.95, "b": 0.8, "a": 1.0 }
+  },
+  {
+    "id": "boss_8",
+    "name": "Vexen",
+    "image": "character8",
+    "element": "void",
+    "hp": 160,
+    "defense": 22,
+    "filter": { "r": 0.5, "g": 0.0, "b": 1.0, "a": 1.0 }
+  },
+  {
+    "id": "boss_9",
+    "name": "Brutus",
+    "image": "character9",
+    "element": "earth",
+    "hp": 140,
+    "defense": 18,
+    "filter": { "r": 0.45, "g": 0.3, "b": 0.1, "a": 1.0 }
+  },
+  {
+    "id": "boss_10",
+    "name": "Ignara",
+    "image": "character10",
+    "element": "fire",
+    "hp": 105,
+    "defense": 9,
+    "filter": { "r": 1.0, "g": 0.4, "b": 0.2, "a": 1.0 }
+  },
+  {
+    "id": "boss_11",
+    "name": "Frostbane",
+    "image": "character11",
+    "element": "ice",
+    "hp": 125,
+    "defense": 14,
+    "filter": { "r": 0.25, "g": 0.55, "b": 1.0, "a": 1.0 }
   },
   {
     "id": "boss_12",
-    "name": "Toxic Senix",
-    "image": "character4",
-    "element": "nature",
-    "hp": 120,
-    "defense": 20,
-    "filter": { "r": 0.0, "g": 0.9, "b": 0.3, "a": 1.0 }
+    "name": "Ravok",
+    "image": "character12",
+    "element": "dark",
+    "hp": 95,
+    "defense": 9,
+    "filter": { "r": 0.15, "g": 0.08, "b": 0.2, "a": 1.0 }
   },
   {
     "id": "boss_13",
-    "name": "Crimson Ley",
-    "image": "character5",
-    "element": "fire",
-    "hp": 120,
-    "defense": 20,
-    "filter": { "r": 1.0, "g": 0.1, "b": 0.1, "a": 1.0 }
+    "name": "Stormrend",
+    "image": "character13",
+    "element": "thunder",
+    "hp": 135,
+    "defense": 17,
+    "filter": { "r": 0.95, "g": 0.95, "b": 0.3, "a": 1.0 }
   },
   {
     "id": "boss_14",
-    "name": "Glacier Len",
-    "image": "character6",
-    "element": "ice",
-    "hp": 120,
-    "defense": 20,
-    "filter": { "r": 0.5, "g": 0.8, "b": 1.0, "a": 1.0 }
+    "name": "Bouldermaw",
+    "image": "character14",
+    "element": "earth",
+    "hp": 155,
+    "defense": 21,
+    "filter": { "r": 0.5, "g": 0.38, "b": 0.12, "a": 1.0 }
   },
   {
     "id": "boss_15",
-    "name": "Abyss Gen",
-    "image": "character7",
-    "element": "void",
+    "name": "Solarin",
+    "image": "character15",
+    "element": "light",
     "hp": 120,
-    "defense": 20,
-    "filter": { "r": 0.15, "g": 0.0, "b": 0.3, "a": 1.0 }
+    "defense": 13,
+    "filter": { "r": 1.0, "g": 0.92, "b": 0.65, "a": 1.0 }
   },
   {
     "id": "boss_16",
-    "name": "Verdant Ganix",
-    "image": "character8",
-    "element": "nature",
-    "hp": 120,
-    "defense": 20,
-    "filter": { "r": 0.1, "g": 1.0, "b": 0.2, "a": 1.0 }
+    "name": "Umbraxis",
+    "image": "character16",
+    "element": "void",
+    "hp": 170,
+    "defense": 24,
+    "filter": { "r": 0.55, "g": 0.0, "b": 0.9, "a": 1.0 }
   },
   {
-      "id": "boss_17",
-      "name": "Eclipse Sly",
+    "id": "boss_17",
+    "name": "Cryon",
+    "image": "character17",
+    "element": "ice",
+    "hp": 118,
+    "defense": 12,
+    "filter": { "r": 0.3, "g": 0.6, "b": 1.0, "a": 1.0 }
+  },
+  {
+    "id": "boss_18",
+    "name": "Ashborn",
+    "image": "character18",
+    "element": "fire",
+    "hp": 108,
+    "defense": 10,
+    "filter": { "r": 1.0, "g": 0.43, "b": 0.15, "a": 1.0 }
+  },
+  {
+    "id": "boss_19",
+    "name": "Electra",
+    "image": "character19",
+    "element": "thunder",
+    "hp": 132,
+    "defense": 16,
+    "filter": { "r": 1.0, "g": 1.0, "b": 0.4, "a": 1.0 }
+  },
+  {
+    "id": "boss_20",
+    "name": "Gravorn",
+    "image": "character20",
+    "element": "earth",
+    "hp": 152,
+    "defense": 21,
+    "filter": { "r": 0.42, "g": 0.28, "b": 0.1, "a": 1.0 }
+  },
+  {
+    "id": "boss_21",
+    "name": "Hollowstar",
+    "image": "character21",
+    "element": "void",
+    "hp": 165,
+    "defense": 23,
+    "filter": { "r": 0.5, "g": 0.0, "b": 0.95, "a": 1.0 }
+  },
+  {
+    "id": "boss_22",
+    "name": "Blazemaiden",
+    "image": "character22",
+    "element": "fire",
+    "hp": 112,
+    "defense": 11,
+    "filter": { "r": 1.0, "g": 0.45, "b": 0.2, "a": 1.0 }
+  },
+  {
+    "id": "boss_23",
+    "name": "Frosthorn",
+    "image": "character23",
+    "element": "ice",
+    "hp": 128,
+    "defense": 15,
+    "filter": { "r": 0.25, "g": 0.58, "b": 1.0, "a": 1.0 }
+  },
+  {
+    "id": "boss_24",
+    "name": "Voltstrike",
+    "image": "character24",
+    "element": "thunder",
+    "hp": 138,
+    "defense": 17,
+    "filter": { "r": 0.98, "g": 0.98, "b": 0.4, "a": 1.0 }
+  },
+  {
+    "id": "boss_25",
+    "name": "Earthshaker",
+    "image": "character25",
+    "element": "earth",
+    "hp": 160,
+    "defense": 22,
+    "filter": { "r": 0.48, "g": 0.35, "b": 0.1, "a": 1.0 }
+  },
+  {
+    "id": "boss_26",
+    "name": "Voidfang",
+    "image": "character26",
+    "element": "void",
+    "hp": 175,
+    "defense": 25,
+    "filter": { "r": 0.6, "g": 0.0, "b": 1.0, "a": 1.0 }
+  },
+  {
+    "id": "boss_27",
+    "name": "Lightra",
+    "image": "character27",
+    "element": "light",
+    "hp": 118,
+    "defense": 13,
+    "filter": { "r": 1.0, "g": 0.95, "b": 0.85, "a": 1.0 }
+  },
+  {
+    "id": "boss_28",
+    "name": "Shadeclaw",
+    "image": "character28",
+    "element": "dark",
+    "hp": 100,
+    "defense": 9,
+    "filter": { "r": 0.2, "g": 0.1, "b": 0.3, "a": 1.0 }
+  },
+  {
+    "id": "boss_29",
+    "name": "Flarion",
+    "image": "character29",
+    "element": "fire",
+    "hp": 110,
+    "defense": 11,
+    "filter": { "r": 1.0, "g": 0.42, "b": 0.15, "a": 1.0 }
+  },
+  {
+    "id": "boss_30",
+    "name": "Cryostorm",
+    "image": "character30",
+    "element": "ice",
+    "hp": 130,
+    "defense": 16,
+    "filter": { "r": 0.3, "g": 0.62, "b": 1.0, "a": 1.0 }
+  },
+    {
+      "id": "boss_31",
+      "name": "Emberfang",
       "image": "character1",
-      "element": "void",
-      "hp": 150,
-      "defense": 30,
-      "filter": { "r": 0.3, "g": 0.0, "b": 0.6, "a": 1.0 }
-    },
-    {
-      "id": "boss_18",
-      "name": "Astral Keyo",
-      "image": "character2",
-      "element": "ice",
-      "hp": 150,
-      "defense": 30,
-      "filter": { "r": 0.4, "g": 0.7, "b": 1.0, "a": 1.0 }
-    },
-    {
-      "id": "boss_19",
-      "name": "Phantom Kenix",
-      "image": "character3",
-      "element": "void",
-      "hp": 150,
-      "defense": 30,
-      "filter": { "r": 0.5, "g": 0.0, "b": 0.9, "a": 1.0 }
-    },
-    {
-      "id": "boss_20",
-      "name": "Abyssal Senix",
-      "image": "character4",
-      "element": "nature",
-      "hp": 150,
-      "defense": 30,
-      "filter": { "r": 0.0, "g": 0.7, "b": 0.2, "a": 1.0 }
-    },
-    {
-      "id": "boss_21",
-      "name": "Stellar Ley",
-      "image": "character5",
       "element": "fire",
       "hp": 150,
-      "defense": 30,
-      "filter": { "r": 1.0, "g": 0.3, "b": 0.1, "a": 1.0 }
+      "defense": 18,
+      "filter": { "r": 1.0, "g": 0.38, "b": 0.12, "a": 1.0 }
     },
     {
-      "id": "boss_22",
-      "name": "Celestial Len",
-      "image": "character6",
+      "id": "boss_32",
+      "name": "Frostclaw",
+      "image": "character2",
       "element": "ice",
-      "hp": 150,
-      "defense": 30,
-      "filter": { "r": 0.4, "g": 0.9, "b": 1.0, "a": 1.0 }
+      "hp": 165,
+      "defense": 20,
+      "filter": { "r": 0.25, "g": 0.55, "b": 1.0, "a": 1.0 }
     },
     {
-      "id": "boss_23",
-      "name": "Ancient Gen",
-      "image": "character7",
+      "id": "boss_33",
+      "name": "Thunderhorn",
+      "image": "character3",
+      "element": "thunder",
+      "hp": 175,
+      "defense": 22,
+      "filter": { "r": 1.0, "g": 1.0, "b": 0.25, "a": 1.0 }
+    },
+    {
+      "id": "boss_34",
+      "name": "Darkveil",
+      "image": "character4",
+      "element": "dark",
+      "hp": 140,
+      "defense": 15,
+      "filter": { "r": 0.15, "g": 0.08, "b": 0.22, "a": 1.0 }
+    },
+    {
+      "id": "boss_35",
+      "name": "Solarinus",
+      "image": "character5",
+      "element": "light",
+      "hp": 160,
+      "defense": 18,
+      "filter": { "r": 1.0, "g": 0.92, "b": 0.75, "a": 1.0 }
+    },
+    {
+      "id": "boss_36",
+      "name": "Voidreaver",
+      "image": "character6",
       "element": "void",
-      "hp": 150,
-      "defense": 30,
-      "filter": { "r": 0.2, "g": 0.0, "b": 0.4, "a": 1.0 }
+      "hp": 190,
+      "defense": 26,
+      "filter": { "r": 0.55, "g": 0.0, "b": 1.0, "a": 1.0 }
     },
     {
-      "id": "boss_24",
-      "name": "Eternal Ganix",
+      "id": "boss_37",
+      "name": "Earthbreaker",
+      "image": "character7",
+      "element": "earth",
+      "hp": 185,
+      "defense": 25,
+      "filter": { "r": 0.48, "g": 0.32, "b": 0.15, "a": 1.0 }
+    },
+    {
+      "id": "boss_38",
+      "name": "Ashwarden",
       "image": "character8",
-      "element": "nature",
+      "element": "fire",
+      "hp": 145,
+      "defense": 17,
+      "filter": { "r": 1.0, "g": 0.42, "b": 0.18, "a": 1.0 }
+    },
+    {
+      "id": "boss_39",
+      "name": "Cryostrike",
+      "image": "character9",
+      "element": "ice",
+      "hp": 168,
+      "defense": 19,
+      "filter": { "r": 0.3, "g": 0.62, "b": 1.0, "a": 1.0 }
+    },
+    {
+      "id": "boss_40",
+      "name": "Stormcaller",
+      "image": "character10",
+      "element": "thunder",
+      "hp": 178,
+      "defense": 23,
+      "filter": { "r": 0.95, "g": 0.95, "b": 0.35, "a": 1.0 }
+    },
+    {
+      "id": "boss_41",
+      "name": "Shadowfang",
+      "image": "character11",
+      "element": "dark",
       "hp": 150,
+      "defense": 16,
+      "filter": { "r": 0.2, "g": 0.1, "b": 0.35, "a": 1.0 }
+    },
+    {
+      "id": "boss_42",
+      "name": "Brightwarden",
+      "image": "character12",
+      "element": "light",
+      "hp": 165,
+      "defense": 19,
+      "filter": { "r": 1.0, "g": 0.95, "b": 0.85, "a": 1.0 }
+    },
+    {
+      "id": "boss_43",
+      "name": "Voidspike",
+      "image": "character13",
+      "element": "void",
+      "hp": 195,
+      "defense": 27,
+      "filter": { "r": 0.6, "g": 0.0, "b": 1.0, "a": 1.0 }
+    },
+    {
+      "id": "boss_44",
+      "name": "Granitus",
+      "image": "character14",
+      "element": "earth",
+      "hp": 180,
+      "defense": 24,
+      "filter": { "r": 0.45, "g": 0.3, "b": 0.18, "a": 1.0 }
+    },
+    {
+      "id": "boss_45",
+      "name": "Flarestorm",
+      "image": "character15",
+      "element": "fire",
+      "hp": 155,
+      "defense": 18,
+      "filter": { "r": 1.0, "g": 0.38, "b": 0.15, "a": 1.0 }
+    },
+    {
+      "id": "boss_46",
+      "name": "Wintermaw",
+      "image": "character16",
+      "element": "ice",
+      "hp": 170,
+      "defense": 20,
+      "filter": { "r": 0.25, "g": 0.55, "b": 1.0, "a": 1.0 }
+    },
+    {
+      "id": "boss_47",
+      "name": "Thunderclaw",
+      "image": "character17",
+      "element": "thunder",
+      "hp": 182,
+      "defense": 22,
+      "filter": { "r": 0.98, "g": 0.98, "b": 0.35, "a": 1.0 }
+    },
+    {
+      "id": "boss_48",
+      "name": "Nightreaver",
+      "image": "character18",
+      "element": "dark",
+      "hp": 148,
+      "defense": 16,
+      "filter": { "r": 0.18, "g": 0.08, "b": 0.3, "a": 1.0 }
+    },
+    {
+      "id": "boss_49",
+      "name": "Radiantis",
+      "image": "character19",
+      "element": "light",
+      "hp": 168,
+      "defense": 20,
+      "filter": { "r": 1.0, "g": 0.95, "b": 0.78, "a": 1.0 }
+    },
+    {
+      "id": "boss_50",
+      "name": "Abysscaller",
+      "image": "character20",
+      "element": "void",
+      "hp": 200,
+      "defense": 28,
+      "filter": { "r": 0.52, "g": 0.0, "b": 1.0, "a": 1.0 }
+    },
+    {
+      "id": "boss_51",
+      "name": "Rockhorn",
+      "image": "character21",
+      "element": "earth",
+      "hp": 178,
+      "defense": 24,
+      "filter": { "r": 0.48, "g": 0.35, "b": 0.12, "a": 1.0 }
+    },
+    {
+      "id": "boss_52",
+      "name": "Flamehowl",
+      "image": "character22",
+      "element": "fire",
+      "hp": 150,
+      "defense": 17,
+      "filter": { "r": 1.0, "g": 0.4, "b": 0.15, "a": 1.0 }
+    },
+    {
+      "id": "boss_53",
+      "name": "Cryospine",
+      "image": "character23",
+      "element": "ice",
+      "hp": 172,
+      "defense": 19,
+      "filter": { "r": 0.3, "g": 0.6, "b": 1.0, "a": 1.0 }
+    },
+    {
+      "id": "boss_54",
+      "name": "Stormmaw",
+      "image": "character24",
+      "element": "thunder",
+      "hp": 183,
+      "defense": 22,
+      "filter": { "r": 1.0, "g": 1.0, "b": 0.29, "a": 1.0 }
+    },
+    {
+      "id": "boss_55",
+      "name": "Voidheart",
+      "image": "character25",
+      "element": "void",
+      "hp": 205,
       "defense": 30,
-      "filter": { "r": 0.1, "g": 0.9, "b": 0.1, "a": 1.0 }
-    }
-]
+      "filter": { "r": 0.6, "g": 0.0, "b": 1.0, "a": 1.0 }
+    },
+    {
+      "id": "boss_56",
+      "name": "Brightflame",
+      "image": "character26",
+      "element": "light",
+      "hp": 170,
+      "defense": 20,
+      "filter": { "r": 1.0, "g": 0.9, "b": 0.8, "a": 1.0 }
+    },
+    {
+      "id": "boss_57",
+      "name": "Stonegrasp",
+      "image": "character27",
+      "element": "earth",
+      "hp": 182,
+      "defense": 23,
+      "filter": { "r": 0.45, "g": 0.3, "b": 0.15, "a": 1.0 }
+    },
+    {
+      "id": "boss_58",
+      "name": "Blazeclaw",
+      "image": "character28",
+      "element": "fire",
+      "hp": 152,
+      "defense": 18,
+      "filter": { "r": 1.0, "g": 0.42, "b": 0.2, "a": 1.0 }
+    },
+    {
+      "id": "boss_59",
+      "name": "Frostwarden",
+      "image": "character29",
+      "element": "ice",
+      "hp": 178,
+      "defense": 20,
+      "filter": { "r": 0.28, "g": 0.6, "b": 1.0, "a": 1.0 }
+    },
+    {
+      "id": "boss_60",
+      "name": "Thunderfang",
+      "image": "character30",
+      "element": "thunder",
+      "hp": 190,
+      "defense": 23,
+      "filter": { "r": 1.0, "g": 1.0, "b": 0.32, "a": 1.0 }
+    },
+      {
+        "id": "boss_61",
+        "name": "Abyssfire Behemoth",
+        "image": "character1",
+        "element": "fire",
+        "hp": 200,
+        "defense": 28,
+        "filter": { "r": 1.0, "g": 0.32, "b": 0.1, "a": 1.0 }
+      },
+      {
+        "id": "boss_62",
+        "name": "Frosthowl Chimera",
+        "image": "character2",
+        "element": "ice",
+        "hp": 215,
+        "defense": 30,
+        "filter": { "r": 0.25, "g": 0.6, "b": 1.0, "a": 1.0 }
+      },
+      {
+        "id": "boss_63",
+        "name": "Stormwrath Colossus",
+        "image": "character3",
+        "element": "thunder",
+        "hp": 225,
+        "defense": 32,
+        "filter": { "r": 1.0, "g": 1.0, "b": 0.22, "a": 1.0 }
+      },
+      {
+        "id": "boss_64",
+        "name": "Umbral Nightreaver",
+        "image": "character4",
+        "element": "dark",
+        "hp": 180,
+        "defense": 22,
+        "filter": { "r": 0.15, "g": 0.1, "b": 0.25, "a": 1.0 }
+      },
+      {
+        "id": "boss_65",
+        "name": "Solarflare Harbinger",
+        "image": "character5",
+        "element": "light",
+        "hp": 210,
+        "defense": 27,
+        "filter": { "r": 1.0, "g": 0.92, "b": 0.65, "a": 1.0 }
+      },
+      {
+        "id": "boss_66",
+        "name": "Voidshatter Worm",
+        "image": "character6",
+        "element": "void",
+        "hp": 240,
+        "defense": 35,
+        "filter": { "r": 0.5, "g": 0.0, "b": 1.0, "a": 1.0 }
+      },
+      {
+        "id": "boss_67",
+        "name": "Ironclad Mammoth",
+        "image": "character7",
+        "element": "earth",
+        "hp": 230,
+        "defense": 34,
+        "filter": { "r": 0.48, "g": 0.35, "b": 0.18, "a": 1.0 }
+      },
+      {
+        "id": "boss_68",
+        "name": "Blazetalon Fiend",
+        "image": "character8",
+        "element": "fire",
+        "hp": 185,
+        "defense": 24,
+        "filter": { "r": 1.0, "g": 0.36, "b": 0.12, "a": 1.0 }
+      },
+      {
+        "id": "boss_69",
+        "name": "Frostgale Warden",
+        "image": "character9",
+        "element": "ice",
+        "hp": 205,
+        "defense": 26,
+        "filter": { "r": 0.22, "g": 0.62, "b": 1.0, "a": 1.0 }
+      },
+      {
+        "id": "boss_70",
+        "name": "Thunderfury Hydra",
+        "image": "character10",
+        "element": "thunder",
+        "hp": 235,
+        "defense": 33,
+        "filter": { "r": 1.0, "g": 1.0, "b": 0.3, "a": 1.0 }
+      },
+      {
+        "id": "boss_71",
+        "name": "Shadowspire Gargoyle",
+        "image": "character11",
+        "element": "dark",
+        "hp": 190,
+        "defense": 23,
+        "filter": { "r": 0.18, "g": 0.08, "b": 0.32, "a": 1.0 }
+      },
+      {
+        "id": "boss_72",
+        "name": "Crystalborn Titan",
+        "image": "character12",
+        "element": "light",
+        "hp": 215,
+        "defense": 28,
+        "filter": { "r": 1.0, "g": 0.95, "b": 0.75, "a": 1.0 }
+      },
+      {
+        "id": "boss_73",
+        "name": "Aetherclaw Seraph",
+        "image": "character13",
+        "element": "light",
+        "hp": 230,
+        "defense": 29,
+        "filter": { "r": 1.0, "g": 0.97, "b": 0.85, "a": 1.0 }
+      },
+      {
+        "id": "boss_74",
+        "name": "Duskfang Ravager",
+        "image": "character14",
+        "element": "dark",
+        "hp": 185,
+        "defense": 21,
+        "filter": { "r": 0.14, "g": 0.08, "b": 0.22, "a": 1.0 }
+      },
+      {
+        "id": "boss_75",
+        "name": "Moltenhorn Drake",
+        "image": "character15",
+        "element": "fire",
+        "hp": 210,
+        "defense": 27,
+        "filter": { "r": 1.0, "g": 0.38, "b": 0.15, "a": 1.0 }
+      },
+      {
+        "id": "boss_76",
+        "name": "Stormgrasp Leviathan",
+        "image": "character16",
+        "element": "thunder",
+        "hp": 240,
+        "defense": 34,
+        "filter": { "r": 1.0, "g": 1.0, "b": 0.26, "a": 1.0 }
+      },
+      {
+        "id": "boss_77",
+        "name": "Frostthorn Direbear",
+        "image": "character17",
+        "element": "ice",
+        "hp": 208,
+        "defense": 26,
+        "filter": { "r": 0.25, "g": 0.6, "b": 1.0, "a": 1.0 }
+      },
+      {
+        "id": "boss_78",
+        "name": "Netherborn Reaper",
+        "image": "character18",
+        "element": "void",
+        "hp": 250,
+        "defense": 36,
+        "filter": { "r": 0.55, "g": 0.0, "b": 1.0, "a": 1.0 }
+      },
+      {
+        "id": "boss_79",
+        "name": "Shardbreaker Golem",
+        "image": "character19",
+        "element": "earth",
+        "hp": 220,
+        "defense": 30,
+        "filter": { "r": 0.45, "g": 0.32, "b": 0.18, "a": 1.0 }
+      },
+      {
+        "id": "boss_80",
+        "name": "Flameveil Basilisk",
+        "image": "character20",
+        "element": "fire",
+        "hp": 200,
+        "defense": 25,
+        "filter": { "r": 1.0, "g": 0.35, "b": 0.15, "a": 1.0 }
+      },
+      {
+        "id": "boss_81",
+        "name": "Lightningborn Raptor",
+        "image": "character21",
+        "element": "thunder",
+        "hp": 225,
+        "defense": 31,
+        "filter": { "r": 1.0, "g": 1.0, "b": 0.3, "a": 1.0 }
+      },
+      {
+        "id": "boss_82",
+        "name": "Soulshard Wraith",
+        "image": "character22",
+        "element": "dark",
+        "hp": 190,
+        "defense": 22,
+        "filter": { "r": 0.15, "g": 0.08, "b": 0.3, "a": 1.0 }
+      },
+      {
+        "id": "boss_83",
+        "name": "Ironfang Juggernaut",
+        "image": "character23",
+        "element": "earth",
+        "hp": 228,
+        "defense": 32,
+        "filter": { "r": 0.45, "g": 0.28, "b": 0.15, "a": 1.0 }
+      },
+      {
+        "id": "boss_84",
+        "name": "Dreadflare Phoenix",
+        "image": "character24",
+        "element": "fire",
+        "hp": 225,
+        "defense": 29,
+        "filter": { "r": 1.0, "g": 0.34, "b": 0.1, "a": 1.0 }
+      },
+      {
+        "id": "boss_85",
+        "name": "Frostscale Serpent",
+        "image": "character25",
+        "element": "ice",
+        "hp": 210,
+        "defense": 25,
+        "filter": { "r": 0.22, "g": 0.58, "b": 1.0, "a": 1.0 }
+      },
+      {
+        "id": "boss_86",
+        "name": "Stormborn Colossus",
+        "image": "character26",
+        "element": "thunder",
+        "hp": 245,
+        "defense": 35,
+        "filter": { "r": 1.0, "g": 1.0, "b": 0.22, "a": 1.0 }
+      },
+      {
+        "id": "boss_87",
+        "name": "Nightbloom Witch",
+        "image": "character27",
+        "element": "dark",
+        "hp": 185,
+        "defense": 21,
+        "filter": { "r": 0.14, "g": 0.1, "b": 0.28, "a": 1.0 }
+      },
+      {
+        "id": "boss_88",
+        "name": "Earthrend Behemoth",
+        "image": "character28",
+        "element": "earth",
+        "hp": 230,
+        "defense": 33,
+        "filter": { "r": 0.48, "g": 0.3, "b": 0.18, "a": 1.0 }
+      },
+      {
+        "id": "boss_89",
+        "name": "Voidgazer Harvester",
+        "image": "character29",
+        "element": "void",
+        "hp": 255,
+        "defense": 38,
+        "filter": { "r": 0.6, "g": 0.0, "b": 1.0, "a": 1.0 }
+      },
+      {
+        "id": "boss_90",
+        "name": "Eclipseborn Titan",
+        "image": "character30",
+        "element": "void",
+        "hp": 260,
+        "defense": 40,
+        "filter": { "r": 0.52, "g": 0.0, "b": 0.85, "a": 1.0 }
+      }
+    ]

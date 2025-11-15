@@ -25,7 +25,7 @@ struct SlaykenApp: App {
     // MARK: - Scene
     var body: some Scene {
         WindowGroup {
-            RootView()
+            FooterTabView()
                 .environmentObjects(
                     coinManager,
                     crystalManager,

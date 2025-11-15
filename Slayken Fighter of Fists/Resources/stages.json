@@ -9,55 +9,55 @@
   },
   {
     "id": 2,
-    "name": "Ice Rise",
+    "name": "Crimson Beast",
     "bossId": "boss_2",
     "type": "boss",
     "world": 1,
-    "stars": 5
+    "stars": 4
   },
   {
     "id": 3,
-    "name": "Void Cave",
+    "name": "Ironjaw Titan",
     "bossId": "boss_3",
     "type": "boss",
     "world": 1,
-    "stars": 5
+    "stars": 4
   },
   {
     "id": 4,
-    "name": "Crimson Cave",
+    "name": "Shadow Serpent",
     "bossId": "boss_4",
     "type": "boss",
     "world": 1,
-    "stars": 5
+    "stars": 3
   },
   {
     "id": 5,
-    "name": "Snow Arena",
+    "name": "Blazeborn Ogre",
     "bossId": "boss_5",
     "type": "boss",
     "world": 1,
-    "stars": 5
+    "stars": 3
   },
   {
     "id": 6,
-    "name": "Void Land",
+    "name": "Frostfang Wolf",
     "bossId": "boss_6",
     "type": "boss",
     "world": 1,
-    "stars": 5
+    "stars": 2
   },
   {
     "id": 7,
-    "name": "Inferno Rise",
+    "name": "Thunderclaw Hawk",
     "bossId": "boss_7",
     "type": "boss",
     "world": 1,
-    "stars": 5
+    "stars": 2
   },
   {
     "id": 8,
-    "name": "Snow Land",
+    "name": "Nightfall Phantom",
     "bossId": "boss_8",
     "type": "boss",
     "world": 1,
@@ -65,194 +65,658 @@
   },
   {
     "id": 9,
-    "name": "Dark Sly",
+    "name": "Rockhide Golem",
     "bossId": "boss_9",
     "type": "boss",
-    "world": 2,
-    "stars": 5
+    "world": 1,
+    "stars": 3
   },
   {
     "id": 10,
-    "name": "Frozen Keyo",
+    "name": "Stormbreaker Giant",
     "bossId": "boss_10",
     "type": "boss",
-    "world": 2,
-    "stars": 5
+    "world": 1,
+    "stars": 4
   },
   {
     "id": 11,
-    "name": "Shadow Kenix",
+    "name": "Venomstrike Hydra",
     "bossId": "boss_11",
     "type": "boss",
-    "world": 2,
-    "stars": 5
+    "world": 1,
+    "stars": 4
   },
   {
     "id": 12,
-    "name": "Toxic Senix",
+    "name": "Ashen Berserker",
     "bossId": "boss_12",
     "type": "boss",
-    "world": 2,
-    "stars": 5
+    "world": 1,
+    "stars": 2
   },
   {
     "id": 13,
-    "name": "Crimson Ley",
+    "name": "Glacier Colossus",
     "bossId": "boss_13",
     "type": "boss",
-    "world": 2,
+    "world": 1,
     "stars": 5
   },
   {
     "id": 14,
-    "name": "Glacier Len",
+    "name": "Bonecrusher Troll",
     "bossId": "boss_14",
     "type": "boss",
-    "world": 2,
-    "stars": 5
+    "world": 1,
+    "stars": 3
   },
   {
     "id": 15,
-    "name": "Abyss Gen",
+    "name": "Rageborn Minotaur",
     "bossId": "boss_15",
     "type": "boss",
-    "world": 2,
-    "stars": 5
+    "world": 1,
+    "stars": 3
   },
   {
     "id": 16,
-    "name": "Verdant Ganix",
+    "name": "Stormshade Witch",
     "bossId": "boss_16",
     "type": "boss",
-    "world": 2,
+    "world": 1,
+    "stars": 2
+  },
+  {
+    "id": 17,
+    "name": "Cragfang Basilisk",
+    "bossId": "boss_17",
+    "type": "boss",
+    "world": 1,
+    "stars": 4
+  },
+  {
+    "id": 18,
+    "name": "Blightborn Reaper",
+    "bossId": "boss_18",
+    "type": "boss",
+    "world": 1,
+    "stars": 5
+  },
+  {
+    "id": 19,
+    "name": "Ironspike Guardian",
+    "bossId": "boss_19",
+    "type": "boss",
+    "world": 1,
+    "stars": 3
+  },
+  {
+    "id": 20,
+    "name": "Dreadshadow Panther",
+    "bossId": "boss_20",
+    "type": "boss",
+    "world": 1,
+    "stars": 4
+  },
+  {
+    "id": 21,
+    "name": "Moltencore Brute",
+    "bossId": "boss_21",
+    "type": "boss",
+    "world": 1,
+    "stars": 2
+  },
+  {
+    "id": 22,
+    "name": "Hollowmire Specter",
+    "bossId": "boss_22",
+    "type": "boss",
+    "world": 1,
+    "stars": 3
+  },
+  {
+    "id": 23,
+    "name": "Bloodthorn Ravager",
+    "bossId": "boss_23",
+    "type": "boss",
+    "world": 1,
+    "stars": 5
+  },
+  {
+    "id": 24,
+    "name": "Grimtusk Boar",
+    "bossId": "boss_24",
+    "type": "boss",
+    "world": 1,
+    "stars": 2
+  },
+  {
+    "id": 25,
+    "name": "Voidclaw Horror",
+    "bossId": "boss_25",
+    "type": "boss",
+    "world": 1,
+    "stars": 5
+  },
+  {
+    "id": 26,
+    "name": "Boulderback Titan",
+    "bossId": "boss_26",
+    "type": "boss",
+    "world": 1,
+    "stars": 3
+  },
+  {
+    "id": 27,
+    "name": "Thunderfang Lynx",
+    "bossId": "boss_27",
+    "type": "boss",
+    "world": 1,
+    "stars": 2
+  },
+  {
+    "id": 28,
+    "name": "Cinderborn Harpy",
+    "bossId": "boss_28",
+    "type": "boss",
+    "world": 1,
+    "stars": 3
+  },
+  {
+    "id": 29,
+    "name": "Nightforge Sentinel",
+    "bossId": "boss_29",
+    "type": "boss",
+    "world": 1,
+    "stars": 4
+  },
+  {
+    "id": 30,
+    "name": "Eclipse Tyrant",
+    "bossId": "boss_30",
+    "type": "boss",
+    "world": 1,
     "stars": 5
   },
     {
-      "id": 17,
-      "name": "Eclipse Arena",
-      "bossId": "boss_17",
-      "type": "boss",
-      "world": 3,
-      "stars": 5
-    },
-    {
-      "id": 18,
-      "name": "Cosmic Rift",
-      "bossId": "boss_18",
-      "type": "boss",
-      "world": 3,
-      "stars": 5
-    },
-    {
-      "id": 19,
-      "name": "Phantom Corridor",
-      "bossId": "boss_19",
-      "type": "boss",
-      "world": 3,
-      "stars": 5
-    },
-    {
-      "id": 20,
-      "name": "Abyssal Throne",
-      "bossId": "boss_20",
-      "type": "boss",
-      "world": 3,
-      "stars": 5
-    },
-    {
-      "id": 21,
-      "name": "Stardust Valley",
-      "bossId": "boss_21",
-      "type": "boss",
-      "world": 3,
-      "stars": 5
-    },
-    {
-      "id": 22,
-      "name": "Celestial Forge",
-      "bossId": "boss_22",
-      "type": "boss",
-      "world": 3,
-      "stars": 5
-    },
-    {
-      "id": 23,
-      "name": "Ancient Dominion",
-      "bossId": "boss_23",
-      "type": "boss",
-      "world": 3,
-      "stars": 5
-    },
-    {
-      "id": 24,
-      "name": "Eternal Edge",
-      "bossId": "boss_24",
-      "type": "boss",
-      "world": 3,
-      "stars": 5
-    },
-    {
-      "id": 25,
-      "name": "Iron Bastion",
-      "bossId": "boss_25",
-      "type": "boss",
-      "world": 4,
-      "stars": 5
-    },
-    {
-      "id": 26,
-      "name": "Obsidian Depths",
-      "bossId": "boss_26",
-      "type": "boss",
-      "world": 4,
-      "stars": 5
-    },
-    {
-      "id": 27,
-      "name": "Stormfront Peak",
-      "bossId": "boss_27",
-      "type": "boss",
-      "world": 4,
-      "stars": 5
-    },
-    {
-      "id": 28,
-      "name": "Radiant Fortress",
-      "bossId": "boss_28",
-      "type": "boss",
-      "world": 4,
-      "stars": 5
-    },
-    {
-      "id": 29,
-      "name": "Lunar Citadel",
-      "bossId": "boss_29",
-      "type": "boss",
-      "world": 4,
-      "stars": 5
-    },
-    {
-      "id": 30,
-      "name": "Prime Sanctum",
-      "bossId": "boss_30",
-      "type": "boss",
-      "world": 4,
-      "stars": 5
-    },
-    {
       "id": 31,
-      "name": "Arcane Overlook",
+      "name": "Emberfang Drake",
       "bossId": "boss_31",
       "type": "boss",
-      "world": 4,
+      "world": 2,
       "stars": 5
     },
     {
       "id": 32,
-      "name": "Titanfall Arena",
+      "name": "Twilight Reaver",
       "bossId": "boss_32",
       "type": "boss",
-      "world": 4,
+      "world": 2,
+      "stars": 4
+    },
+    {
+      "id": 33,
+      "name": "Stonehide Leviathan",
+      "bossId": "boss_33",
+      "type": "boss",
+      "world": 2,
+      "stars": 4
+    },
+    {
+      "id": 34,
+      "name": "Nightshroud Wraith",
+      "bossId": "boss_34",
+      "type": "boss",
+      "world": 2,
+      "stars": 3
+    },
+    {
+      "id": 35,
+      "name": "Ashbreaker Colossus",
+      "bossId": "boss_35",
+      "type": "boss",
+      "world": 2,
       "stars": 5
-    }
-  ]
+    },
+    {
+      "id": 36,
+      "name": "Frostborn Yeti",
+      "bossId": "boss_36",
+      "type": "boss",
+      "world": 2,
+      "stars": 3
+    },
+    {
+      "id": 37,
+      "name": "Thunderjaw Wyvern",
+      "bossId": "boss_37",
+      "type": "boss",
+      "world": 2,
+      "stars": 4
+    },
+    {
+      "id": 38,
+      "name": "Obsidian Stalker",
+      "bossId": "boss_38",
+      "type": "boss",
+      "world": 2,
+      "stars": 2
+    },
+    {
+      "id": 39,
+      "name": "Riftborne Titan",
+      "bossId": "boss_39",
+      "type": "boss",
+      "world": 2,
+      "stars": 5
+    },
+    {
+      "id": 40,
+      "name": "Cinderlash Fiend",
+      "bossId": "boss_40",
+      "type": "boss",
+      "world": 2,
+      "stars": 3
+    },
+    {
+      "id": 41,
+      "name": "Stormfang Basilisk",
+      "bossId": "boss_41",
+      "type": "boss",
+      "world": 2,
+      "stars": 4
+    },
+    {
+      "id": 42,
+      "name": "Venomroot Hydra",
+      "bossId": "boss_42",
+      "type": "boss",
+      "world": 2,
+      "stars": 5
+    },
+    {
+      "id": 43,
+      "name": "Crimson Direwolf",
+      "bossId": "boss_43",
+      "type": "boss",
+      "world": 2,
+      "stars": 3
+    },
+    {
+      "id": 44,
+      "name": "Ironfang Sentinel",
+      "bossId": "boss_44",
+      "type": "boss",
+      "world": 2,
+      "stars": 3
+    },
+    {
+      "id": 45,
+      "name": "Shadebane Reaper",
+      "bossId": "boss_45",
+      "type": "boss",
+      "world": 2,
+      "stars": 5
+    },
+    {
+      "id": 46,
+      "name": "Blazebound Phoenix",
+      "bossId": "boss_46",
+      "type": "boss",
+      "world": 2,
+      "stars": 5
+    },
+    {
+      "id": 47,
+      "name": "Frostfang Direboar",
+      "bossId": "boss_47",
+      "type": "boss",
+      "world": 2,
+      "stars": 2
+    },
+    {
+      "id": 48,
+      "name": "Stormforged Harpy",
+      "bossId": "boss_48",
+      "type": "boss",
+      "world": 2,
+      "stars": 4
+    },
+    {
+      "id": 49,
+      "name": "Grimthorn Brute",
+      "bossId": "boss_49",
+      "type": "boss",
+      "world": 2,
+      "stars": 3
+    },
+    {
+      "id": 50,
+      "name": "Voidstorm Serpent",
+      "bossId": "boss_50",
+      "type": "boss",
+      "world": 2,
+      "stars": 5
+    },
+    {
+      "id": 51,
+      "name": "Ashclaw Ravager",
+      "bossId": "boss_51",
+      "type": "boss",
+      "world": 2,
+      "stars": 4
+    },
+    {
+      "id": 52,
+      "name": "Glareborn Titan",
+      "bossId": "boss_52",
+      "type": "boss",
+      "world": 2,
+      "stars": 4
+    },
+    {
+      "id": 53,
+      "name": "Shadowmaw Panther",
+      "bossId": "boss_53",
+      "type": "boss",
+      "world": 2,
+      "stars": 3
+    },
+    {
+      "id": 54,
+      "name": "Stonebreaker Golem",
+      "bossId": "boss_54",
+      "type": "boss",
+      "world": 2,
+      "stars": 3
+    },
+    {
+      "id": 55,
+      "name": "Nightflame Warden",
+      "bossId": "boss_55",
+      "type": "boss",
+      "world": 2,
+      "stars": 5
+    },
+    {
+      "id": 56,
+      "name": "Frostveil Chimera",
+      "bossId": "boss_56",
+      "type": "boss",
+      "world": 2,
+      "stars": 4
+    },
+    {
+      "id": 57,
+      "name": "Thunderhorn Behemoth",
+      "bossId": "boss_57",
+      "type": "boss",
+      "world": 2,
+      "stars": 4
+    },
+    {
+      "id": 58,
+      "name": "Ashenstorm Succubus",
+      "bossId": "boss_58",
+      "type": "boss",
+      "world": 2,
+      "stars": 3
+    },
+    {
+      "id": 59,
+      "name": "Riftclaw Devourer",
+      "bossId": "boss_59",
+      "type": "boss",
+      "world": 2,
+      "stars": 5
+    },
+    {
+      "id": 60,
+      "name": "Ebonflame Tyrant",
+      "bossId": "boss_60",
+      "type": "boss",
+      "world": 2,
+      "stars": 5
+    },
+      {
+        "id": 61,
+        "name": "Abyssfire Behemoth",
+        "bossId": "boss_61",
+        "type": "boss",
+        "world": 3,
+        "stars": 5
+      },
+      {
+        "id": 62,
+        "name": "Frosthowl Chimera",
+        "bossId": "boss_62",
+        "type": "boss",
+        "world": 3,
+        "stars": 4
+      },
+      {
+        "id": 63,
+        "name": "Stormwrath Colossus",
+        "bossId": "boss_63",
+        "type": "boss",
+        "world": 3,
+        "stars": 5
+      },
+      {
+        "id": 64,
+        "name": "Umbral Nightreaver",
+        "bossId": "boss_64",
+        "type": "boss",
+        "world": 3,
+        "stars": 3
+      },
+      {
+        "id": 65,
+        "name": "Solarflare Harbinger",
+        "bossId": "boss_65",
+        "type": "boss",
+        "world": 3,
+        "stars": 5
+      },
+      {
+        "id": 66,
+        "name": "Voidshatter Worm",
+        "bossId": "boss_66",
+        "type": "boss",
+        "world": 3,
+        "stars": 4
+      },
+      {
+        "id": 67,
+        "name": "Ironclad Mammoth",
+        "bossId": "boss_67",
+        "type": "boss",
+        "world": 3,
+        "stars": 4
+      },
+      {
+        "id": 68,
+        "name": "Blazetalon Fiend",
+        "bossId": "boss_68",
+        "type": "boss",
+        "world": 3,
+        "stars": 3
+      },
+      {
+        "id": 69,
+        "name": "Frostgale Warden",
+        "bossId": "boss_69",
+        "type": "boss",
+        "world": 3,
+        "stars": 4
+      },
+      {
+        "id": 70,
+        "name": "Thunderfury Hydra",
+        "bossId": "boss_70",
+        "type": "boss",
+        "world": 3,
+        "stars": 5
+      },
+      {
+        "id": 71,
+        "name": "Shadowspire Gargoyle",
+        "bossId": "boss_71",
+        "type": "boss",
+        "world": 3,
+        "stars": 3
+      },
+      {
+        "id": 72,
+        "name": "Crystalborn Titan",
+        "bossId": "boss_72",
+        "type": "boss",
+        "world": 3,
+        "stars": 4
+      },
+      {
+        "id": 73,
+        "name": "Aetherclaw Seraph",
+        "bossId": "boss_73",
+        "type": "boss",
+        "world": 3,
+        "stars": 5
+      },
+      {
+        "id": 74,
+        "name": "Duskfang Ravager",
+        "bossId": "boss_74",
+        "type": "boss",
+        "world": 3,
+        "stars": 3
+      },
+      {
+        "id": 75,
+        "name": "Moltenhorn Drake",
+        "bossId": "boss_75",
+        "type": "boss",
+        "world": 3,
+        "stars": 4
+      },
+      {
+        "id": 76,
+        "name": "Stormgrasp Leviathan",
+        "bossId": "boss_76",
+        "type": "boss",
+        "world": 3,
+        "stars": 5
+      },
+      {
+        "id": 77,
+        "name": "Frostthorn Direbear",
+        "bossId": "boss_77",
+        "type": "boss",
+        "world": 3,
+        "stars": 4
+      },
+      {
+        "id": 78,
+        "name": "Netherborn Reaper",
+        "bossId": "boss_78",
+        "type": "boss",
+        "world": 3,
+        "stars": 5
+      },
+      {
+        "id": 79,
+        "name": "Shardbreaker Golem",
+        "bossId": "boss_79",
+        "type": "boss",
+        "world": 3,
+        "stars": 3
+      },
+      {
+        "id": 80,
+        "name": "Flameveil Basilisk",
+        "bossId": "boss_80",
+        "type": "boss",
+        "world": 3,
+        "stars": 4
+      },
+      {
+        "id": 81,
+        "name": "Lightningborn Raptor",
+        "bossId": "boss_81",
+        "type": "boss",
+        "world": 3,
+        "stars": 5
+      },
+      {
+        "id": 82,
+        "name": "Soulshard Wraith",
+        "bossId": "boss_82",
+        "type": "boss",
+        "world": 3,
+        "stars": 3
+      },
+      {
+        "id": 83,
+        "name": "Ironfang Juggernaut",
+        "bossId": "boss_83",
+        "type": "boss",
+        "world": 3,
+        "stars": 4
+      },
+      {
+        "id": 84,
+        "name": "Dreadflare Phoenix",
+        "bossId": "boss_84",
+        "type": "boss",
+        "world": 3,
+        "stars": 5
+      },
+      {
+        "id": 85,
+        "name": "Frostscale Serpent",
+        "bossId": "boss_85",
+        "type": "boss",
+        "world": 3,
+        "stars": 4
+      },
+      {
+        "id": 86,
+        "name": "Stormborn Colossus",
+        "bossId": "boss_86",
+        "type": "boss",
+        "world": 3,
+        "stars": 5
+      },
+      {
+        "id": 87,
+        "name": "Nightbloom Witch",
+        "bossId": "boss_87",
+        "type": "boss",
+        "world": 3,
+        "stars": 3
+      },
+      {
+        "id": 88,
+        "name": "Earthrend Behemoth",
+        "bossId": "boss_88",
+        "type": "boss",
+        "world": 3,
+        "stars": 4
+      },
+      {
+        "id": 89,
+        "name": "Voidgazer Harvester",
+        "bossId": "boss_89",
+        "type": "boss",
+        "world": 3,
+        "stars": 5
+      },
+      {
+        "id": 90,
+        "name": "Eclipseborn Titan",
+        "bossId": "boss_90",
+        "type": "boss",
+        "world": 3,
+        "stars": 5
+      }
+    ]
