@@ -8,12 +8,15 @@
 import Foundation
 
 // MARK: - Stage Model
-struct Stage: Identifiable, Codable, Hashable {
+struct Stage: Identifiable, Codable {
     let id: Int
     let name: String
     let bossId: String
     let type: String
-    let world: Int   // 🌍 Weltzuordnung (z. B. World 1, World 2)
+    let world: Int
+    let stars: Int?
+    
+
 
     // MARK: - Beispiel für Preview/Test
     static let example = Stage(
@@ -21,7 +24,8 @@ struct Stage: Identifiable, Codable, Hashable {
         name: "Forest Gate",
         bossId: "boss_001",
         type: "story",
-        world: 1
+        world: 1,
+        stars: 5
     )
 }
 

@@ -15,7 +15,6 @@ struct SlaykenApp: App {
     @StateObject private var crystalManager = CrystalManager.shared
     @StateObject private var accountManager = AccountLevelManager.shared
     @StateObject private var characterManager = CharacterManager.shared
-    @StateObject private var themeManager = ThemeManager.shared
     @StateObject private var teamManager = TeamManager.shared
     @StateObject private var progressManager = StageProgressManager.shared
     @StateObject private var skillManager = SkillManager.shared
@@ -32,7 +31,6 @@ struct SlaykenApp: App {
                     crystalManager,
                     accountManager,
                     characterManager,
-                    themeManager,
                     teamManager,
                     progressManager,
                     skillManager,
@@ -47,8 +45,6 @@ private struct RootView: View {
     var body: some View {
         TutorialView()
             .preferredColorScheme(.dark)
-            .transition(.opacity.combined(with: .scale))
-            .animation(.easeInOut(duration: 0.4), value: UUID())
     }
 }
 
@@ -59,7 +55,6 @@ private extension View {
         _ crystal: CrystalManager,
         _ account: AccountLevelManager,
         _ character: CharacterManager,
-        _ theme: ThemeManager,
         _ team: TeamManager,
         _ progress: StageProgressManager,
         _ skill: SkillManager,
@@ -69,7 +64,6 @@ private extension View {
             .environmentObject(crystal)
             .environmentObject(account)
             .environmentObject(character)
-            .environmentObject(theme)
             .environmentObject(team)
             .environmentObject(progress)
             .environmentObject(skill)

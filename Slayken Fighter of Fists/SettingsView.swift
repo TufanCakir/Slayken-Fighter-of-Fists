@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct SettingsView: View {
+
     // MARK: - Environment Objects
     @EnvironmentObject var coinManager: CoinManager
     @EnvironmentObject var crystalManager: CrystalManager
     @EnvironmentObject var accountManager: AccountLevelManager
-    @EnvironmentObject var themeManager: ThemeManager
     @EnvironmentObject var musicManager: MusicManager
 
     // MARK: - Local State
@@ -20,25 +20,29 @@ struct SettingsView: View {
     @State private var showResetConfirmation = false
     @State private var resetAnimation = false
 
+    // Orb Animation
+    @State private var orbGlow = false
+    @State private var orbRotation = 0.0
+
+    // MARK: - Body
     var body: some View {
         NavigationStack {
             ZStack {
-                // Hintergrund
-                LinearGradient(colors: [.black, .blue.opacity(0.8), .black],
-                               startPoint: .topLeading,
-                               endPoint: .bottomTrailing)
-                    .ignoresSafeArea()
 
+                // MARK: - Hintergrund
+                backgroundLayer
+
+                // MARK: - Content
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 32) {
 
-                        // MARK: - Audio Section
+                        // MARK: Audio
                         settingsSection(title: "Audio") {
                             MusicToggleButton()
                                 .environmentObject(musicManager)
                         }
 
-                        // MARK: - Account Overview
+                        // MARK: Account
                         settingsSection(title: "Account Overview") {
                             HStack(spacing: 22) {
                                 StatBox(icon: "star.fill", title: "Level", value: "\(accountManager.level)", color: .green)
@@ -46,9 +50,10 @@ struct SettingsView: View {
                                 StatBox(icon: "c.circle.fill", title: "Coins", value: "\(coinManager.coins)", color: .yellow)
                             }
                             .frame(maxWidth: .infinity)
+
                         }
 
-                        // MARK: - Data & Storage
+                        // MARK: Data & Storage
                         settingsSection(title: "Data & Storage") {
                             Button {
                                 withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
@@ -63,23 +68,11 @@ struct SettingsView: View {
                                     .background(.red.gradient.opacity(0.7))
                                     .cornerRadius(16)
                                     .shadow(color: .red.opacity(0.5), radius: 6)
+                                
                             }
                             .padding(.horizontal, 8)
-                        }
+                            .shadow(color: .white, radius: 5)
 
-                        // MARK: - Appearance
-                        settingsSection(title: "Appearance") {
-                            NavigationLink(destination: ThemeSwitcherView()) {
-                                Label("Change Theme", systemImage: "paintpalette.fill")
-                                    .font(.headline)
-                                    .foregroundColor(.white)
-                                    .padding()
-                                    .frame(maxWidth: .infinity)
-                                    .background(.blue.gradient.opacity(0.6))
-                                    .cornerRadius(16)
-                                    .shadow(color: .blue.opacity(0.5), radius: 6)
-                            }
-                            .padding(.horizontal, 8)
                         }
 
                         Spacer(minLength: 80)
@@ -97,10 +90,70 @@ struct SettingsView: View {
                 Text("This will permanently delete your progress, characters, skins, and shop data.")
             }
             .overlay(resetConfirmationOverlay)
+            .onAppear {
+                orbGlow = true
+                orbRotation = 360
+            }
+        }
+    }
+}
+
+
+
+
+
+    // MARK: - Background Layer
+    extension SettingsView {
+        var backgroundLayer: some View {
+            ZStack {
+
+                // MARK: Glow (soft + centered)
+                Circle()
+                    .fill(
+                        RadialGradient(
+                            colors: [.black, .blue, .black],
+                            center: .center,
+                            startRadius: 10,
+                            endRadius: 160
+                        )
+                    )
+                    .scaleEffect(orbGlow ? 1.12 : 0.88)
+                    .blur(radius: 50)
+                    .drawingGroup() // bessere GPU Performance
+                    .animation(.easeInOut(duration: 3).repeatForever(), value: orbGlow)
+
+                // MARK: Main Orb (clean glass effect)
+                Circle()
+                    .fill(.ultraThinMaterial)
+                    .frame(width: 200, height: 200)
+                    .shadow(color: .blue.opacity(0.6), radius: 25, y: 4)
+
+                // MARK: Rotating Ring
+                Circle()
+                    .stroke(
+                        AngularGradient(
+                            gradient: Gradient(colors: [.black, .blue, .black]),
+                            center: .center
+                        ),
+                        lineWidth: 10
+                    )
+                    .frame(width: 260, height: 260)
+                    .blur(radius: 2)
+                    .rotationEffect(.degrees(orbRotation))
+                    .animation(.linear(duration: 6).repeatForever(autoreverses: false), value: orbRotation)
+
+                // MARK: Center Icon
+                Image(systemName: "sparkles")
+                    .font(.system(size: 55))
+                    .foregroundStyle(.cyan)
+                    .shadow(color: .cyan.opacity(0.5), radius: 12)
+            }
+            .ignoresSafeArea()
         }
     }
 
-    // MARK: - Reset Confirmation Overlay
+// MARK: - Reset Confirmation Overlay
+extension SettingsView {
     private var resetConfirmationOverlay: some View {
         Group {
             if showResetConfirmation {
@@ -118,27 +171,25 @@ struct SettingsView: View {
                 .padding()
                 .background(.ultraThinMaterial)
                 .cornerRadius(16)
-                .shadow(color: .green.opacity(0.4), radius: 10)
+                .shadow(color: .white, radius: 5)
                 .transition(.scale.combined(with: .opacity))
             }
         }
     }
+}
 
-    // MARK: - Reset Logic
+// MARK: - Reset Logic
+extension SettingsView {
     private func performReset() {
         let generator = UINotificationFeedbackGenerator()
         generator.notificationOccurred(.success)
 
-        // 🧹 Lokale Daten löschen
         coinManager.reset()
         crystalManager.reset()
         accountManager.reset()
         CharacterManager.shared.resetProgress()
         StageProgressManager.shared.resetProgress()
 
-
-
-        // 🎵 UI Feedback
         withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
             showResetConfirmation = true
             resetAnimation = true
@@ -150,10 +201,14 @@ struct SettingsView: View {
             }
         }
 
-        print("🧩 All saved data cleared successfully (coins, crystals, characters, skins, and shop).")
+        print("🧩 All saved data cleared successfully.")
     }
+}
 
-    // MARK: - Section Wrapper
+
+
+// MARK: - Section Wrapper Component
+extension SettingsView {
     @ViewBuilder
     private func settingsSection<Content: View>(
         title: String,
@@ -184,18 +239,18 @@ struct MusicToggleButton: View {
                 iconScale = 1.2
             }
 
-            withAnimation(.spring(response: 0.4, dampingFraction: 0.5, blendDuration: 0.2).delay(0.1)) {
+            withAnimation(.spring(response: 0.4, dampingFraction: 0.5).delay(0.1)) {
                 iconScale = 1.0
             }
 
-            Task { await musicManager.handleMusicToggleExternally() }
         } label: {
             HStack(spacing: 12) {
-                Image(systemName: musicManager.isMusicOn ? "music.note" : "speaker.slash.fill")
+                Image(systemName: musicManager.isMusicOn
+                      ? "music.note"
+                      : "speaker.slash.fill")
                     .font(.title3.bold())
-                    .foregroundColor(.orange)
+                    .foregroundColor(.blue)
                     .scaleEffect(iconScale)
-                    .shadow(color: .orange.opacity(0.5), radius: 5)
 
                 Text(musicManager.isMusicOn ? "Music On" : "Music Off")
                     .font(.headline)
@@ -205,10 +260,10 @@ struct MusicToggleButton: View {
             .padding()
             .background(.thinMaterial)
             .cornerRadius(14)
-            .shadow(color: .orange.opacity(0.3), radius: 6)
         }
     }
 }
+
 
 // MARK: - Erweiterung für externen Music-Call
 extension MusicManager {
@@ -240,7 +295,6 @@ private struct StatBox: View {
         .frame(width: 90, height: 90)
         .background(Color.white.opacity(0.08))
         .cornerRadius(16)
-        .shadow(color: color.opacity(0.5), radius: 6)
     }
 }
 
@@ -249,7 +303,6 @@ private struct StatBox: View {
         .environmentObject(CoinManager.shared)
         .environmentObject(CrystalManager.shared)
         .environmentObject(AccountLevelManager.shared)
-        .environmentObject(ThemeManager.shared)
         .environmentObject(MusicManager())
         .preferredColorScheme(.dark)
 }

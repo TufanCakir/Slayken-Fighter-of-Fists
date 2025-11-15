@@ -1,0 +1,258 @@
+[
+  {
+    "id": 1,
+    "name": "Fighter of Fists",
+    "bossId": "boss_1",
+    "type": "boss",
+    "world": 1,
+    "stars": 5
+  },
+  {
+    "id": 2,
+    "name": "Ice Rise",
+    "bossId": "boss_2",
+    "type": "boss",
+    "world": 1,
+    "stars": 5
+  },
+  {
+    "id": 3,
+    "name": "Void Cave",
+    "bossId": "boss_3",
+    "type": "boss",
+    "world": 1,
+    "stars": 5
+  },
+  {
+    "id": 4,
+    "name": "Crimson Cave",
+    "bossId": "boss_4",
+    "type": "boss",
+    "world": 1,
+    "stars": 5
+  },
+  {
+    "id": 5,
+    "name": "Snow Arena",
+    "bossId": "boss_5",
+    "type": "boss",
+    "world": 1,
+    "stars": 5
+  },
+  {
+    "id": 6,
+    "name": "Void Land",
+    "bossId": "boss_6",
+    "type": "boss",
+    "world": 1,
+    "stars": 5
+  },
+  {
+    "id": 7,
+    "name": "Inferno Rise",
+    "bossId": "boss_7",
+    "type": "boss",
+    "world": 1,
+    "stars": 5
+  },
+  {
+    "id": 8,
+    "name": "Snow Land",
+    "bossId": "boss_8",
+    "type": "boss",
+    "world": 1,
+    "stars": 5
+  },
+  {
+    "id": 9,
+    "name": "Dark Sly",
+    "bossId": "boss_9",
+    "type": "boss",
+    "world": 2,
+    "stars": 5
+  },
+  {
+    "id": 10,
+    "name": "Frozen Keyo",
+    "bossId": "boss_10",
+    "type": "boss",
+    "world": 2,
+    "stars": 5
+  },
+  {
+    "id": 11,
+    "name": "Shadow Kenix",
+    "bossId": "boss_11",
+    "type": "boss",
+    "world": 2,
+    "stars": 5
+  },
+  {
+    "id": 12,
+    "name": "Toxic Senix",
+    "bossId": "boss_12",
+    "type": "boss",
+    "world": 2,
+    "stars": 5
+  },
+  {
+    "id": 13,
+    "name": "Crimson Ley",
+    "bossId": "boss_13",
+    "type": "boss",
+    "world": 2,
+    "stars": 5
+  },
+  {
+    "id": 14,
+    "name": "Glacier Len",
+    "bossId": "boss_14",
+    "type": "boss",
+    "world": 2,
+    "stars": 5
+  },
+  {
+    "id": 15,
+    "name": "Abyss Gen",
+    "bossId": "boss_15",
+    "type": "boss",
+    "world": 2,
+    "stars": 5
+  },
+  {
+    "id": 16,
+    "name": "Verdant Ganix",
+    "bossId": "boss_16",
+    "type": "boss",
+    "world": 2,
+    "stars": 5
+  },
+    {
+      "id": 17,
+      "name": "Eclipse Arena",
+      "bossId": "boss_17",
+      "type": "boss",
+      "world": 3,
+      "stars": 5
+    },
+    {
+      "id": 18,
+      "name": "Cosmic Rift",
+      "bossId": "boss_18",
+      "type": "boss",
+      "world": 3,
+      "stars": 5
+    },
+    {
+      "id": 19,
+      "name": "Phantom Corridor",
+      "bossId": "boss_19",
+      "type": "boss",
+      "world": 3,
+      "stars": 5
+    },
+    {
+      "id": 20,
+      "name": "Abyssal Throne",
+      "bossId": "boss_20",
+      "type": "boss",
+      "world": 3,
+      "stars": 5
+    },
+    {
+      "id": 21,
+      "name": "Stardust Valley",
+      "bossId": "boss_21",
+      "type": "boss",
+      "world": 3,
+      "stars": 5
+    },
+    {
+      "id": 22,
+      "name": "Celestial Forge",
+      "bossId": "boss_22",
+      "type": "boss",
+      "world": 3,
+      "stars": 5
+    },
+    {
+      "id": 23,
+      "name": "Ancient Dominion",
+      "bossId": "boss_23",
+      "type": "boss",
+      "world": 3,
+      "stars": 5
+    },
+    {
+      "id": 24,
+      "name": "Eternal Edge",
+      "bossId": "boss_24",
+      "type": "boss",
+      "world": 3,
+      "stars": 5
+    },
+    {
+      "id": 25,
+      "name": "Iron Bastion",
+      "bossId": "boss_25",
+      "type": "boss",
+      "world": 4,
+      "stars": 5
+    },
+    {
+      "id": 26,
+      "name": "Obsidian Depths",
+      "bossId": "boss_26",
+      "type": "boss",
+      "world": 4,
+      "stars": 5
+    },
+    {
+      "id": 27,
+      "name": "Stormfront Peak",
+      "bossId": "boss_27",
+      "type": "boss",
+      "world": 4,
+      "stars": 5
+    },
+    {
+      "id": 28,
+      "name": "Radiant Fortress",
+      "bossId": "boss_28",
+      "type": "boss",
+      "world": 4,
+      "stars": 5
+    },
+    {
+      "id": 29,
+      "name": "Lunar Citadel",
+      "bossId": "boss_29",
+      "type": "boss",
+      "world": 4,
+      "stars": 5
+    },
+    {
+      "id": 30,
+      "name": "Prime Sanctum",
+      "bossId": "boss_30",
+      "type": "boss",
+      "world": 4,
+      "stars": 5
+    },
+    {
+      "id": 31,
+      "name": "Arcane Overlook",
+      "bossId": "boss_31",
+      "type": "boss",
+      "world": 4,
+      "stars": 5
+    },
+    {
+      "id": 32,
+      "name": "Titanfall Arena",
+      "bossId": "boss_32",
+      "type": "boss",
+      "world": 4,
+      "stars": 5
+    }
+  ]

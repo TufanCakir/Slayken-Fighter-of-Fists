@@ -45,6 +45,10 @@ final class CharacterManager: ObservableObject {
         isLoaded = true
     }
 
+    func loadCharacterSkills(_ character: GameCharacter, skillManager: SkillManager) -> [Skill] {
+        skillManager.getSkills(for: character.skillIDs)
+    }
+
     private func loadFromBundle() {
         guard let url = Bundle.main.url(forResource: "characters", withExtension: "json") else {
             print("⚠️ [CharacterManager] Keine characters.json gefunden. Verwende leeres Array.")

@@ -22,7 +22,9 @@ struct CreateCharacterView: View {
     @State private var imageScale: CGFloat = 0.9
     @FocusState private var nameFocused: Bool
     @State private var loadedSkills: [Skill] = []
-
+    // MARK: - Orb
+       @State private var orbGlow = false
+       @State private var orbRotation = 0.0
     // MARK: - Elements
     private let elements: [String] = [
         "fire", "ice", "void", "thunder", "nature", "wind", "water", "shadow",
@@ -33,17 +35,14 @@ struct CreateCharacterView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                background(for: selectedElement)
-                    .ignoresSafeArea()
-                    .overlay(Color.black.opacity(0.25))
-                    .blur(radius: 8)
+                backgroundLayer
+
 
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 32) {
                         titleSection
                         nameInputSection
                         mainElementPicker
-                        extraElementPicker
                         previewBox(for: selectedElement)
                         skillPreview
                         createButton
@@ -65,6 +64,56 @@ struct CreateCharacterView: View {
             }
         }
         .preferredColorScheme(.dark)
+    }
+}
+
+// MARK: - Background Orb Layer
+private extension CreateCharacterView {
+    var backgroundLayer: some View {
+        ZStack {
+
+            // Glow
+            Circle()
+                .fill(
+                    RadialGradient(
+                        colors: [.black, .blue, .black],
+                        center: .center,
+                        startRadius: 15,
+                        endRadius: 140
+                    )
+                )
+                .scaleEffect(orbGlow ? 1.1 : 0.9)
+                .blur(radius: 40)
+                .animation(.easeInOut(duration: 1.3).repeatForever(), value: orbGlow)
+
+            // Main Orb
+            Circle()
+                .fill(.ultraThinMaterial)
+                .frame(width: 180, height: 180)
+                .shadow(color: .blue, radius: 20)
+
+            // Rotating Energy Ring (FIXED)
+            Circle()
+                .stroke(
+                    AngularGradient(
+                        gradient: Gradient(colors: [.black, .blue, .black]),
+                        center: .center
+                    ),
+                    lineWidth: 10
+                )
+                .frame(width: 230, height: 230)
+                .blur(radius: 2)
+                .rotationEffect(.degrees(orbRotation))
+                .animation(.linear(duration: 6).repeatForever(autoreverses: false), value: orbRotation)
+
+            Image(systemName: "sparkles")
+                .font(.system(size: 55))
+                .foregroundStyle(.cyan)
+        }
+        .onAppear {
+            orbGlow = true
+            orbRotation = 360
+        }
     }
 }
 
@@ -187,111 +236,7 @@ private extension CreateCharacterView {
         }
     }
 
-    // 🌈 Neben-Elemente mit aufklappbaren Skills
-    var extraElementPicker: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Extra Elements")
-                .font(.headline)
-                .foregroundColor(.white.opacity(0.85))
-            
-            VStack(spacing: 12) {
-                ForEach(elements.filter { $0 != selectedElement }, id: \.self) { element in
-                    ExpandableExtraElementView(
-                        element: element,
-                        isSelected: selectedExtras.contains(element),
-                        accent: accentColor(for: element),
-                        toggleAction: { toggleExtraElement(element) }
-                    )
-                }
-            }
-            .padding(.horizontal, 16)
-        }
-    }
-
-    // MARK: - ExpandableExtraElementView
-    private struct ExpandableExtraElementView: View {
-        let element: String
-        let isSelected: Bool
-        let accent: Color
-        let toggleAction: () -> Void
-        @State private var isExpanded = false
-        
-        var body: some View {
-            VStack(spacing: 0) {
-                Button {
-                    withAnimation(.spring(response: 0.45, dampingFraction: 0.85)) {
-                        if isSelected { isExpanded.toggle() }
-                        else { toggleAction() } // erst aktivieren, dann ggf. aufklappen
-                    }
-                } label: {
-                    HStack {
-                        Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
-                            .foregroundColor(isSelected ? accent : .white.opacity(0.4))
-                            .font(.title3)
-                        
-                        Text(element.capitalized)
-                            .font(.subheadline.bold())
-                            .foregroundColor(.white)
-                        
-                        Spacer()
-                        if isSelected {
-                            Image(systemName: isExpanded ? "chevron.up.circle.fill" : "chevron.down.circle.fill")
-                                .foregroundColor(accent.opacity(0.9))
-                                .imageScale(.medium)
-                        }
-                    }
-                    .padding(.vertical, 10)
-                    .padding(.horizontal, 12)
-                    .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(isSelected ? accent.opacity(0.35) : Color.black.opacity(0.25))
-                    )
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke(Color.white.opacity(0.15), lineWidth: 1)
-                    )
-                    .shadow(color: isSelected ? accent.opacity(0.5) : .clear, radius: 6)
-                }
-                
-                // 📜 Eingeklappte Skills nur anzeigen, wenn Element aktiv ist
-                if isSelected && isExpanded {
-                    let skills = SkillManager.shared.getSkills(forElement: element).prefix(3)
-                    VStack(alignment: .leading, spacing: 8) {
-                        ForEach(skills, id: \.id) { skill in
-                            HStack(alignment: .top, spacing: 8) {
-                                Circle()
-                                    .fill(accent)
-                                    .frame(width: 8, height: 8)
-                                VStack(alignment: .leading, spacing: 2) {
-                                    Text(skill.name)
-                                        .font(.subheadline.bold())
-                                        .foregroundColor(accent)
-                                    Text(skill.description)
-                                        .font(.caption)
-                                        .foregroundColor(.white.opacity(0.7))
-                                        .lineLimit(2)
-                                }
-                                Spacer()
-                                Text("\(Int(skill.cooldown))s")
-                                    .font(.caption2)
-                                    .foregroundColor(.white.opacity(0.6))
-                            }
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 4)
-                            .background(Color.white.opacity(0.05))
-                            .cornerRadius(8)
-                        }
-                    }
-                    .padding(.horizontal, 12)
-                    .padding(.bottom, 8)
-                    .transition(.opacity.combined(with: .move(edge: .top)))
-                }
-            }
-            .padding(.vertical, 4)
-        }
-    }
-
-
+ 
     // ⚔️ Skill-Vorschau mit Gruppen und Akkordeon
     var skillPreview: some View {
         VStack(spacing: 14) {
@@ -525,5 +470,5 @@ private extension CreateCharacterView {
     CreateCharacterView()
         .environmentObject(CharacterManager.shared)
         .preferredColorScheme(.dark)
-} 
+}
 

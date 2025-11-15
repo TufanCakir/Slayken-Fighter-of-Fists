@@ -79,6 +79,25 @@ final class SkillManager: ObservableObject {
         skillLookup[id.lowercased()]
     }
 
+    func summonRandomSkill() -> Skill? {
+        guard !skills.isEmpty else { return nil }
+
+        let randomSkill = skills.randomElement()
+        print("🎁 Summoned Skill: \(randomSkill?.name ?? "none")")
+        return randomSkill
+    }
+
+    func summonTenSkills() -> [Skill] {
+        var result: [Skill] = []
+        for _ in 0..<10 {
+            if let skill = summonRandomSkill() {
+                result.append(skill)
+            }
+        }
+        return result
+    }
+
+    
     // MARK: - Mehrere Skills abrufen
     func getSkills(for ids: [String]) -> [Skill] {
         guard !ids.isEmpty else { return [] }

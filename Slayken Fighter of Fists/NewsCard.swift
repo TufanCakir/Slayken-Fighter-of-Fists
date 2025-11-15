@@ -22,12 +22,12 @@ struct NewsCard: View {
                     .foregroundColor(.white)
 
                 Text(item.date.uppercased())
-                    .font(.caption)
-                    .foregroundColor(.cyan.opacity(0.8))
+                    .font(.headline.bold())
+                    .foregroundColor(.white)
 
                 Text(item.description)
-                    .font(.subheadline)
-                    .foregroundColor(.white.opacity(0.8))
+                    .font(.headline.bold())
+                    .foregroundColor(.white)
                     .lineLimit(3)
             }
             .padding(.horizontal, 8)
@@ -35,7 +35,7 @@ struct NewsCard: View {
         }
         .background(
             LinearGradient(
-                colors: [.black, .blue, .black],
+                colors: [.clear, .clear, .clear],
                 startPoint: .top,
                 endPoint: .bottom
             )

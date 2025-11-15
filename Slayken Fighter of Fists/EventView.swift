@@ -9,99 +9,123 @@ import SwiftUI
 
 @MainActor
 struct EventView: View {
-    // MARK: - JSON Data
+
+    // MARK: JSON Data
     @State private var events: [Event] = Bundle.main.decodeSafe("events.json")
     @State private var bosses: [Boss] = Bundle.main.decodeSafe("eventBosses.json")
 
-    // MARK: - States
+    // MARK: States
     @State private var selectedEvent: Event?
     @State private var showBattle = false
-    @State private var victoryText: String?
+    @State private var showVictoryOverlay = false
+    @State private var victoryMessage: String = ""
     @State private var fadeBackground = false
+    // ORB Animation
+     @State private var orbGlow = false
+     @State private var orbRotation = 0.0
 
-    // MARK: - Environment Managers
+    // MARK: Environment
     @EnvironmentObject private var coinManager: CoinManager
     @EnvironmentObject private var crystalManager: CrystalManager
     @EnvironmentObject private var accountManager: AccountLevelManager
     @EnvironmentObject private var characterManager: CharacterManager
     @EnvironmentObject private var skillManager: SkillManager
 
-    // MARK: - Body
+    // MARK: Body
     var body: some View {
         ZStack {
             backgroundLayer
 
-            // Event-Auswahl
             if !showBattle {
                 eventSelectionView
                     .opacity(fadeBackground ? 0 : 1)
                     .transition(.opacity.combined(with: .scale(scale: 0.96)))
             }
 
-            // Siegesoverlay
-            if let text = victoryText {
-                victoryOverlay(text: text)
+            if showVictoryOverlay {
+                victoryOverlay(text: victoryMessage)
                     .zIndex(10)
                     .transition(.scale.combined(with: .opacity))
-            }
-
-            // Sanftes Schwarz beim Übergang in Battle
-            if showBattle {
-                Color.black.opacity(0.8)
-                    .ignoresSafeArea()
-                    .transition(.opacity)
-                    .zIndex(5)
             }
         }
         .navigationTitle("Events")
         .navigationBarTitleDisplayMode(.inline)
-        .animation(.easeInOut(duration: 0.35), value: showBattle)
         .fullScreenCover(isPresented: $showBattle) { battleScreen }
     }
 }
 
 //
-// MARK: - UI Layer
+// MARK: - UI
 //
 private extension EventView {
 
     // MARK: Background
     var backgroundLayer: some View {
-        LinearGradient(
-            colors: [.black, .indigo.opacity(0.9), .black],
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-        )
-        .overlay(
+        ZStack {
+
+            // Glow
+            Circle()
+                .fill(
+                    RadialGradient(
+                        colors: [.black, .blue, .black],
+                        center: .center,
+                        startRadius: 15,
+                        endRadius: 140
+                    )
+                )
+                .scaleEffect(orbGlow ? 1.1 : 0.9)
+                .blur(radius: 40)
+                .animation(.easeInOut(duration: 1.3).repeatForever(), value: orbGlow)
+
+            // Main Orb
+            Circle()
+                .fill(.ultraThinMaterial)
+                .frame(width: 180, height: 180)
+                .shadow(color: .blue, radius: 20)
+
+            // Rotating Energy Ring (FIXED)
+            Circle()
+                .stroke(
+                    AngularGradient(
+                        gradient: Gradient(colors: [.black, .blue, .black]),
+                        center: .center
+                    ),
+                    lineWidth: 10
+                )
+                .frame(width: 230, height: 230)
+                .blur(radius: 2)
+                .rotationEffect(.degrees(orbRotation))
+                .animation(.linear(duration: 6).repeatForever(autoreverses: false), value: orbRotation)
+
             Image(systemName: "sparkles")
-                .font(.system(size: 300))
-                .foregroundStyle(.linearGradient(colors: [.indigo.opacity(0.25), .clear], startPoint: .top, endPoint: .bottom))
-                .blur(radius: 80)
-                .offset(y: -100)
-        )
-        .ignoresSafeArea()
+                .font(.system(size: 55))
+                .foregroundStyle(.cyan)
+        }
+        .onAppear {
+            orbGlow = true
+            orbRotation = 360
+        }
     }
 
-    // MARK: Event Auswahl
+
+    // MARK: Event Selection
     var eventSelectionView: some View {
         ScrollView(showsIndicators: false) {
-            VStack(spacing: 32) {
+            VStack(spacing: 28) {
                 Text("Select an Event")
-                    .font(.system(size: 30, weight: .bold, design: .rounded))
-                    .foregroundStyle(LinearGradient(colors: [.white, .cyan], startPoint: .top, endPoint: .bottom))
-                    .shadow(color: .cyan.opacity(0.4), radius: 10)
-                    .padding(.top, 28)
+                    .font(.system(size: 28, weight: .bold, design: .rounded))
+                    .foregroundStyle(.linearGradient(colors: [.white, .cyan], startPoint: .top, endPoint: .bottom))
+                    .padding(.top, 20)
 
                 LazyVStack(spacing: 20) {
                     ForEach(events) { event in
                         eventCard(for: event)
-                            .transition(.opacity.combined(with: .scale))
                     }
                 }
 
-                Spacer(minLength: 80)
+                Spacer(minLength: 60)
             }
-            .padding(.horizontal, 20)
+            .padding(.horizontal, 18)
         }
     }
 
@@ -109,80 +133,52 @@ private extension EventView {
     func eventCard(for event: Event) -> some View {
         Button { startBattle(for: event) } label: {
             ZStack(alignment: .bottomLeading) {
+
                 eventImage(for: event.image)
-                    .frame(height: 160)
+                    .frame(height: 200)
+                    .frame(maxWidth: .infinity)
                     .clipShape(RoundedRectangle(cornerRadius: 18))
-                    .overlay(
-                        LinearGradient(colors: [.black.opacity(0.6), .clear],
-                                       startPoint: .bottom, endPoint: .top)
-                    )
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 18)
-                            .stroke(Color.cyan.opacity(0.6), lineWidth: 1.5)
-                    )
+                    .overlay(gradientOverlay)
+                    .overlay(borderOverlay)
                     .shadow(color: .black.opacity(0.7), radius: 10, y: 4)
 
-                VStack(alignment: .leading, spacing: 6) {
+                VStack(alignment: .leading, spacing: 4) {
                     Text(event.name)
-                        .font(.headline.bold())
+                        .font(.headline.weight(.bold))
                         .foregroundColor(.white)
-                        .shadow(color: .black.opacity(0.9), radius: 2)
+                        .shadow(radius: 2)
 
                     Text(event.description)
-                        .font(.caption)
-                        .foregroundColor(.white.opacity(0.8))
-                        .lineLimit(2)
+                        .font(.headline.weight(.bold))
+                        .foregroundColor(.white)
+                        .shadow(radius: 2)
                 }
                 .padding(12)
             }
         }
         .buttonStyle(.plain)
-        .scaleEffect(selectedEvent?.id == event.id ? 0.96 : 1.0)
+        .scaleEffect(selectedEvent?.id == event.id ? 0.96 : 1)
         .animation(.easeInOut(duration: 0.2), value: selectedEvent?.id)
     }
 
-    // MARK: Victory Overlay
-    func victoryOverlay(text: String) -> some View {
-        VStack(spacing: 16) {
-            Text("Victory!")
-                .font(.system(size: 34, weight: .bold))
-                .foregroundStyle(LinearGradient(colors: [.yellow, .orange], startPoint: .top, endPoint: .bottom))
-                .shadow(color: .orange.opacity(0.9), radius: 10)
+    var gradientOverlay: some View {
+        LinearGradient(
+            colors: [.clear, .clear, .clear],
+            startPoint: .bottom,
+            endPoint: .top
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 18))
+    }
 
-            Text(text)
-                .font(.headline)
-                .foregroundColor(.white)
-                .multilineTextAlignment(.center)
-
-            Button("Back to Events") {
-                withAnimation(.easeInOut(duration: 0.4)) {
-                    victoryText = nil
-                    showBattle = false
-                    selectedEvent = nil
-                }
-            }
-            .font(.headline.bold())
-            .padding(.vertical, 10)
-            .padding(.horizontal, 26)
-            .background(LinearGradient(colors: [.yellow, .orange],
-                                       startPoint: .topLeading,
-                                       endPoint: .bottomTrailing))
-            .clipShape(Capsule())
-            .foregroundColor(.black)
-            .shadow(color: .yellow.opacity(0.6), radius: 8)
-        }
-        .padding(30)
-        .background(.ultraThinMaterial)
-        .cornerRadius(26)
-        .shadow(color: .black.opacity(0.8), radius: 16)
-        .frame(maxWidth: 320)
-        .transition(.scale)
+    var borderOverlay: some View {
+        RoundedRectangle(cornerRadius: 18)
+            .stroke(Color.cyan.opacity(0.6), lineWidth: 1.4)
     }
 
     // MARK: Event Image Loader
     @ViewBuilder
     func eventImage(for name: String) -> some View {
-        if name.lowercased().hasPrefix("http") {
+        if name.lowercased().starts(with: "http") {
             AsyncImage(url: URL(string: name)) { phase in
                 switch phase {
                 case .empty:
@@ -190,24 +186,51 @@ private extension EventView {
                         Color.gray.opacity(0.15)
                         ProgressView().tint(.cyan)
                     }
-                case .success(let image):
-                    image.resizable().scaledToFill()
-                case .failure:
-                    Color.gray.opacity(0.25)
-                @unknown default:
+                case .success(let img):
+                    img.resizable().scaledToFill()
+                default:
                     Color.gray.opacity(0.25)
                 }
             }
         } else {
-            Image(name)
-                .resizable()
-                .scaledToFill()
+            Image(name).resizable().scaledToFit()
         }
+    }
+
+    // MARK: Victory Overlay
+    func victoryOverlay(text: String) -> some View {
+        VStack(spacing: 18) {
+            Text("Victory!")
+                .font(.system(size: 34, weight: .bold))
+                .foregroundStyle(LinearGradient(colors: [.yellow, .orange], startPoint: .top, endPoint: .bottom))
+
+            Text(text)
+                .font(.headline)
+                .foregroundColor(.white)
+                .multilineTextAlignment(.center)
+
+            Button {
+                closeBattle()
+            } label: {
+                Text("Back to Events")
+                    .font(.headline.bold())
+                    .padding(.vertical, 10)
+                    .padding(.horizontal, 26)
+                    .background(LinearGradient(colors: [.yellow, .orange], startPoint: .top, endPoint: .bottom))
+                    .clipShape(Capsule())
+                    .foregroundColor(.black)
+            }
+        }
+        .padding(30)
+        .background(.ultraThinMaterial)
+        .cornerRadius(26)
+        .shadow(color: .black.opacity(0.7), radius: 16)
+        .frame(maxWidth: 320)
     }
 }
 
 //
-// MARK: - ⚔️ Battle Logic
+// MARK: - BATTLE LOGIC
 //
 private extension EventView {
 
@@ -215,23 +238,19 @@ private extension EventView {
         Group {
             if let event = selectedEvent,
                let boss = bosses.first(where: { $0.id == event.bossId }) {
-                BattleSceneView(controller: makeController(for: boss, event: event))
-                    .environmentObjects(
-                        coinManager,
-                        crystalManager,
-                        accountManager,
-                        characterManager,
-                        skillManager
-                    )
+
+                BattleSceneView(controller: createController(boss: boss, event: event))
+                    .environmentObjects(coinManager, crystalManager, accountManager, characterManager, skillManager)
                     .background(Color.black)
                     .ignoresSafeArea()
+
             } else {
                 fallbackBattleView
             }
         }
     }
 
-    func makeController(for boss: Boss, event: Event) -> BattleSceneController {
+    func createController(boss: Boss, event: Event) -> BattleSceneController {
         let controller = BattleSceneController(
             boss: boss,
             bossHp: boss.hp,
@@ -243,20 +262,15 @@ private extension EventView {
         )
 
         controller.onFight = {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
-                withAnimation(.easeInOut(duration: 0.4)) {
-                    showBattle = false
-                    fadeBackground = false
-                    victoryText = "\(boss.name) was defeated!"
-                }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                victoryMessage = "\(boss.name) was defeated!"
+                showVictoryOverlay = true
+                showBattle = false
             }
         }
 
         controller.onExit = {
-            withAnimation(.easeInOut(duration: 0.4)) {
-                showBattle = false
-                selectedEvent = nil
-            }
+            closeBattle()
         }
 
         return controller
@@ -264,13 +278,23 @@ private extension EventView {
 
     func startBattle(for event: Event) {
         selectedEvent = event
-        withAnimation(.easeInOut(duration: 0.5)) {
+
+        withAnimation(.easeInOut(duration: 0.4)) {
             fadeBackground = true
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             withAnimation(.easeInOut(duration: 0.4)) {
                 showBattle = true
             }
+        }
+    }
+
+    func closeBattle() {
+        withAnimation(.easeInOut(duration: 0.35)) {
+            showVictoryOverlay = false
+            selectedEvent = nil
+            fadeBackground = false
         }
     }
 
@@ -288,7 +312,7 @@ private extension EventView {
 }
 
 //
-// MARK: - 📦 Helpers
+// MARK: Bundle Helper
 //
 private extension Bundle {
     func decodeSafe<T: Decodable>(_ file: String) -> [T] {
@@ -302,6 +326,9 @@ private extension Bundle {
     }
 }
 
+//
+// MARK: Environment Helper
+//
 private extension View {
     func environmentObjects(
         _ coin: CoinManager,

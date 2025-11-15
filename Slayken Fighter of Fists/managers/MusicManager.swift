@@ -1,9 +1,17 @@
+//
+//  MusicManager.swift
+//  Slayken Fighter of Fists
+//
+//  Created by Tufan Cakir on 2025-10-30.
+//
+
 import Foundation
 import AVFoundation
 import Combine
 
 @MainActor
 final class MusicManager: NSObject, ObservableObject, AVAudioPlayerDelegate {
+
     // MARK: - Published
     @Published var isMusicOn: Bool {
         didSet { Task { await handleMusicToggle() } }
@@ -13,42 +21,67 @@ final class MusicManager: NSObject, ObservableObject, AVAudioPlayerDelegate {
     private var player: AVAudioPlayer?
     private var currentSongIndex = 0
     private var songs: [Song] = []
+
     private var fadeTask: Task<Void, Never>?
 
-    // MARK: - Init
+    // MARK: - INIT
     override init() {
         self.isMusicOn = UserDefaults.standard.bool(forKey: "isMusicOn")
         super.init()
+
         configureAudioSession()
         loadSongs()
-        // Kein Autostart mehr (verhindert Doppelplayback)
-    }
 
-    // MARK: - Audio Session Setup
-    private func configureAudioSession() {
-        let session = AVAudioSession.sharedInstance()
-        do {
-            try session.setCategory(.playback, mode: .default, options: [.mixWithOthers])
-            try session.setActive(true)
-        } catch {
-            print("⚠️ AudioSession error:", error.localizedDescription)
+        // Falls Musik aktiviert war – wieder starten
+        if isMusicOn {
+            Task { await playCurrentSong(fadeIn: true) }
         }
     }
+}
 
-    // MARK: - Songdaten laden
+// MARK: - Audio Session
+extension MusicManager {
+    private func configureAudioSession() {
+        let session = AVAudioSession.sharedInstance()
+
+        do {
+            try session.setCategory(.ambient, mode: .default, options: [.mixWithOthers])
+            try session.setActive(true)
+        } catch {
+            print("⚠️ AudioSession konnte nicht gesetzt werden:", error.localizedDescription)
+
+            // Fallback
+            try? session.setCategory(.playback)
+            try? session.setActive(true)
+        }
+    }
+}
+
+// MARK: - JSON Songs laden
+extension MusicManager {
     private func loadSongs() {
         guard
             let url = Bundle.main.url(forResource: "songs", withExtension: "json"),
             let data = try? Data(contentsOf: url),
             let decoded = try? JSONDecoder().decode(SongList.self, from: data)
         else {
-            print("⚠️ Keine Songs gefunden oder JSON fehlerhaft.")
+            print("❌ songs.json NICHT gefunden oder fehlerhaft.")
             return
         }
-        songs = decoded.songs
-    }
 
-    // MARK: - Musik Toggle (On/Off)
+        songs = decoded.songs
+
+        if songs.isEmpty {
+            print("❌ KEINE Songs in JSON gefunden.")
+        } else {
+            print("🎵 \(songs.count) Songs geladen.")
+        }
+    }
+}
+
+// MARK: - Toggle: Musik EIN/AUS
+extension MusicManager {
+
     func handleMusicToggle() async {
         UserDefaults.standard.set(isMusicOn, forKey: "isMusicOn")
 
@@ -60,96 +93,128 @@ final class MusicManager: NSObject, ObservableObject, AVAudioPlayerDelegate {
             await fadeOutAndStop()
         }
     }
+}
 
-    // MARK: - Song abspielen
+// MARK: - SONG AB SPIELEN
+extension MusicManager {
+
     private func playCurrentSong(fadeIn: Bool = false) async {
-        guard isMusicOn, !songs.isEmpty else { return }
+        guard isMusicOn else { return }
+        guard !songs.isEmpty else { return }
 
-        // Doppelstart verhindern
+        // Doppelstarts verhindern
         if let p = player, p.isPlaying {
-            print("⚠️ Player läuft bereits, kein erneuter Start.")
+            print("⚠️ Player läuft bereits — kein Doppelstart.")
             return
         }
 
         let song = songs[currentSongIndex]
-        guard let url = URL(string: song.url) else {
-            print("❌ Ungültige URL: \(song.url)")
+
+        guard let url = Bundle.main.url(forResource: song.fileName, withExtension: "mp3") else {
+            print("❌ MP3-Datei fehlt:", song.fileName)
             return
         }
 
         do {
-            let (data, _) = try await URLSession.shared.data(from: url)
-            let newPlayer = try AVAudioPlayer(data: data)
+            let newPlayer = try AVAudioPlayer(contentsOf: url)
             newPlayer.delegate = self
-            newPlayer.numberOfLoops = 0
             newPlayer.volume = fadeIn ? 0.0 : 0.6
+            newPlayer.numberOfLoops = 0
             newPlayer.prepareToPlay()
             newPlayer.play()
 
             player = newPlayer
-            if fadeIn { await fadeInMusic(to: 0.6) }
 
-            print("🎶 Now playing:", song.title)
+            if fadeIn {
+                await fadeInMusic(to: 0.6)
+            }
+
+            print("🎶 Now Playing:", song.title)
+
         } catch {
             print("❌ Fehler beim Abspielen:", error.localizedDescription)
             await skipToNextSong()
         }
     }
+}
 
-    // MARK: - Smooth Fade-Out
+// MARK: - FADE OUT
+extension MusicManager {
     private func fadeOutAndStop() async {
         guard let player = player else { return }
         fadeTask?.cancel()
 
         fadeTask = Task {
-            for volume in stride(from: player.volume, through: 0, by: -0.05) {
+            let startVolume = player.volume
+            let steps: Float = 20
+
+            for i in stride(from: 0, through: steps, by: 1) {
                 guard !Task.isCancelled else { return }
-                player.volume = max(volume, 0)
-                try? await Task.sleep(nanoseconds: 50_000_000)
+
+                let newVolume = startVolume * (1 - Float(i) / steps)
+                player.volume = max(newVolume, 0)
+
+                try? await Task.sleep(nanoseconds: 40_000_000)
             }
+
             player.stop()
             self.player = nil
             print("🛑 Musik gestoppt")
         }
+
         await fadeTask?.value
     }
+}
 
-    // MARK: - Fade-In Effekt
-    private func fadeInMusic(to targetVolume: Float) async {
+// MARK: - FADE IN
+extension MusicManager {
+    private func fadeInMusic(to target: Float) async {
         guard let player = player else { return }
         fadeTask?.cancel()
 
         fadeTask = Task {
-            for volume in stride(from: player.volume, to: targetVolume, by: 0.05) {
+            let steps: Float = 20
+
+            for i in stride(from: 0, through: steps, by: 1) {
                 guard !Task.isCancelled else { return }
-                player.volume = min(volume, targetVolume)
-                try? await Task.sleep(nanoseconds: 50_000_000)
+
+                let newVolume = (Float(i) / steps) * target
+                player.volume = min(newVolume, target)
+
+                try? await Task.sleep(nanoseconds: 40_000_000)
             }
-            player.volume = targetVolume
+
+            player.volume = target
         }
+
         await fadeTask?.value
     }
+}
 
-    // MARK: - Nächster Song
+// MARK: - NÄCHSTER SONG
+extension MusicManager {
+
     private func skipToNextSong() async {
         guard !songs.isEmpty else { return }
+
         currentSongIndex = (currentSongIndex + 1) % songs.count
-        print("⏭️ Überspringe zu:", songs[currentSongIndex].title)
+
+        print("⏭️ Weiter zu:", songs[currentSongIndex].title)
+
         await playCurrentSong(fadeIn: true)
     }
 
-    // MARK: - Delegate
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         Task { await skipToNextSong() }
     }
 }
 
-// MARK: - Models
+// MARK: - MODELS
 struct SongList: Codable {
     let songs: [Song]
 }
 
 struct Song: Codable {
     let title: String
-    let url: String
+    let fileName: String // MUSS lokal in App sein
 }

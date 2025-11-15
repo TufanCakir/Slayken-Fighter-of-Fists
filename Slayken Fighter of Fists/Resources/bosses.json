@@ -143,5 +143,77 @@
     "hp": 120,
     "defense": 20,
     "filter": { "r": 0.1, "g": 1.0, "b": 0.2, "a": 1.0 }
-  }
+  },
+  {
+      "id": "boss_17",
+      "name": "Eclipse Sly",
+      "image": "character1",
+      "element": "void",
+      "hp": 150,
+      "defense": 30,
+      "filter": { "r": 0.3, "g": 0.0, "b": 0.6, "a": 1.0 }
+    },
+    {
+      "id": "boss_18",
+      "name": "Astral Keyo",
+      "image": "character2",
+      "element": "ice",
+      "hp": 150,
+      "defense": 30,
+      "filter": { "r": 0.4, "g": 0.7, "b": 1.0, "a": 1.0 }
+    },
+    {
+      "id": "boss_19",
+      "name": "Phantom Kenix",
+      "image": "character3",
+      "element": "void",
+      "hp": 150,
+      "defense": 30,
+      "filter": { "r": 0.5, "g": 0.0, "b": 0.9, "a": 1.0 }
+    },
+    {
+      "id": "boss_20",
+      "name": "Abyssal Senix",
+      "image": "character4",
+      "element": "nature",
+      "hp": 150,
+      "defense": 30,
+      "filter": { "r": 0.0, "g": 0.7, "b": 0.2, "a": 1.0 }
+    },
+    {
+      "id": "boss_21",
+      "name": "Stellar Ley",
+      "image": "character5",
+      "element": "fire",
+      "hp": 150,
+      "defense": 30,
+      "filter": { "r": 1.0, "g": 0.3, "b": 0.1, "a": 1.0 }
+    },
+    {
+      "id": "boss_22",
+      "name": "Celestial Len",
+      "image": "character6",
+      "element": "ice",
+      "hp": 150,
+      "defense": 30,
+      "filter": { "r": 0.4, "g": 0.9, "b": 1.0, "a": 1.0 }
+    },
+    {
+      "id": "boss_23",
+      "name": "Ancient Gen",
+      "image": "character7",
+      "element": "void",
+      "hp": 150,
+      "defense": 30,
+      "filter": { "r": 0.2, "g": 0.0, "b": 0.4, "a": 1.0 }
+    },
+    {
+      "id": "boss_24",
+      "name": "Eternal Ganix",
+      "image": "character8",
+      "element": "nature",
+      "hp": 150,
+      "defense": 30,
+      "filter": { "r": 0.1, "g": 0.9, "b": 0.1, "a": 1.0 }
+    }
 ]

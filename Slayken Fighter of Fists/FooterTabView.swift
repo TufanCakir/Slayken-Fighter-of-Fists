@@ -1,16 +1,20 @@
 import SwiftUI
 
 struct FooterTabView: View {
-    @EnvironmentObject var theme: ThemeManager
+
     @State private var tabs: [FooterTab] = Bundle.main.decode("footerTabs.json")
     @State private var selectedTab: String = "HomeView"
     @State private var backgroundColor: Color = .black
 
     var body: some View {
         ZStack {
-         
 
-            // MARK: - Haupt-TabView
+            // MARK: - Hintergrund animiert mit Tab-Farbe
+            backgroundColor
+                .ignoresSafeArea()
+                .animation(.easeInOut(duration: 0.35), value: backgroundColor)
+
+            // MARK: - Haupt TabView
             TabView(selection: $selectedTab) {
                 ForEach(tabs) { tab in
                     NavigationStack {
@@ -25,7 +29,7 @@ struct FooterTabView: View {
                 }
             }
             .tint(currentTabColor)
-            .onChange(of: selectedTab) { oldValue, newValue in
+            .onChange(of: selectedTab) { _, _ in
                 withAnimation(.easeInOut(duration: 0.35)) {
                     backgroundColor = currentTabColor
                 }
@@ -34,10 +38,9 @@ struct FooterTabView: View {
                 backgroundColor = currentTabColor
             }
         }
-        .animation(.easeInOut(duration: 0.35), value: selectedTab)
     }
 
-    // MARK: - Aktuelle Tab-Farbe
+    // MARK: - Aktuelle Tabfarbe
     private var currentTabColor: Color {
         Color(hex: tabs.first(where: { $0.destination == selectedTab })?.color ?? "#FFFFFF")
     }
@@ -51,12 +54,9 @@ struct FooterTabView: View {
 
         case "CharacterOverView":
             CharacterOverView()
-            
+
         case "CreateCharacterView":
             CreateCharacterView()
-            
-        case "ShopView":
-            ShopView()
 
         default:
             HomeView()
@@ -67,4 +67,3 @@ struct FooterTabView: View {
 #Preview {
     FooterTabView()
 }
-

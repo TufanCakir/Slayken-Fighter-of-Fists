@@ -20,11 +20,5 @@
     "color": "#0096FF",
     "destination": "CharacterOverView"
   },
-  {
-    "id": "4",
-    "title": "Shop",
-    "icon": "cart.fill",
-    "color": "#32CD32",
-    "destination": "ShopView"
-  },
 ]
+ 

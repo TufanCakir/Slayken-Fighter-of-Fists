@@ -160,9 +160,9 @@ struct StageNodeView: View {
     private var stageStars: some View {
         HStack(spacing: 3) {
             if progress.unlocked {
-                ForEach(0..<3, id: \.self) { i in
+                ForEach(0..<5, id: \.self) { i in
                     Image(systemName: "star.fill")
-                        .font(.system(size: 12))
+                        .font(.system(size: 10))
                         .foregroundColor(i < progress.stars ? glowColor : .gray.opacity(0.4))
                         .scaleEffect(i < progress.stars ? 1.1 : 1.0)
                         .animation(.spring(response: 0.5, dampingFraction: 0.8),

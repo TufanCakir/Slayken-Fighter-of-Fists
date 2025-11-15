@@ -4,102 +4,32 @@ struct CharacterOverView: View {
     @EnvironmentObject private var characterManager: CharacterManager
     @Environment(\.dismiss) private var dismiss
 
-    // Visueller Effekt beim Wechseln
+    // MARK: - States
     @State private var selectedHeroID: String? = nil
     @State private var showDeleteAlert = false
     @State private var heroToDelete: GameCharacter? = nil
 
+    // ORB Animation
+    @State private var orbGlow = false
+    @State private var orbRotation = 0.0
+
     var body: some View {
         NavigationStack {
             ZStack {
-                // MARK: - Hintergrund
-                LinearGradient(
-                    colors: [.black, .purple.opacity(0.8), .black],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-                .ignoresSafeArea()
+                backgroundLayer    // ⭐ Neue Perfect Background Animation
 
+                // MARK: Hauptinhalt
                 VStack(spacing: 28) {
 
-                    // MARK: - Titel
-                    VStack(spacing: 6) {
-                        Text("SLAYKEN")
-                            .font(.system(size: 40, weight: .heavy, design: .rounded))
-                            .foregroundStyle(
-                                LinearGradient(
-                                    colors: [.white, .purple.opacity(0.8)],
-                                    startPoint: .top,
-                                    endPoint: .bottom
-                                )
-                            )
-                            .shadow(color: .purple.opacity(0.6), radius: 10)
+                    headerSection
 
-                        Text("Choose Your Hero")
-                            .font(.title3.weight(.medium))
-                            .foregroundColor(.white.opacity(0.8))
-                    }
-
-                    // MARK: - Charakterauswahl
-                    if characterManager.characters.isEmpty {
-                        Spacer()
-                        Text("No heroes found in characters.json")
-                            .foregroundColor(.white.opacity(0.6))
-                        Spacer()
-                    } else {
-                        ScrollView(showsIndicators: false) {
-                            LazyVGrid(columns: [GridItem(.adaptive(minimum: 150), spacing: 20)], spacing: 20) {
-                                ForEach(characterManager.characters, id: \.id) { hero in
-                                    heroCard(for: hero)
-                                        .onTapGesture {
-                                            withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
-                                                selectedHeroID = hero.id
-                                                characterManager.setActiveCharacter(hero)
-                                            }
-                                        }
-                                }
-                            }
-                            .padding(.horizontal, 20)
-                            .padding(.top, 10)
-                            .padding(.bottom, 20)
-                        }
-                    }
+                    heroGridSection
 
                     Spacer()
 
-                    // MARK: - Enter World Button
-                    if let active = characterManager.activeCharacter {
-                        NavigationLink {
-                            HomeView()
-                        } label: {
-                            Label("Enter World as \(active.name)", systemImage: "flame.fill")
-                                .font(.headline.bold())
-                                .foregroundColor(.black)
-                                .padding(.vertical, 16)
-                                .frame(maxWidth: .infinity)
-                                .background(
-                                    LinearGradient(
-                                        colors: [.yellow, .orange],
-                                        startPoint: .topLeading,
-                                        endPoint: .bottomTrailing
-                                    )
-                                )
-                                .cornerRadius(18)
-                                .shadow(color: .yellow.opacity(0.7), radius: 12, y: 3)
-                        }
-                        .padding(.horizontal, 40)
-                        .transition(.opacity.combined(with: .scale))
-                    }
+                    enterWorldButtonSection
 
-                    // MARK: - Reset Button
-                    Button(role: .destructive) {
-                        showDeleteAlert = true
-                    } label: {
-                        Text("Reset Progress")
-                            .font(.subheadline)
-                            .foregroundColor(.red.opacity(0.8))
-                    }
-                    .padding(.bottom, 24)
+                    resetButtonSection
                 }
             }
             .alert("Reset all progress?", isPresented: $showDeleteAlert) {
@@ -116,8 +46,156 @@ struct CharacterOverView: View {
             selectedHeroID = characterManager.activeCharacter?.id
         }
     }
+}
 
-    // MARK: - Hero Card
+//
+// MARK: - UI Komponenten
+//
+private extension CharacterOverView {
+
+    // MARK: Background Layer
+    var backgroundLayer: some View {
+        ZStack {
+
+            // Base Gradient (gleich wie Summon)
+            LinearGradient(
+                colors: [.black, .blue.opacity(0.35), .black],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .overlay(
+                Image(systemName: "sparkles")
+                    .font(.system(size: 260))
+                    .foregroundStyle(.blue)
+                    .blur(radius: 50)
+                    .offset(y: -160)
+            )
+            .ignoresSafeArea()
+
+            // ⭐ Glow (1:1 wie Summon)
+            Circle()
+                .fill(
+                    RadialGradient(
+                        colors: [.black, .blue, .black],
+                        center: .center,
+                        startRadius: 15,
+                        endRadius: 260
+                    )
+                )
+                .scaleEffect(orbGlow ? 1.1 : 0.9)
+                .blur(radius: 40)
+                .animation(.easeInOut(duration: 1.3).repeatForever(), value: orbGlow)
+
+            // ⭐ Rotating Ring (identisch wie Summon)
+            Circle()
+                .stroke(
+                    AngularGradient(
+                        gradient: Gradient(colors: [
+                            .black,
+                            .blue,
+                            .black
+                        ]),
+                        center: .center
+                    ),
+                    lineWidth: 12
+                )
+                .frame(width: 330, height: 330)
+                .blur(radius: 2)
+                .rotationEffect(.degrees(orbRotation))
+                .animation(.linear(duration: 6).repeatForever(autoreverses: false), value: orbRotation)
+                .opacity(0.8)
+
+            // ⭐ Sparkles Icon
+            Image(systemName: "sparkles")
+                .font(.system(size: 55))
+                .foregroundStyle(.cyan.opacity(0.9))
+                .shadow(color: .cyan.opacity(0.5), radius: 15)
+        }
+        .onAppear {
+            orbGlow = true
+            orbRotation = 360
+        }
+    }
+
+    // MARK: Header
+    var headerSection: some View {
+        VStack(spacing: 6) {
+            Text("Choose Your Hero")
+                .font(.title3)
+                .foregroundColor(.white)
+        }
+    }
+
+    // MARK: Hero Grid
+    var heroGridSection: some View {
+        Group {
+            if characterManager.characters.isEmpty {
+                Spacer()
+                Text("No heroes found in characters.json")
+                    .foregroundColor(.white.opacity(0.6))
+                Spacer()
+            } else {
+                ScrollView(showsIndicators: false) {
+                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 150), spacing: 20)], spacing: 20) {
+                        ForEach(characterManager.characters, id: \.id) { hero in
+                            heroCard(for: hero)
+                                .onTapGesture {
+                                    withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
+                                        selectedHeroID = hero.id
+                                        characterManager.setActiveCharacter(hero)
+                                    }
+                                }
+                        }
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.top, 10)
+                    .padding(.bottom, 20)
+                }
+            }
+        }
+    }
+
+    // MARK: Enter World Button
+    var enterWorldButtonSection: some View {
+        Group {
+            if let active = characterManager.activeCharacter {
+                NavigationLink {
+                    HomeView()
+                } label: {
+                    Label("Enter World as \(active.name)", systemImage: "flame.fill")
+                        .font(.headline.bold())
+                        .foregroundColor(.black)
+                        .padding(.vertical, 16)
+                        .frame(maxWidth: .infinity)
+                        .background(
+                            LinearGradient(
+                                colors: [.yellow, .orange],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                        .cornerRadius(18)
+                        .shadow(color: .yellow.opacity(0.7), radius: 12, y: 3)
+                }
+                .padding(.horizontal, 40)
+                .transition(.opacity.combined(with: .scale))
+            }
+        }
+    }
+
+    // MARK: Reset Button
+    var resetButtonSection: some View {
+        Button(role: .destructive) {
+            showDeleteAlert = true
+        } label: {
+            Text("Reset Progress")
+                .font(.subheadline)
+                .foregroundColor(.red.opacity(0.8))
+        }
+        .padding(.bottom, 24)
+    }
+
+    // MARK: Hero Card
     private func heroCard(for hero: GameCharacter) -> some View {
         let isSelected = selectedHeroID == hero.id
         let aura = Color(hex: hero.auraColor)
@@ -136,10 +214,7 @@ struct CharacterOverView: View {
                 )
                 .overlay(
                     RoundedRectangle(cornerRadius: 20)
-                        .stroke(
-                            isSelected ? aura : Color.clear,
-                            lineWidth: isSelected ? 3 : 0
-                        )
+                        .stroke(isSelected ? aura : Color.clear, lineWidth: isSelected ? 3 : 0)
                         .shadow(color: isSelected ? aura.opacity(0.8) : .clear, radius: 12)
                 )
                 .shadow(color: .black.opacity(0.5), radius: 10, y: 3)
