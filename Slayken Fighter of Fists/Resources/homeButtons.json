@@ -27,4 +27,12 @@
     "color": "#0096FF",
     "destination": "SettingsView"
   },
+  {
+    "id": "5",
+    "title": "Equipment",
+    "icon": "slowmo",
+    "color": "#0096FF",
+    "destination": "EquipmentView"
+  },
 ]
+ 

@@ -27,6 +27,7 @@ struct ScreenFactory {
         case "ShowdownView":  return AnyView(ShowdownView())
         case "EventView":     return AnyView(EventView())
         case "BattleSceneView": return makeBattleSceneView()
+        case "EquipmentView":     return AnyView(EquipmentView())
 
         // MARK: - 🧩 Fallback
         default:

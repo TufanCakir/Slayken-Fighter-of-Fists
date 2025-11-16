@@ -175,3 +175,36 @@ final class CharacterManager: ObservableObject {
         print("🔄 Fortschritt & Level zurückgesetzt.")
     }
 }
+// MARK: - EQUIPMENT SYSTEM (Diablo Style)
+extension CharacterManager {
+
+        /// Item ausrüsten
+        func equip(_ item: EventShopItem) {
+            guard var active = activeCharacter else { return }
+
+            // Beispiel: item.slot = "weapon"
+            active.equipped[item.slot] = item.id
+
+            activeCharacter = active
+            saveAll()
+            objectWillChange.send()
+        }
+
+        /// Item ablegen
+        func unequip(slot: String) {
+            guard var active = activeCharacter else { return }
+
+            active.equipped[slot] = nil
+
+            activeCharacter = active
+            saveAll()
+            objectWillChange.send()
+        }
+
+        /// Ausgerüstetes Item für Slot abrufen
+        func equippedItem(for slot: String) -> EventShopItem? {
+            guard let id = activeCharacter?.equipped[slot] else { return nil }
+            return InventoryManager.shared.allEquipment[id]
+        }
+    }
+

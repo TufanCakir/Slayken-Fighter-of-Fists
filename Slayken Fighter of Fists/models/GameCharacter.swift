@@ -15,6 +15,11 @@ struct GameCharacter: Identifiable, Codable, Hashable {
     var image: String
     var element: String
     var auraColor: String
+    /// Equipment-Slots: weapon, armor, helmet, ring, etc.
+     /// Beispiel: ["weapon": "berserker_blade"]
+    var equipped: [String: String] = [:]
+
+
 
     // 🔹 Optische Daten
     var gradient: GradientColors
@@ -45,7 +50,8 @@ struct GameCharacter: Identifiable, Codable, Hashable {
         skillIDs: [String] = [],
         skills: [String]? = nil,
         level: Int = 1,
-        exp: Int = 0
+        exp: Int = 0,
+        equipped: [String: String] = [:]
     ) {
         self.id = id
         self.name = name
@@ -59,6 +65,7 @@ struct GameCharacter: Identifiable, Codable, Hashable {
         self.skills = skills
         self.level = level
         self.exp = exp
+        self.equipped = equipped
     }
 
     // 🔹 Kampfkraft basierend auf Level
@@ -120,6 +127,7 @@ extension GameCharacter {
             "Shadow Clone"
         ],
         level: 1,
-        exp: 0
+        exp: 0,
+        equipped: [:]
     )
 }

@@ -1,0 +1,11 @@
+{
+  "categories": [
+    {
+      "id": "category_weapons",
+      "title": "Waffen",
+      "items": [
+        { "id": "berserker_sword" }
+      ]
+    }
+  ]
+}

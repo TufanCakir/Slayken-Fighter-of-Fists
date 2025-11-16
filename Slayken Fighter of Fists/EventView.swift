@@ -36,6 +36,7 @@ struct EventView: View {
         ZStack {
             backgroundLayer
 
+            
             if !showBattle {
                 eventSelectionView
                     .opacity(fadeBackground ? 0 : 1)
@@ -107,16 +108,36 @@ private extension EventView {
         }
     }
 
+    
 
     // MARK: Event Selection
     var eventSelectionView: some View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 28) {
+
+                // ⭐ EVENT SHOP BUTTON
+                NavigationLink {
+                    EventShopView()
+                        .environmentObject(EventShopManager.shared)
+                        .environmentObject(CrystalManager.shared)
+                        .environmentObject(CoinManager.shared)
+                } label: {
+                    HStack(spacing: 10) {
+                        Image(systemName: "cart.fill")
+                        Text("Event Shop")
+                    }
+                    .padding()
+                    .background(.ultraThinMaterial)
+                    .cornerRadius(18)
+                }
+
+                // ⭐ TITLE
                 Text("Select an Event")
                     .font(.system(size: 28, weight: .bold, design: .rounded))
                     .foregroundStyle(.linearGradient(colors: [.white, .cyan], startPoint: .top, endPoint: .bottom))
-                    .padding(.top, 20)
+                    .padding(.top, 10)
 
+                // ⭐ EVENT LIST
                 LazyVStack(spacing: 20) {
                     ForEach(events) { event in
                         eventCard(for: event)
@@ -128,6 +149,7 @@ private extension EventView {
             .padding(.horizontal, 18)
         }
     }
+
 
     // MARK: Event Card
     func eventCard(for event: Event) -> some View {
@@ -263,11 +285,20 @@ private extension EventView {
 
         controller.onFight = {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                victoryMessage = "\(boss.name) was defeated!"
+
+                // 💎 Reward für Events
+                let reward = Int.random(in: 4...9) // ändere wie du willst
+                CrystalManager.shared.addCrystals(reward)
+
+                // 📝 Victory Text inkl. Reward
+                victoryMessage = "\(boss.name) was defeated!\n\n+💎\(reward) Event Crystals"
+
+                // UI Update
                 showVictoryOverlay = true
                 showBattle = false
             }
         }
+
 
         controller.onExit = {
             closeBattle()
@@ -353,6 +384,7 @@ private extension View {
         EventView()
             .environmentObject(CoinManager.shared)
             .environmentObject(CrystalManager.shared)
+            .environmentObject(EventShopManager.shared)
             .environmentObject(AccountLevelManager.shared)
             .environmentObject(CharacterManager.shared)
             .environmentObject(SkillManager.shared)

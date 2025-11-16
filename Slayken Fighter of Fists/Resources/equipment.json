@@ -1,0 +1,21 @@
+[
+  {
+    "id": "berserker_sword",
+    "name": "Berserker Sword",
+    "description": "+15% Gesamtschaden dauerhaft.",
+    "rarity": "legendary",
+    "slot": "weapon",
+    "type": "equipment",
+
+    "image": "berserker_schwert",
+
+    "stats": {
+      "damageMultiplier": 1.15
+    },
+
+    "shop": {
+      "price": 300,
+      "currency": "event_crystal"
+    }
+  }
+]
