@@ -96,14 +96,17 @@ final class CharacterManager: ObservableObject {
         print("✨ Neuer Charakter hinzugefügt: \(newChar.name)")
     }
 
-    private func updateCharacter(_ updated: GameCharacter) {
+    func updateCharacter(_ updated: GameCharacter) {
         if let index = characters.firstIndex(where: { $0.id == updated.id }) {
             characters[index] = updated
-            if activeCharacter?.id == updated.id {
-                activeCharacter = updated
-            }
-            saveAll()
         }
+
+        // Aktualisiere aktive Version
+        if activeCharacter?.id == updated.id {
+            activeCharacter = updated
+        }
+
+        saveAll()
     }
 
     // MARK: - Level & Erfahrung
@@ -161,6 +164,7 @@ final class CharacterManager: ObservableObject {
         }
     }
 
+
     func reloadCharacters() {
         loadAll()
     }
@@ -175,36 +179,44 @@ final class CharacterManager: ObservableObject {
         print("🔄 Fortschritt & Level zurückgesetzt.")
     }
 }
-// MARK: - EQUIPMENT SYSTEM (Diablo Style)
+// MARK: - EQUIPMENT SYSTEM (Persistent)
 extension CharacterManager {
 
-        /// Item ausrüsten
-        func equip(_ item: EventShopItem) {
-            guard var active = activeCharacter else { return }
+    /// Item ausrüsten
+    func equip(_ item: EventShopItem) {
+        guard var active = activeCharacter else { return }
 
-            // Beispiel: item.slot = "weapon"
-            active.equipped[item.slot] = item.id
+        active.equipped[item.slot] = item.id
 
-            activeCharacter = active
-            saveAll()
-            objectWillChange.send()
-        }
+        // Character ersetzen
+        updateCharacter(active)
 
-        /// Item ablegen
-        func unequip(slot: String) {
-            guard var active = activeCharacter else { return }
+        // Aktiv setzen
+        activeCharacter = active
 
-            active.equipped[slot] = nil
-
-            activeCharacter = active
-            saveAll()
-            objectWillChange.send()
-        }
-
-        /// Ausgerüstetes Item für Slot abrufen
-        func equippedItem(for slot: String) -> EventShopItem? {
-            guard let id = activeCharacter?.equipped[slot] else { return nil }
-            return InventoryManager.shared.allEquipment[id]
-        }
+        saveAll()
+        objectWillChange.send()
     }
+
+    /// Item ablegen
+    func unequip(slot: String) {
+        guard var active = activeCharacter else { return }
+
+        active.equipped[slot] = nil
+
+        // Character ersetzen
+        updateCharacter(active)
+
+        activeCharacter = active
+
+        saveAll()
+        objectWillChange.send()
+    }
+
+    /// Ausgerüstetes Item holen
+    func equippedItem(for slot: String) -> EventShopItem? {
+        guard let id = activeCharacter?.equipped[slot] else { return nil }
+        return InventoryManager.shared.allEquipment[id]
+    }
+}
 

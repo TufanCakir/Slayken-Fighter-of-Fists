@@ -14,7 +14,7 @@
     },
 
     "shop": {
-      "price": 300,
+      "price": 0,
       "currency": "event_crystal"
     }
   }

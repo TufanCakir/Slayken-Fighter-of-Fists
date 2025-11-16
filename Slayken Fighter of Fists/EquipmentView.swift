@@ -6,274 +6,162 @@ import SwiftUI
 
 struct EquipmentView: View {
 
-    @EnvironmentObject private var inventory: InventoryManager
+    @EnvironmentObject var characterManager: CharacterManager
+    @EnvironmentObject var inventoryManager: InventoryManager
 
-    @State private var selectedItem: EventShopItem? = nil
-    @State private var showDetail = false
+    @State private var selectedSlot: String?
+    @State private var showModal = false
 
-    private let columns = [
-        GridItem(.adaptive(minimum: 150), spacing: 22)
-    ]
+    // ORB Animation
+    @State private var orbGlow = false
+    @State private var orbRotation = 0.0
 
-    private var items: [EventShopItem] {
-        inventory.ownedEquipment
-    }
+    private let leftSlots = ["head", "shoulder", "chest", "hands", "legs"]
+    private let rightSlots = ["weapon", "ring", "neck", "feet"]
 
     var body: some View {
         ZStack {
             backgroundLayer
 
-            VStack(spacing: 24) {
+            if let character = characterManager.activeCharacter {
+                VStack(spacing: 22) {
 
-                Text("Ausrüstung")
-                    .font(.system(size: 30, weight: .bold, design: .rounded))
-                    .foregroundColor(.white)
-                    .shadow(color: .cyan.opacity(0.5), radius: 12)
-                    .padding(.top)
+                    // MARK: Charakter Name
+                    Text(character.name)
+                        .font(.system(size: 30, weight: .bold, design: .rounded))
+                        .foregroundColor(.white.opacity(0.9))
 
-                ScrollView(showsIndicators: false) {
-                    LazyVGrid(columns: columns, spacing: 26) {
+                    // MARK: Ausrüstung Layout
+                    HStack(alignment: .center, spacing: 20) {
 
-                        ForEach(items) { item in
-                            equipmentCard(item)
-                                .onTapGesture {
-                                    selectedItem = item
-                                    withAnimation(.spring(response: 0.45, dampingFraction: 0.75)) {
-                                        showDetail = true
-                                    }
-                                }
+                        // LEFT SIDE
+                        VStack(spacing: 20) {
+                            ForEach(leftSlots, id: \.self) { slot in
+                                EquipmentSlotView(
+                                    slot: slot,
+                                    equippedItem: characterManager.equippedItem(for: slot),
+                                    tapAction: { openSlot(slot) }
+                                )
+                            }
+                        }
+
+                        Spacer()
+
+                        // CHARACTER IMAGE
+                        Image(character.image)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 130)
+                            .shadow(color: .white.opacity(0.3), radius: 10)
+
+                        Spacer()
+
+                        // RIGHT SIDE
+                        VStack(spacing: 20) {
+                            ForEach(rightSlots, id: \.self) { slot in
+                                EquipmentSlotView(
+                                    slot: slot,
+                                    equippedItem: characterManager.equippedItem(for: slot),
+                                    tapAction: { openSlot(slot) }
+                                )
+                            }
                         }
                     }
-                    .padding(.horizontal, 18)
-                    .padding(.bottom, 50)
+                    .padding(.horizontal, 24)
+
+                    // Tipp
+                    Text("Tippe auf einen Slot um Items auszurüsten.")
+                        .foregroundColor(.white.opacity(0.6))
+                        .font(.caption)
+                        .padding(.top, 10)
                 }
             }
-
-            if showDetail, let item = selectedItem {
-                detailPopup(item)
-                    .transition(.scale.combined(with: .opacity))
-                    .zIndex(20)
-            }
         }
-        .animation(.easeInOut(duration: 0.25), value: showDetail)
+        .sheet(isPresented: $showModal) {
+            EquipmentSelectModal(
+                slot: selectedSlot ?? "",
+                items: itemsForSlot(selectedSlot),
+                onSelect: { item in
+                    characterManager.equip(item)
+                    showModal = false
+                }
+            )
+        }
     }
 }
 
-
-
-
-//
-// MARK: - BACKGROUND
-//
+// MARK: - Slot Handling
 private extension EquipmentView {
 
-
-        var backgroundLayer: some View {
-            ZStack {
-                LinearGradient(
-                    colors: [.black, .blue.opacity(0.25), .black],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-                .ignoresSafeArea()
-
-                Circle()
-                    .fill(
-                        RadialGradient(
-                            colors: [.clear, .blue.opacity(0.4), .clear],
-                            center: .center,
-                            startRadius: 30,
-                            endRadius: 380
-                        )
-                    )
-                    .blur(radius: 70)
-                    .opacity(0.6)
-
-                Image(systemName: "sparkles")
-                    .font(.system(size: 240))
-                    .foregroundColor(.blue.opacity(0.25))
-                    .blur(radius: 50)
-                    .offset(y: -160)
-            }
-        }
+    func openSlot(_ slot: String) {
+        selectedSlot = slot
+        showModal = true
     }
 
-
-//
-// MARK: - CARD
-//
-private extension EquipmentView {
-
-    func equipmentCard(_ item: EventShopItem) -> some View {
-        ZStack(alignment: .bottom) {
-
-            RoundedRectangle(cornerRadius: 22)
-                .fill(cardGradient(for: item))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 22)
-                        .stroke(rarityColor(for: item).opacity(0.8), lineWidth: 2)
-                )
-                .shadow(color: rarityColor(for: item).opacity(0.4), radius: 16)
-
-            VStack(spacing: 12) {
-
-                itemIcon(for: item)
-                    .frame(width: 60, height: 60)
-
-                Text(item.name)
-                    .font(.headline.bold())
-                    .foregroundColor(.white)
-            }
-            .padding(.bottom, 20)
-        }
-        .frame(height: 190)
+    func itemsForSlot(_ slot: String?) -> [EventShopItem] {
+        guard let slot else { return [] }
+        return inventoryManager.ownedEquipment.filter { $0.slot == slot }
     }
 }
 
-
-//
-// MARK: - DETAIL POPUP
-//
+// MARK: - Background Layer
 private extension EquipmentView {
-
-    func detailPopup(_ item: EventShopItem) -> some View {
-
+    var backgroundLayer: some View {
         ZStack {
 
-            Color.black.opacity(0.55)
-                .ignoresSafeArea()
-                .onTapGesture { withAnimation { showDetail = false } }
+            // Glow
+            Circle()
+                .fill(
+                    RadialGradient(
+                        colors: [.black, .blue, .black],
+                        center: .center,
+                        startRadius: 15,
+                        endRadius: 140
+                    )
+                )
+                .scaleEffect(orbGlow ? 1.1 : 0.9)
+                .blur(radius: 40)
+                .animation(.easeInOut(duration: 1.3).repeatForever(), value: orbGlow)
 
-            VStack(spacing: 20) {
+            // Main Orb
+            Circle()
+                .fill(.ultraThinMaterial)
+                .frame(width: 180, height: 180)
+                .shadow(color: .blue, radius: 20)
 
-                itemIcon(for: item)
-                    .frame(width: 90, height: 90)
+            // Rotating Energy Ring (FIXED)
+            Circle()
+                .stroke(
+                    AngularGradient(
+                        gradient: Gradient(colors: [.black, .blue, .black]),
+                        center: .center
+                    ),
+                    lineWidth: 10
+                )
+                .frame(width: 230, height: 230)
+                .blur(radius: 2)
+                .rotationEffect(.degrees(orbRotation))
+                .animation(.linear(duration: 3).repeatForever(autoreverses: false), value: orbRotation)
 
-                Text(item.name)
-                    .font(.title.bold())
-                    .foregroundColor(.white)
-
-                Text(item.description)
-                    .foregroundColor(.white.opacity(0.8))
-                    .padding(.horizontal, 10)
-
-                Divider().background(.white.opacity(0.3))
-
-                statsSection(item)
-
-                Divider().background(.white.opacity(0.3))
-
-                Button {
-                    withAnimation { showDetail = false }
-                } label: {
-                    Text("Schließen")
-                        .font(.headline.bold())
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 14)
-                        .background(.white)
-                        .foregroundColor(.black)
-                        .cornerRadius(16)
-                }
-            }
-            .padding(30)
-            .background(.ultraThinMaterial)
-            .cornerRadius(26)
-            .shadow(color: .black.opacity(0.6), radius: 25)
-            .padding(.horizontal, 40)
+            Image(systemName: "sparkles")
+                .font(.system(size: 55))
+                .foregroundStyle(.cyan)
+        }
+        .onAppear {
+            orbGlow = true
+            orbRotation = 360
         }
     }
 }
-
-
-//
-// MARK: - STATS
-//
-private extension EquipmentView {
-
-    @ViewBuilder
-    func statsSection(_ item: EventShopItem) -> some View {
-
-        VStack(alignment: .leading, spacing: 10) {
-
-            if let dmg = item.stats.damageMultiplier {
-                statLine("Schaden", "+\(Int((dmg - 1) * 100))%")
-            }
-
-            if let atk = item.stats.attackMultiplier {
-                statLine("Angriff", "+\(Int((atk - 1) * 100))%")
-            }
-
-            if let duration = item.stats.duration {
-                statLine("Dauer", "\(duration / 60) min")
-            }
-        }
-    }
-
-    func statLine(_ title: String, _ value: String, color: Color = .white) -> some View {
-        HStack {
-            Text(title).foregroundColor(.white.opacity(0.7))
-            Spacer()
-            Text(value).foregroundColor(color)
-        }
-    }
-}
-
-
-
-//
-// MARK: - HELPERS
-//
-private extension EquipmentView {
-
-    @ViewBuilder
-    func itemIcon(for item: EventShopItem) -> some View {
-        // Lokales Bild vorhanden?
-        if let imageName = item.image, !imageName.isEmpty {
-            Image(imageName)
-                .resizable()
-                .scaledToFit()
-        } else {
-            // Fallback: Emoji-Slot
-            Text(icon(for: item.slot))
-                .font(.system(size: 54))
-        }
-    }
-
-    func icon(for slot: String) -> String {
-        switch slot {
-        case "weapon": return "🗡️"
-        case "armor": return "🛡️"
-        case "amulet": return "🧿"
-        case "ring": return "💍"
-        default: return "🎁"
-        }
-    }
-
-    func rarityColor(for item: EventShopItem) -> Color {
-        switch item.rarity.lowercased() {
-        case "common": return .gray
-        case "rare": return .blue
-        case "epic": return .purple
-        case "legendary": return .yellow
-        default: return .white
-        }
-    }
-
-    func cardGradient(for item: EventShopItem) -> LinearGradient {
-        LinearGradient(
-            colors: [
-                rarityColor(for: item).opacity(0.55),
-                .black.opacity(0.8)
-            ],
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-        )
-    }
-}
-
 
 #Preview {
-    EquipmentView()
-        .environmentObject(InventoryManager.shared)
+    let cm = CharacterManager.shared
+    cm.activeCharacter = GameCharacter.example
+
+    let im = InventoryManager.shared
+
+    return EquipmentView()
+        .environmentObject(cm)
+        .environmentObject(im)
         .preferredColorScheme(.dark)
 }
