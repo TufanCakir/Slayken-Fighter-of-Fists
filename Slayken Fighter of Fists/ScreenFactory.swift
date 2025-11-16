@@ -20,14 +20,16 @@ struct ScreenFactory {
         switch name {
 
         // MARK: - ⚙️ Core Screens
-        case "SettingsView":  return AnyView(SettingsView())
-        case "NewsView":      return AnyView(NewsView())
+        case "SettingsView": return AnyView(SettingsView())
+        case "NewsView": return AnyView(NewsView())
 
         // MARK: - ⚔️ Kampf- & Spielsystem
-        case "ShowdownView":  return AnyView(ShowdownView())
-        case "EventView":     return AnyView(EventView())
+        case "ShowdownView": return AnyView(ShowdownView())
+        case "EventView": return AnyView(EventView())
         case "BattleSceneView": return makeBattleSceneView()
-        case "EquipmentView":     return AnyView(EquipmentView())
+        case "EquipmentView": return AnyView(EquipmentView())
+        case "GiftView": return AnyView(GiftView())
+        case "DailyLoginView": return AnyView(DailyLoginView())
 
         // MARK: - 🧩 Fallback
         default:
@@ -39,15 +41,17 @@ struct ScreenFactory {
 //
 // MARK: - 🔧 Erweiterungen
 //
-private extension ScreenFactory {
+extension ScreenFactory {
 
     /// Erstellt eine BattleScene mit echten Boss-Daten (Debug/Preview).
-    static func makeBattleSceneView() -> AnyView {
+    fileprivate static func makeBattleSceneView() -> AnyView {
         do {
             // ✅ JSON sicher laden
             let bosses: [Boss] = try Bundle.main.decodeSafe("bosses.json")
             guard let boss = bosses.first else {
-                return AnyView(fallbackView(for: "BattleSceneView – keine Bossdaten"))
+                return AnyView(
+                    fallbackView(for: "BattleSceneView – keine Bossdaten")
+                )
             }
 
             // 🧩 Manager (Singletons)
@@ -72,7 +76,14 @@ private extension ScreenFactory {
             // ✅ Vollständige BattleScene
             return AnyView(
                 BattleSceneView(controller: controller)
-                    .environmentObjects(coin, crystal, account, team, character, skill)
+                    .environmentObjects(
+                        coin,
+                        crystal,
+                        account,
+                        team,
+                        character,
+                        skill
+                    )
                     .preferredColorScheme(.dark)
                     .background(Color.black.ignoresSafeArea())
             )
@@ -84,7 +95,7 @@ private extension ScreenFactory {
     }
 
     /// 🧱 Fallback für nicht registrierte Screens
-    static func fallbackView(for name: String) -> some View {
+    fileprivate static func fallbackView(for name: String) -> some View {
         VStack(spacing: 18) {
             Image(systemName: "questionmark.app.fill")
                 .font(.system(size: 70))
@@ -95,13 +106,18 @@ private extension ScreenFactory {
                 .font(.system(size: 22, weight: .semibold, design: .rounded))
                 .foregroundColor(.white)
 
-            Text("Dieser Bildschirm ist noch nicht in der ScreenFactory registriert.")
-                .font(.subheadline)
-                .foregroundColor(.white.opacity(0.65))
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 30)
+            Text(
+                "Dieser Bildschirm ist noch nicht in der ScreenFactory registriert."
+            )
+            .font(.subheadline)
+            .foregroundColor(.white.opacity(0.65))
+            .multilineTextAlignment(.center)
+            .padding(.horizontal, 30)
 
-            Divider().background(Color.white.opacity(0.25)).padding(.vertical, 8)
+            Divider().background(Color.white.opacity(0.25)).padding(
+                .vertical,
+                8
+            )
 
             Button {
                 print("🐞 Debug: Screen '\(name)' fehlt in ScreenFactory.make()")
@@ -127,26 +143,35 @@ private extension ScreenFactory {
 //
 // MARK: - 🧰 Bundle + View Helpers
 //
-private extension Bundle {
+extension Bundle {
     /// JSON-Decode mit sauberem Fehler-Handling und Default-Fallback
-    func decodeSafe<T: Decodable>(_ file: String) throws -> T {
+    fileprivate func decodeSafe<T: Decodable>(_ file: String) throws -> T {
         guard let url = url(forResource: file, withExtension: nil) else {
-            throw NSError(domain: "ScreenFactory.FileNotFound", code: 404,
-                          userInfo: [NSLocalizedDescriptionKey: "\(file) nicht gefunden"])
+            throw NSError(
+                domain: "ScreenFactory.FileNotFound",
+                code: 404,
+                userInfo: [NSLocalizedDescriptionKey: "\(file) nicht gefunden"]
+            )
         }
         let data = try Data(contentsOf: url)
         do {
             return try JSONDecoder().decode(T.self, from: data)
         } catch {
-            throw NSError(domain: "ScreenFactory.DecodeError", code: 500,
-                          userInfo: [NSLocalizedDescriptionKey: "Fehler beim Decodieren von \(file): \(error)"])
+            throw NSError(
+                domain: "ScreenFactory.DecodeError",
+                code: 500,
+                userInfo: [
+                    NSLocalizedDescriptionKey:
+                        "Fehler beim Decodieren von \(file): \(error)"
+                ]
+            )
         }
     }
 }
 
-private extension View {
+extension View {
     /// Mehrere EnvironmentObjects gleichzeitig anhängen.
-    func environmentObjects(
+    fileprivate func environmentObjects(
         _ coin: CoinManager,
         _ crystal: CrystalManager,
         _ account: AccountLevelManager,

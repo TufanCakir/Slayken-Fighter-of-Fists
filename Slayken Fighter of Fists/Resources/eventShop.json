@@ -6,6 +6,24 @@
       "items": [
         { "id": "berserker_sword" }
       ]
+    },
+    {
+      "id": "category_armor",
+      "title": "Rüstungen",
+      "items": [
+        { "id": "berserker_helmet" },
+        { "id": "berserker_breast" },
+        { "id": "berserker_bracer" },
+        { "id": "berserker_boots" }
+      ]
+    },
+    {
+      "id": "category_accessories",
+      "title": "Accessoires",
+      "items": [
+        { "id": "berserker_amulet" },
+        { "id": "berserker_ring" }
+      ]
     }
   ]
 }

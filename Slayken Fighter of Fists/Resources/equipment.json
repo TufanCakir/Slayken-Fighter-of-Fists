@@ -6,15 +6,110 @@
     "rarity": "legendary",
     "slot": "weapon",
     "type": "equipment",
-
     "image": "berserker_schwert",
-
     "stats": {
       "damageMultiplier": 1.15
     },
-
     "shop": {
-      "price": 0,
+      "price": 1000,
+      "currency": "event_crystal"
+    }
+  },
+  {
+    "id": "berserker_amulet",
+    "name": "Berserker Amulet",
+    "description": "+10% Angriffstempo.",
+    "rarity": "legendary",
+    "slot": "neck",
+    "type": "equipment",
+    "image": "berserker_amulet",
+    "stats": {
+      "attackMultiplier": 1.10
+    },
+    "shop": {
+      "price": 700,
+      "currency": "event_crystal"
+    }
+  },
+  {
+    "id": "berserker_boots",
+    "name": "Berserker Boots",
+    "description": "+8% Bewegungsgeschwindigkeit.",
+    "rarity": "legendary",
+    "slot": "feet",
+    "type": "equipment",
+    "image": "berserker_boots",
+    "stats": {
+      "attackMultiplier": 1.08
+    },
+    "shop": {
+      "price": 500,
+      "currency": "event_crystal"
+    }
+  },
+  {
+    "id": "berserker_bracer",
+    "name": "Berserker Bracer",
+    "description": "+12% Nahkampfschaden.",
+    "rarity": "legendary",
+    "slot": "hands",
+    "type": "equipment",
+    "image": "berserker_bracer",
+    "stats": {
+      "damageMultiplier": 1.12
+    },
+    "shop": {
+      "price": 500,
+      "currency": "event_crystal"
+    }
+  },
+  {
+    "id": "berserker_breast",
+    "name": "Berserker Chestplate",
+    "description": "+15% Verteidigung.",
+    "rarity": "legendary",
+    "slot": "chest",
+    "type": "equipment",
+    "image": "berserker_breast",
+    "stats": {
+      "attackMultiplier": 1.00,
+      "damageMultiplier": 1.00,
+      "duration": 0
+    },
+    "shop": {
+      "price": 500,
+      "currency": "event_crystal"
+    }
+  },
+  {
+    "id": "berserker_helmet",
+    "name": "Berserker Helmet",
+    "description": "+10% kritische Trefferchance.",
+    "rarity": "legendary",
+    "slot": "head",
+    "type": "equipment",
+    "image": "berserker_helmet",
+    "stats": {
+      "attackMultiplier": 1.05
+    },
+    "shop": {
+      "price": 500,
+      "currency": "event_crystal"
+    }
+  },
+  {
+    "id": "berserker_ring",
+    "name": "Berserker Ring",
+    "description": "+6% Gesamtschaden.",
+    "rarity": "legendary",
+    "slot": "ring",
+    "type": "equipment",
+    "image": "berserker_ring",
+    "stats": {
+      "damageMultiplier": 1.06
+    },
+    "shop": {
+      "price": 700,
       "currency": "event_crystal"
     }
   }

@@ -34,5 +34,19 @@
     "color": "#0096FF",
     "destination": "EquipmentView"
   },
+  {
+    "id": "6",
+    "title": "Gifts",
+    "icon": "gift",
+    "color": "#0096FF",
+    "destination": "GiftView"
+  },
+  {
+    "id": "7",
+    "title": "Daily Login Bonus",
+    "icon": "giftcard",
+    "color": "#0096FF",
+    "destination": "DailyLoginView"
+  },
 ]
  

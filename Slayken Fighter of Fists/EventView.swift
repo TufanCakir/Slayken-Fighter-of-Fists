@@ -287,7 +287,7 @@ private extension EventView {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
 
                 // 💎 Reward für Events
-                let reward = Int.random(in: 4...9) // ändere wie du willst
+                let reward = Int.random(in: 10...50) // ändere wie du willst
                 CrystalManager.shared.addCrystals(reward)
 
                 // 📝 Victory Text inkl. Reward

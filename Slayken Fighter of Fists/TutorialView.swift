@@ -38,7 +38,7 @@ struct TutorialView: View {
             .padding(.horizontal, 20)
         }
         .fullScreenCover(isPresented: $showWelcome) {
-            HomeView()
+            FooterTabView()
                 .transition(.opacity.combined(with: .scale))
         }
         .onAppear {
