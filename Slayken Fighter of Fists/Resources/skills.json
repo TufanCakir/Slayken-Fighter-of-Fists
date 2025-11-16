@@ -169,7 +169,7 @@
     "description": "Beschwört einen Schattenklon, der den Gegner angreift."
   },
   {
-    "id": "skill_tornado_001",
+    "id": "tornado_strike",
     "name": "Tornado",
     "element": "tornado",
     "type": "damage",
@@ -187,6 +187,17 @@
     "minDamage": 30,
     "maxDamage": 45,
     "description": "Erzeugt einen mächtigen Beam, der Gegner fortbläst."
+  },
+  {
+      "id": "tide_crash",
+      "name": "Tide Crash",
+      "type": "damage",
+      "element": "tide_crash",
+      "description": "Ein gigantischer Wasserstoß, der wie ein Tsunami auf den Gegner einschlägt.",
+      "cooldown": 6.0,
+      "minDamage": 30,
+      "maxDamage": 50
   }
+
 ]
  

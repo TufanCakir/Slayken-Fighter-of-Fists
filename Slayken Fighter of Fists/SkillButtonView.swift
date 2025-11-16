@@ -193,7 +193,9 @@ private extension SkillButtonView {
         case "wind": return [.mint, .teal]
         case "water": return [.blue, .cyan]
         case "beamstrike": return [.green, .green]
-        case "tornado": return [.gray, .white.opacity(0.5)]
+        case "tornado": return [.gray, .white]
+        case "tide_crash": return [.white, .blue, .white]
+
         default: return [.gray, .white.opacity(0.5)]
         }
     }
@@ -211,6 +213,7 @@ private extension SkillButtonView {
         case "water": return "drop.fill"
         case "beamstrike": return "headlight.high.beam.fill"
         case "tornado": return "tornado.circle"
+        case "tide_crash": return "waveform.split"
         default: return "sparkles"
         }
     }

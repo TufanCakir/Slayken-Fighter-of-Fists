@@ -66,6 +66,21 @@ final class CharacterManager: ObservableObject {
             self.characters = []
         }
     }
+    
+    @MainActor
+    func deleteCharacter(id: String) {
+        characters.removeAll { $0.id == id }
+
+        // Falls aktiver Charakter gelöscht wurde → löschen
+        if activeCharacter?.id == id {
+            activeCharacter = nil
+            UserDefaults.standard.removeObject(forKey: activeCharacterIDKey)
+        }
+
+        saveAll()
+        print("🗑 Charakter gelöscht: \(id)")
+    }
+
 
     // MARK: - Aktiver Charakter
     func loadActiveCharacter() {

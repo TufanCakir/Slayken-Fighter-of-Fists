@@ -191,6 +191,78 @@ struct MetalSkillEffectView: UIViewRepresentable {
                 particles.append(Particle(position: pos, velocity: vel, color: coreColor))
             }
         }
+        
+        private func generateTideCrash(color: SIMD4<Float>) {
+            particles.removeAll(keepingCapacity: true)
+
+            let waveParticles = Int(140 * scale)
+            let splashParticles = Int(120 * scale)
+            let mistParticles = Int(60 * scale)
+
+            // 1️⃣ Massive Wasserfront
+            for i in 0..<waveParticles {
+                let angle = Float(i) / Float(waveParticles) * .pi
+                let radius = Float.random(in: 0.15...0.45)
+
+                let pos = SIMD2<Float>(
+                    cos(angle) * radius,
+                    sin(angle) * radius - 0.5
+                )
+
+                let vel = SIMD2<Float>(
+                    cos(angle) * 0.02 * scale,
+                    sin(angle) * 0.07 * scale + Float.random(in: 0.01...0.025)
+                )
+
+                let c = SIMD4<Float>(
+                    0.4, 0.8, 1.0,
+                    Float.random(in: 0.7...1.0)
+                )
+
+                particles.append(Particle(position: pos, velocity: vel, color: c))
+            }
+
+            // 2️⃣ Splash
+            for _ in 0..<splashParticles {
+                let pos = SIMD2<Float>(
+                    Float.random(in: -0.15...0.15),
+                    -0.5 + Float.random(in: -0.05...0.05)
+                )
+
+                let vel = SIMD2<Float>(
+                    Float.random(in: -0.025...0.025),
+                    Float.random(in: 0.06...0.12)
+                )
+
+                let c = SIMD4<Float>(
+                    0.5, 0.9, 1.0,
+                    Float.random(in: 0.5...0.9)
+                )
+
+                particles.append(Particle(position: pos, velocity: vel, color: c))
+            }
+
+            // 3️⃣ Nebel
+            for _ in 0..<mistParticles {
+                let pos = SIMD2<Float>(
+                    Float.random(in: -0.25...0.25),
+                    -0.55 + Float.random(in: -0.05...0.05)
+                )
+
+                let vel = SIMD2<Float>(
+                    Float.random(in: -0.01...0.01),
+                    Float.random(in: 0.015...0.035)
+                )
+
+                let c = SIMD4<Float>(
+                    0.6, 0.9, 1.0,
+                    Float.random(in: 0.15...0.35)
+                )
+
+                particles.append(Particle(position: pos, velocity: vel, color: c))
+            }
+        }
+
 
 
 
@@ -204,6 +276,13 @@ struct MetalSkillEffectView: UIViewRepresentable {
                  generateBeamstrike(color: color)
                  return
              }
+            
+            // Spezialfall: Tide Crash – eigener Generator
+            if style == "tide_crash" {
+                generateTideCrash(color: color)
+                return
+            }
+
             
 
             for i in 0..<count {
@@ -272,6 +351,67 @@ struct MetalSkillEffectView: UIViewRepresentable {
                     )
        
 
+                case "tide_crash":
+                    // 🌊 MASSIVE WATER WAVE IMPACT
+                    let waveParticles = Int(140 * scale)
+                    let splashParticles = Int(120 * scale)
+
+                    // 1️⃣ Haupt-Wellenfront (Halbkreis)
+                    for i in 0..<waveParticles {
+                        let angle = Float(i) / Float(waveParticles) * .pi   // nur obere Hälfte
+                        let radius = Float.random(in: 0.15...0.45)
+
+                        let pos = SIMD2<Float>(
+                            cos(angle) * radius,
+                            sin(angle) * radius - 0.5
+                        )
+
+                        let vel = SIMD2<Float>(
+                            cos(angle) * 0.02 * scale,
+                            sin(angle) * 0.07 * scale + Float.random(in: 0.01...0.025)
+                        )
+
+                        var c = SIMD4<Float>(0.4, 0.8, 1.0, 1.0)  // blau–türkis
+                        c.w = Float.random(in: 0.7...1.0)
+
+                        particles.append(Particle(position: pos, velocity: vel, color: c))
+                    }
+
+                    // 2️⃣ Wassertröpfchen (Splash)
+                    for _ in 0..<splashParticles {
+                        let pos = SIMD2<Float>(
+                            Float.random(in: -0.15...0.15),
+                            -0.5 + Float.random(in: -0.05...0.05)
+                        )
+
+                        let vel = SIMD2<Float>(
+                            Float.random(in: -0.025...0.025),
+                            Float.random(in: 0.06...0.12)
+                        )
+
+                        var c = SIMD4<Float>(0.5, 0.9, 1.0, 1.0)
+                        c.w = Float.random(in: 0.5...0.9)
+
+                        particles.append(Particle(position: pos, velocity: vel, color: c))
+                    }
+
+                    // 3️⃣ Kühl-bläuliche Nebelwolke
+                    for _ in 0..<Int(60 * scale) {
+                        let pos = SIMD2<Float>(
+                            Float.random(in: -0.25...0.25),
+                            -0.55 + Float.random(in: -0.05...0.05)
+                        )
+
+                        let vel = SIMD2<Float>(
+                            Float.random(in: -0.01...0.01),
+                            Float.random(in: 0.015...0.035)
+                        )
+
+                        var c = SIMD4<Float>(0.6, 0.9, 1.0, 0.4) // leichte Wassernebel
+                        c.w = Float.random(in: 0.2...0.45)
+
+                        particles.append(Particle(position: pos, velocity: vel, color: c))
+                    }
 
                     
                     // Manche Partikel sind leicht transparent für „Rauch“-Effekt

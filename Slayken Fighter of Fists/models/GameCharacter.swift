@@ -82,20 +82,19 @@ struct GameCharacter: Identifiable, Codable, Hashable {
             print("🆙 \(name) hat Level \(level) erreicht!")
         }
     }
+    
+    // MARK: - Equatable & Hashable
+    static func == (lhs: GameCharacter, rhs: GameCharacter) -> Bool {
+        // Characters are considered equal if they share the same stable identifier
+        return lhs.id == rhs.id
+    }
+
+    func hash(into hasher: inout Hasher) {
+        // Hash only by stable identifier to avoid requiring nested types to conform
+        hasher.combine(id)
+    }
 }
 
-// MARK: - Gradient Farben
-struct GradientColors: Codable, Hashable {
-    var top: String
-    var bottom: String
-}
-
-// MARK: - Partikeleffekt
-struct ParticleEffect: Codable, Hashable {
-    var type: String
-    var speed: Float
-    var size: Float
-}
 
 // MARK: - Beispielcharakter (Fallback)
 extension GameCharacter {
@@ -131,3 +130,4 @@ extension GameCharacter {
         equipped: [:]
     )
 }
+

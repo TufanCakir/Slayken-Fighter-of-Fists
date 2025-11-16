@@ -17,50 +17,326 @@
     "element": "fire",
     "auraColor": "#FF4500",
     "attack": 100,
-    "gradient": {
-      "top": "#FF8000",
-      "bottom": "#400000"
-    },
-    "particle": {
-      "type": "burst",
-      "speed": 1.2,
-      "size": 6.0
-    }
+    "gradient": { "top": "#FF8000", "bottom": "#400000" },
+    "particle": { "type": "burst", "speed": 1.2, "size": 6.0 }
   },
   {
     "id": "character_2",
     "name": "Keyo",
-    "skillIDs": ["skill_ice_001", "skill_void_001"],
+    "skillIDs": ["skill_ice_001", "skill_void_001", "skill_water_001"],
     "image": "character2",
     "element": "ice",
     "auraColor": "#00C8FF",
     "attack": 100,
-    "gradient": {
-      "top": "#A0E8FF",
-      "bottom": "#002040"
-    },
-    "particle": {
-      "type": "snow",
-      "speed": 0.6,
-      "size": 5.0
-    }
+    "gradient": { "top": "#A0E8FF", "bottom": "#002040" },
+    "particle": { "type": "snow", "speed": 0.6, "size": 5.0 }
   },
   {
     "id": "character_3",
     "name": "Kenix",
-    "skillIDs": ["skill_void_001", "skill_fire_001"],
+    "skillIDs": ["skill_void_001", "skill_fire_001", "shadow_clone"],
     "image": "character3",
     "element": "void",
     "auraColor": "#9A00FF",
     "attack": 100,
-    "gradient": {
-      "top": "#5A00A0",
-      "bottom": "#0C0018"
-    },
-    "particle": {
-      "type": "dark",
-      "speed": 0.8,
-      "size": 7.0
-    }
+    "gradient": { "top": "#5A00A0", "bottom": "#0C0018" },
+    "particle": { "type": "dark", "speed": 0.8, "size": 7.0 }
+  },
+  {
+    "id": "character_4",
+    "name": "Ravion",
+    "skillIDs": ["skill_thunder_001", "skill_fire_001", "skill_wind_001"],
+    "image": "character4",
+    "element": "thunder",
+    "auraColor": "#FFD700",
+    "attack": 110,
+    "gradient": { "top": "#FFF176", "bottom": "#2B1A00" },
+    "particle": { "type": "lightning", "speed": 1.4, "size": 6.0 }
+  },
+  {
+    "id": "character_5",
+    "name": "Verin",
+    "skillIDs": ["skill_nature_001", "skill_water_001", "skill_wind_001"],
+    "image": "character5",
+    "element": "nature",
+    "auraColor": "#00FF85",
+    "attack": 95,
+    "gradient": { "top": "#33FF99", "bottom": "#003300" },
+    "particle": { "type": "leaf", "speed": 0.7, "size": 5.5 }
+  },
+  {
+    "id": "character_6",
+    "name": "Haze",
+    "skillIDs": ["skill_wind_001", "skill_shadow_001", "tornado_strike"],
+    "image": "character6",
+    "element": "wind",
+    "auraColor": "#80FFE5",
+    "attack": 102,
+    "gradient": { "top": "#C2F2FF", "bottom": "#002C33" },
+    "particle": { "type": "wind", "speed": 1.2, "size": 5.0 }
+  },
+  {
+    "id": "character_7",
+    "name": "Aqua",
+    "skillIDs": ["skill_water_001", "skill_ice_001", "tide_crash"],
+    "image": "character7",
+    "element": "water",
+    "auraColor": "#00BFFF",
+    "attack": 98,
+    "gradient": { "top": "#33BFFF", "bottom": "#001933" },
+    "particle": { "type": "wave", "speed": 0.9, "size": 5.5 }
+  },
+  {
+    "id": "character_8",
+    "name": "Shade",
+    "skillIDs": ["skill_shadow_001", "shadow_clone", "void_slice"],
+    "image": "character8",
+    "element": "shadow",
+    "auraColor": "#6A00AA",
+    "attack": 112,
+    "gradient": { "top": "#660099", "bottom": "#000000" },
+    "particle": { "type": "shadow", "speed": 1.1, "size": 7.0 }
+  },
+  {
+    "id": "character_9",
+    "name": "CloneX",
+    "skillIDs": ["shadow_clone", "skill_void_001", "skill_wind_001"],
+    "image": "character9",
+    "element": "shadowclone",
+    "auraColor": "#6633BB",
+    "attack": 115,
+    "gradient": { "top": "#4A0072", "bottom": "#000000" },
+    "particle": { "type": "shadowclone", "speed": 1.0, "size": 7.5 }
+  },
+  {
+    "id": "character_10",
+    "name": "Typhoon",
+    "skillIDs": ["tornado_strike", "skill_wind_001", "skill_void_001"],
+    "image": "character10",
+    "element": "tornado",
+    "auraColor": "#AAFFF7",
+    "attack": 108,
+    "gradient": { "top": "#B2FFF5", "bottom": "#003333" },
+    "particle": { "type": "tornado", "speed": 1.3, "size": 8.0 }
+  },
+  {
+    "id": "character_11",
+    "name": "Sol",
+    "skillIDs": ["skill_beamstrike_001", "skill_fire_001", "skill_void_001"],
+    "image": "character11",
+    "element": "beamstrike",
+    "auraColor": "#FFC670",
+    "attack": 118,
+    "gradient": { "top": "#FFD6A3", "bottom": "#3B1C00" },
+    "particle": { "type": "beamstrike", "speed": 1.5, "size": 9.0 }
+  },
+  {
+    "id": "character_12",
+    "name": "Blaze",
+    "skillIDs": ["skill_fire_001", "skill_beamstrike_001"],
+    "image": "character1",
+    "element": "fire",
+    "auraColor": "#FF5500",
+    "attack": 120,
+    "gradient": { "top": "#FF9933", "bottom": "#330000" },
+    "particle": { "type": "flame", "speed": 1.3, "size": 6.5 }
+  },
+  {
+    "id": "character_13",
+    "name": "Frosten",
+    "skillIDs": ["skill_ice_001", "tide_crash"],
+    "image": "character2",
+    "element": "ice",
+    "auraColor": "#66E0FF",
+    "attack": 92,
+    "gradient": { "top": "#CCF6FF", "bottom": "#00263D" },
+    "particle": { "type": "snow", "speed": 0.7, "size": 5.0 }
+  },
+  {
+    "id": "character_14",
+    "name": "Voidrix",
+    "skillIDs": ["skill_void_001", "shadow_clone"],
+    "image": "character3",
+    "element": "void",
+    "auraColor": "#AA00FF",
+    "attack": 110,
+    "gradient": { "top": "#7800CC", "bottom": "#140024" },
+    "particle": { "type": "dark", "speed": 1.0, "size": 7.5 }
+  },
+  {
+    "id": "character_15",
+    "name": "Drake",
+    "skillIDs": ["skill_thunder_001", "skill_fire_001"],
+    "image": "character4",
+    "element": "thunder",
+    "auraColor": "#FFD700",
+    "attack": 125,
+    "gradient": { "top": "#FFF176", "bottom": "#2B1A00" },
+    "particle": { "type": "lightning", "speed": 1.5, "size": 6.0 }
+  },
+  {
+    "id": "character_16",
+    "name": "Bloom",
+    "skillIDs": ["skill_nature_001", "skill_wind_001"],
+    "image": "character5",
+    "element": "nature",
+    "auraColor": "#11FF99",
+    "attack": 90,
+    "gradient": { "top": "#44FFAA", "bottom": "#003A00" },
+    "particle": { "type": "leaf", "speed": 0.6, "size": 5.0 }
+  },
+  {
+    "id": "character_17",
+    "name": "Gale",
+    "skillIDs": ["skill_wind_001", "tornado_strike"],
+    "image": "character6",
+    "element": "wind",
+    "auraColor": "#AAFFF5",
+    "attack": 104,
+    "gradient": { "top": "#C2FFFA", "bottom": "#003A3A" },
+    "particle": { "type": "wind", "speed": 1.3, "size": 6.0 }
+  },
+  {
+    "id": "character_18",
+    "name": "Torrent",
+    "skillIDs": ["skill_water_001", "tide_crash"],
+    "image": "character7",
+    "element": "water",
+    "auraColor": "#00AFFF",
+    "attack": 96,
+    "gradient": { "top": "#55CCFF", "bottom": "#002244" },
+    "particle": { "type": "wave", "speed": 1.0, "size": 5.7 }
+  },
+  {
+    "id": "character_19",
+    "name": "Umbra",
+    "skillIDs": ["skill_shadow_001", "skill_void_001"],
+    "image": "character8",
+    "element": "shadow",
+    "auraColor": "#5500FF",
+    "attack": 116,
+    "gradient": { "top": "#440099", "bottom": "#000000" },
+    "particle": { "type": "shadow", "speed": 1.2, "size": 7.2 }
+  },
+  {
+    "id": "character_20",
+    "name": "Replica",
+    "skillIDs": ["shadow_clone", "skill_void_001"],
+    "image": "character9",
+    "element": "shadowclone",
+    "auraColor": "#8844DD",
+    "attack": 114,
+    "gradient": { "top": "#663399", "bottom": "#000000" },
+    "particle": { "type": "shadowclone", "speed": 1.0, "size": 7.3 }
+  },
+  {
+    "id": "character_21",
+    "name": "Cyclon",
+    "skillIDs": ["tornado_strike", "skill_wind_001"],
+    "image": "character10",
+    "element": "tornado",
+    "auraColor": "#CCFFF7",
+    "attack": 112,
+    "gradient": { "top": "#CCFFF7", "bottom": "#003333" },
+    "particle": { "type": "tornado", "speed": 1.3, "size": 8.0 }
+  },
+  {
+    "id": "character_22",
+    "name": "Helion",
+    "skillIDs": ["skill_beamstrike_001", "skill_fire_001"],
+    "image": "character11",
+    "element": "beamstrike",
+    "auraColor": "#FFC680",
+    "attack": 119,
+    "gradient": { "top": "#FFD6A3", "bottom": "#3B1C00" },
+    "particle": { "type": "beamstrike", "speed": 1.4, "size": 9.0 }
+  },
+  {
+    "id": "character_23",
+    "name": "Crimson",
+    "skillIDs": ["skill_fire_001", "skill_void_001"],
+    "image": "character1",
+    "element": "fire",
+    "auraColor": "#FF3300",
+    "attack": 123,
+    "gradient": { "top": "#FF8040", "bottom": "#330000" },
+    "particle": { "type": "flame", "speed": 1.2, "size": 6.2 }
+  },
+  {
+    "id": "character_24",
+    "name": "Glacien",
+    "skillIDs": ["skill_ice_001", "skill_water_001"],
+    "image": "character2",
+    "element": "ice",
+    "auraColor": "#66DFFF",
+    "attack": 91,
+    "gradient": { "top": "#CCF7FF", "bottom": "#002A40" },
+    "particle": { "type": "snow", "speed": 0.8, "size": 5.0 }
+  },
+  {
+    "id": "character_25",
+    "name": "Veyrion",
+    "skillIDs": ["skill_void_001", "shadow_clone"],
+    "image": "character3",
+    "element": "void",
+    "auraColor": "#7A00FF",
+    "attack": 109,
+    "gradient": { "top": "#6900CC", "bottom": "#110020" },
+    "particle": { "type": "dark", "speed": 0.9, "size": 7.0 }
+  },
+  {
+    "id": "character_26",
+    "name": "Shock",
+    "skillIDs": ["skill_thunder_001", "tornado_strike"],
+    "image": "character4",
+    "element": "thunder",
+    "auraColor": "#FFD700",
+    "attack": 124,
+    "gradient": { "top": "#FFF176", "bottom": "#3B1A00" },
+    "particle": { "type": "lightning", "speed": 1.6, "size": 6.3 }
+  },
+  {
+    "id": "character_27",
+    "name": "Sprout",
+    "skillIDs": ["skill_nature_001", "skill_wind_001"],
+    "image": "character5",
+    "element": "nature",
+    "auraColor": "#00FFAA",
+    "attack": 95,
+    "gradient": { "top": "#44FFAA", "bottom": "#003300" },
+    "particle": { "type": "leaf", "speed": 0.7, "size": 5.5 }
+  },
+  {
+    "id": "character_28",
+    "name": "Swift",
+    "skillIDs": ["skill_wind_001", "skill_shadow_001"],
+    "image": "character6",
+    "element": "wind",
+    "auraColor": "#BBFFF5",
+    "attack": 103,
+    "gradient": { "top": "#C2FFFA", "bottom": "#003A3A" },
+    "particle": { "type": "wind", "speed": 1.4, "size": 5.8 }
+  },
+  {
+    "id": "character_29",
+    "name": "Marina",
+    "skillIDs": ["skill_water_001", "tide_crash"],
+    "image": "character7",
+    "element": "water",
+    "auraColor": "#00C0FF",
+    "attack": 97,
+    "gradient": { "top": "#55CCFF", "bottom": "#002A44" },
+    "particle": { "type": "wave", "speed": 0.9, "size": 5.6 }
+  },
+  {
+    "id": "character_30",
+    "name": "Nightbane",
+    "skillIDs": ["skill_shadow_001", "skill_void_001"],
+    "image": "character8",
+    "element": "shadow",
+    "auraColor": "#5500CC",
+    "attack": 117,
+    "gradient": { "top": "#440099", "bottom": "#000000" },
+    "particle": { "type": "shadow", "speed": 1.2, "size": 7.4 }
   }
 ]

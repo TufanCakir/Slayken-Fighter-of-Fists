@@ -2,113 +2,114 @@
 //  CreateCharacterView.swift
 //  Slayken Fighter of Fists
 //
-//  Created by Tufan Cakir on 2025-10-31.
-//
 
 import SwiftUI
+import os
 
 @MainActor
 struct CreateCharacterView: View {
+
+    // MARK: - Logger
+    private let logger = Logger(subsystem: "Slayken", category: "CreateCharacterView")
+
     // MARK: - Environment
     @EnvironmentObject private var characterManager: CharacterManager
+    @EnvironmentObject private var templateManager: CharacterTemplateManager
     @Environment(\.dismiss) private var dismiss
 
-    // MARK: - States
-    @State private var selectedElement: String = "fire"
-    @State private var selectedExtras: Set<String> = []
+    // MARK: - State
+    @State private var selectedTemplateID: String?
     @State private var selectedName: String = ""
-    @State private var createdCharacter: GameCharacter?
-    @State private var showResult = false
-    @State private var imageScale: CGFloat = 0.9
-    @FocusState private var nameFocused: Bool
     @State private var loadedSkills: [Skill] = []
-    // MARK: - Orb
-       @State private var orbGlow = false
-       @State private var orbRotation = 0.0
-    // MARK: - Elements
-    private let elements: [String] = [
-        "fire", "ice", "void", "thunder", "nature", "wind", "water", "shadow",
-        "shadowclone", "tornado", "beamstrike"
-    ]
+    @State private var showResult = false
 
-    // MARK: - Body
+    @FocusState private var nameFocused: Bool
+    @State private var imageScale: CGFloat = 0.9
+
+    // Orb Animation
+    @State private var orbGlow = false
+    @State private var orbRotation = 0.0
+
+
+    // MARK: - View
     var body: some View {
         NavigationStack {
             ZStack {
                 backgroundLayer
-
-
-                ScrollView(showsIndicators: false) {
-                    VStack(spacing: 32) {
-                        titleSection
-                        nameInputSection
-                        mainElementPicker
-                        previewBox(for: selectedElement)
-                        skillPreview
-                        createButton
-                    }
-                    .padding(.bottom, 80)
-                    .animation(.spring(response: 0.45, dampingFraction: 0.8), value: selectedElement)
-                }
+                contentScroll
             }
             .navigationDestination(isPresented: $showResult) {
                 CharacterOverView()
                     .environmentObject(characterManager)
             }
-            .onAppear(perform: updateSkillPreview)
-            .onChange(of: selectedElement) {
-                updateSkillPreview()
-            }
-            .onChange(of: selectedExtras) {
+            .onChange(of: selectedTemplateID) { oldValue, newValue in
+                logger.info("Selected template changed from \(oldValue ?? "nil") to \(newValue ?? "nil")")
                 updateSkillPreview()
             }
         }
         .preferredColorScheme(.dark)
+        .onAppear(perform: logInitialState)
     }
 }
 
-// MARK: - Background Orb Layer
+
+
+
+
+
+// MARK: - Main Content
 private extension CreateCharacterView {
+
+    var contentScroll: some View {
+        ScrollView(showsIndicators: false) {
+            VStack(spacing: 32) {
+                titleSection
+                nameInputSection
+                characterTemplatePicker
+                previewBox
+                skillPreview
+                createButton
+            }
+            .padding(.bottom, 80)
+        }
+    }
+}
+
+
+// MARK: - Background
+private extension CreateCharacterView {
+
     var backgroundLayer: some View {
         ZStack {
-
-            // Glow
             Circle()
                 .fill(
                     RadialGradient(
                         colors: [.black, .blue, .black],
                         center: .center,
-                        startRadius: 15,
-                        endRadius: 140
+                        startRadius: 20,
+                        endRadius: 180
                     )
                 )
-                .scaleEffect(orbGlow ? 1.1 : 0.9)
                 .blur(radius: 40)
-                .animation(.easeInOut(duration: 1.3).repeatForever(), value: orbGlow)
+                .scaleEffect(orbGlow ? 1.12 : 0.88)
+                .animation(.easeInOut(duration: 1.4).repeatForever(), value: orbGlow)
 
-            // Main Orb
-            Circle()
-                .fill(.ultraThinMaterial)
-                .frame(width: 180, height: 180)
-                .shadow(color: .blue, radius: 20)
-
-            // Rotating Energy Ring (FIXED)
             Circle()
                 .stroke(
                     AngularGradient(
                         gradient: Gradient(colors: [.black, .blue, .black]),
                         center: .center
                     ),
-                    lineWidth: 10
+                    lineWidth: 12
                 )
-                .frame(width: 230, height: 230)
-                .blur(radius: 2)
+                .frame(width: 250, height: 250)
                 .rotationEffect(.degrees(orbRotation))
-                .animation(.linear(duration: 6).repeatForever(autoreverses: false), value: orbRotation)
+                .blur(radius: 1.5)
+                .animation(.linear(duration: 6).repeatForever(), value: orbRotation)
 
             Image(systemName: "sparkles")
-                .font(.system(size: 55))
-                .foregroundStyle(.cyan)
+                .font(.system(size: 52))
+                .foregroundColor(.cyan.opacity(0.8))
         }
         .onAppear {
             orbGlow = true
@@ -117,92 +118,46 @@ private extension CreateCharacterView {
     }
 }
 
-//
-// MARK: - Logik
-//
-private extension CreateCharacterView {
-    func updateSkillPreview() {
-        guard SkillManager.shared.isLoaded else { return }
 
-        let combined = [selectedElement] + selectedExtras
-        let allSkills = combined.flatMap { SkillManager.shared.getSkills(forElement: $0).prefix(3) }
 
-        loadedSkills = Array(allSkills.prefix(12))
-        print("🧩 Elemente: \(combined.joined(separator: ", ")) → \(loadedSkills.count) Skills geladen")
-    }
 
-    func createCharacter() {
-        guard !selectedName.trimmingCharacters(in: .whitespaces).isEmpty else { return }
 
-        let skillIDs = loadedSkills.map(\.id)
-        let newChar = GameCharacter(
-            name: selectedName,
-            image: previewImageName(for: selectedElement),
-            element: selectedElement,
-            auraColor: accentColor(for: selectedElement).toHexString(),
-            gradient: gradient(for: selectedElement),
-            particle: particle(for: selectedElement),
-            skillIDs: skillIDs
-        )
 
-        characterManager.addCharacter(newChar)
-        createdCharacter = newChar
-
-        withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
-            showResult = true
-        }
-
-        print("🎉 Neuer Charakter \(newChar.name) erstellt mit \(skillIDs.count) Skills.")
-    }
-
-    func toggleExtraElement(_ element: String) {
-        if selectedExtras.contains(element) {
-            selectedExtras.remove(element)
-        } else if selectedExtras.count < 3 {
-            selectedExtras.insert(element)
-        }
-        updateSkillPreview()
-    }
-}
-
-//
-// MARK: - UI-Sektionen
-//
+// MARK: - UI Sections
 private extension CreateCharacterView {
 
     var titleSection: some View {
         VStack(spacing: 6) {
             Text("Create Your Hero")
-                .font(.system(size: 36, weight: .bold, design: .rounded))
-                .foregroundStyle(LinearGradient(colors: [.white, accentColor(for: selectedElement)],
-                                                startPoint: .top, endPoint: .bottom))
-                .shadow(color: accentColor(for: selectedElement).opacity(0.7), radius: 12)
-            Text("Choose elements and skills to forge your legend.")
-                .font(.subheadline)
-                .foregroundColor(.white.opacity(0.7))
+                .font(.system(size: 36, weight: .bold))
+                .foregroundColor(.white)
+
+            Text("Choose a template to forge your legend.")
+                .foregroundColor(.white.opacity(0.6))
         }
-        .padding(.top, 20)
+        .padding(.top, 16)
     }
+
 
     var nameInputSection: some View {
         VStack(alignment: .leading, spacing: 8) {
+
             Text("Hero Name")
                 .font(.headline)
                 .foregroundColor(.white.opacity(0.85))
+
             HStack {
                 TextField("Enter name", text: $selectedName)
                     .focused($nameFocused)
-                    .textInputAutocapitalization(.words)
-                    .disableAutocorrection(true)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 10)
+                    .padding()
                     .background(.ultraThinMaterial)
                     .cornerRadius(12)
                     .foregroundColor(.white)
+
                 if !selectedName.isEmpty {
                     Button { selectedName = "" } label: {
                         Image(systemName: "xmark.circle.fill")
-                            .foregroundColor(.gray.opacity(0.7))
+                            .foregroundColor(.white.opacity(0.6))
                     }
                 }
             }
@@ -210,265 +165,230 @@ private extension CreateCharacterView {
         .padding(.horizontal, 24)
     }
 
-    var mainElementPicker: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Main Element")
+
+    var characterTemplatePicker: some View {
+        VStack(alignment: .leading, spacing: 12) {
+
+            Text("Choose a Base Character")
                 .font(.headline)
                 .foregroundColor(.white.opacity(0.85))
+
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 12) {
-                    ForEach(elements, id: \.self) { e in
-                        Button { withAnimation(.spring()) { selectedElement = e } } label: {
-                            Text(e.capitalized)
-                                .font(.subheadline.bold())
-                                .padding(.vertical, 10)
-                                .padding(.horizontal, 14)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .fill(selectedElement == e ? accentColor(for: e) : .gray.opacity(0.3))
-                                )
-                                .foregroundColor(.white)
-                                .shadow(color: selectedElement == e ? accentColor(for: e).opacity(0.7) : .clear, radius: 8)
+                HStack(spacing: 16) {
+
+                    ForEach(templateManager.templates) { template in
+                        Button {
+                            selectedTemplateID = template.id
+                            selectedName = template.name
+                            logger.info("Template tapped: \(template.id) - \(template.name)")
+                        } label: {
+                            templateCard(template)
                         }
                     }
-                }.padding(.horizontal, 16)
-            }
-        }
-    }
-
- 
-    // ⚔️ Skill-Vorschau mit Gruppen und Akkordeon
-    var skillPreview: some View {
-        VStack(spacing: 14) {
-            Text("Available Skills")
-                .font(.headline)
-                .foregroundColor(.white.opacity(0.9))
-            if loadedSkills.isEmpty {
-                Text("Select elements to see available skills.")
-                    .foregroundColor(.white.opacity(0.5))
-                    .font(.subheadline)
-                    .padding(.top, 6)
-            } else {
-                let grouped = Dictionary(grouping: loadedSkills, by: { $0.element })
-                VStack(spacing: 12) {
-                    ForEach(grouped.keys.sorted(), id: \.self) { element in
-                        SkillGroupView(
-                            element: element,
-                            skills: grouped[element] ?? [],
-                            accent: accentColor(for: element)
-                        )
-                    }
                 }
-                .padding(.horizontal, 20)
-                .transition(.opacity.combined(with: .scale))
+                .padding(.horizontal, 16)
             }
         }
-        .animation(.spring(response: 0.4, dampingFraction: 0.8), value: loadedSkills.count)
     }
 
-    var createButton: some View {
-        Button(action: createCharacter) {
-            Label("Create Character", systemImage: "sparkles")
-                .font(.headline.bold())
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(
-                    LinearGradient(colors: [accentColor(for: selectedElement),
-                                            accentColor(for: selectedElement).opacity(0.7)],
-                                   startPoint: .topLeading,
-                                   endPoint: .bottomTrailing)
-                )
-                .cornerRadius(14)
-                .shadow(color: accentColor(for: selectedElement).opacity(0.7), radius: 10, y: 4)
+
+    func templateCard(_ template: CharacterTemplate) -> some View {
+        VStack(spacing: 8) {
+            Image(template.image)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 90, height: 90)
+                .cornerRadius(12)
+
+            Text(template.name)
+                .font(.caption)
                 .foregroundColor(.white)
         }
-        .padding(.horizontal, 24)
-        .disabled(selectedName.trimmingCharacters(in: .whitespaces).isEmpty)
-        .opacity(selectedName.isEmpty ? 0.5 : 1)
+        .padding(10)
+        .background(
+            RoundedRectangle(cornerRadius: 14)
+                .fill(selectedTemplateID == template.id ?
+                      Color.white.opacity(0.18) :
+                      Color.white.opacity(0.05))
+        )
     }
 
-    func previewBox(for element: String) -> some View {
+
+    var previewBox: some View {
         VStack(spacing: 12) {
+
             Text("Preview")
                 .font(.headline)
-                .foregroundColor(.white.opacity(0.8))
+                .foregroundColor(.white.opacity(0.9))
+
             ZStack {
                 RoundedRectangle(cornerRadius: 22)
-                    .fill(LinearGradient(colors: [accentColor(for: element).opacity(0.85),
-                                                  .black.opacity(0.85)],
-                                         startPoint: .topLeading,
-                                         endPoint: .bottomTrailing))
-                    .shadow(color: accentColor(for: element).opacity(0.6), radius: 12)
-                    .frame(height: 220)
-                VStack(spacing: 10) {
-                    Image(previewImageName(for: element))
-                        .resizable()
-                        .scaledToFit()
-                        .frame(height: 120)
-                        .scaleEffect(imageScale)
-                        .shadow(color: accentColor(for: element).opacity(0.7), radius: 10)
-                        .onAppear { withAnimation(.easeInOut(duration: 0.6)) { imageScale = 1.0 } }
-                    Text(element.capitalized)
-                        .font(.title2.bold())
-                        .foregroundColor(.white)
-                        .shadow(color: accentColor(for: element), radius: 10)
+                    .fill(Color.black.opacity(0.55))
+                    .frame(height: 240)
+
+                if let id = selectedTemplateID,
+                   let template = templateManager.template(id: id) {
+                    VStack(spacing: 10) {
+                        Image(template.image)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: 130)
+
+                        Text(template.name)
+                            .font(.title3.bold())
+                            .foregroundColor(.white)
+                    }
+                } else {
+                    Text("No Template Selected")
+                        .foregroundColor(.white.opacity(0.4))
                 }
             }
             .padding(.horizontal, 24)
         }
     }
-}
 
-// MARK: - SkillGroupView
-private struct SkillGroupView: View {
-    let element: String
-    let skills: [Skill]
-    let accent: Color
-    @State private var isExpanded = true
 
-    var body: some View {
-        VStack(spacing: 0) {
-            Button {
-                withAnimation(.spring(response: 0.45, dampingFraction: 0.85)) { isExpanded.toggle() }
-            } label: {
+    var skillPreview: some View {
+        VStack(spacing: 14) {
+
+            Text("Skills")
+                .font(.headline)
+                .foregroundColor(.white.opacity(0.95))
+
+            if loadedSkills.isEmpty {
+                Text("Select a character template to see skills.")
+                    .foregroundColor(.white.opacity(0.5))
+            } else {
+                skillsList
+            }
+        }
+    }
+
+
+    var skillsList: some View {
+        VStack(spacing: 10) {
+            ForEach(loadedSkills) { skill in
                 HStack {
-                    LinearGradient(colors: [accent.opacity(0.9), accent.opacity(0.6)],
-                                   startPoint: .topLeading, endPoint: .bottomTrailing)
-                        .frame(width: 6)
-                        .cornerRadius(3)
-                    Text(element.capitalized)
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .padding(.leading, 8)
-                    Spacer()
-                    Image(systemName: isExpanded ? "chevron.up.circle.fill" : "chevron.down.circle.fill")
-                        .foregroundColor(accent.opacity(0.9))
-                        .imageScale(.large)
-                        .padding(.trailing, 6)
-                }
-                .padding(.vertical, 8)
-                .padding(.horizontal, 12)
-                .background(Color.black.opacity(0.25))
-                .cornerRadius(12)
-                .shadow(color: accent.opacity(0.5), radius: 6, y: 3)
-            }
+                    Circle()
+                        .fill(.blue)
+                        .frame(width: 10, height: 10)
 
-            if isExpanded {
-                VStack(alignment: .leading, spacing: 8) {
-                    ForEach(skills, id: \.id) { skill in
-                        HStack(alignment: .top, spacing: 8) {
-                            Circle()
-                                .fill(accent)
-                                .frame(width: 10, height: 10)
-                                .shadow(color: accent.opacity(0.8), radius: 5)
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text(skill.name)
-                                    .font(.subheadline.bold())
-                                    .foregroundColor(accent)
-                                Text(skill.description)
-                                    .font(.caption)
-                                    .foregroundColor(.white.opacity(0.7))
-                                    .lineLimit(2)
-                            }
-                            Spacer()
-                            Text("\(Int(skill.cooldown))s")
-                                .font(.caption2)
-                                .foregroundColor(.white.opacity(0.5))
-                        }
-                        .padding(.horizontal, 6)
-                        .padding(.vertical, 4)
-                        .background(Color.white.opacity(0.05))
-                        .cornerRadius(8)
+                    VStack(alignment: .leading) {
+                        Text(skill.name).foregroundColor(.white)
+                        Text(skill.description)
+                            .foregroundColor(.white.opacity(0.5))
+                            .font(.caption)
                     }
+
+                    Spacer()
+
+                    Text("\(Int(skill.cooldown))s")
+                        .foregroundColor(.white.opacity(0.6))
+                        .font(.caption2)
                 }
-                .padding(.top, 4)
-                .transition(.opacity.combined(with: .move(edge: .top)))
+                .padding(8)
+                .background(Color.white.opacity(0.05))
+                .cornerRadius(8)
             }
         }
-        .padding(.vertical, 4)
+        .padding(.horizontal, 20)
+    }
+
+
+    var createButton: some View {
+        Button(action: createCharacter) {
+            Label("Create Character", systemImage: "sparkles")
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(.blue.opacity(0.7))
+                .cornerRadius(14)
+                .foregroundColor(.white)
+        }
+        .padding(.horizontal, 24)
+        .disabled(selectedTemplateID == nil || selectedName.isEmpty)
+        .opacity(selectedTemplateID == nil || selectedName.isEmpty ? 0.45 : 1)
     }
 }
 
-// MARK: - Farb- & Effektlogik
+
+
+
+
+
+// MARK: - Logic
 private extension CreateCharacterView {
-    func accentColor(for element: String) -> Color {
-        switch element {
-        case "fire": return .orange
-        case "ice": return .cyan
-        case "void": return .purple
-        case "thunder": return .yellow
-        case "nature": return .green
-        case "wind": return .mint
-        case "water": return .blue
-        case "shadow": return .indigo
-        case "shadowclone": return Color(red: 0.4, green: 0.3, blue: 0.7)
-        case "tornado": return Color(red: 0.7, green: 1.0, blue: 0.9)
-        case "beamstrike": return Color(red: 1.0, green: 0.8, blue: 0.6)
-        default: return .gray
+
+    func logInitialState() {
+        logger.info("CreateCharacterView loaded")
+        print("📘 CreateCharacterView geladen")
+
+        let count = templateManager.templates.count
+        logger.info("Loaded templates: \(count)")
+        print("📁 Templates verfügbar: \(count)")
+
+        templateManager.templates.forEach {
+            print(" → ID:\($0.id) | Name:\($0.name) | Bild:\($0.image)")
         }
     }
 
-    func gradient(for element: String) -> GradientColors {
-        switch element {
-        case "fire": return .init(top: "#FF8000", bottom: "#400000")
-        case "ice": return .init(top: "#A0E8FF", bottom: "#002040")
-        case "void": return .init(top: "#5A00A0", bottom: "#0C0018")
-        case "thunder": return .init(top: "#FFF176", bottom: "#2B1A00")
-        case "nature": return .init(top: "#33FF99", bottom: "#003300")
-        case "wind": return .init(top: "#C2F2FF", bottom: "#002C33")
-        case "water": return .init(top: "#33BFFF", bottom: "#001933")
-        case "shadow": return .init(top: "#660099", bottom: "#000000")
-        case "shadowclone": return .init(top: "#4A0072", bottom: "#000000")
-        case "tornado": return .init(top: "#B2FFF5", bottom: "#003333")
-        case "beamstrike": return .init(top: "#FFD6A3", bottom: "#3B1C00")
-        default: return .init(top: "#222", bottom: "#000")
+
+    func updateSkillPreview() {
+        guard let id = selectedTemplateID,
+              let template = templateManager.template(id: id)
+        else {
+            logger.warning("SkillPreview → Template not found for id: \(selectedTemplateID ?? "nil")")
+            loadedSkills = []
+            return
+        }
+
+        logger.info("Loading skills for template: \(template.id)")
+
+        loadedSkills = template.skillIDs.compactMap { sid in
+            let skill = SkillManager.shared.skill(id: sid)
+
+            if skill == nil {
+                logger.error("Missing skill: \(sid)")
+                print("❌ Skill fehlt im JSON: \(sid)")
+            }
+
+            return skill
         }
     }
 
-    func particle(for element: String) -> ParticleEffect {
-        switch element {
-        case "fire": return .init(type: "flame", speed: 1.2, size: 6.0)
-        case "ice": return .init(type: "snow", speed: 0.6, size: 5.0)
-        case "void": return .init(type: "dark", speed: 0.8, size: 7.0)
-        case "thunder": return .init(type: "lightning", speed: 1.4, size: 6.0)
-        case "nature": return .init(type: "leaf", speed: 0.7, size: 5.5)
-        case "wind": return .init(type: "wind", speed: 1.0, size: 5.0)
-        case "water": return .init(type: "wave", speed: 0.9, size: 5.5)
-        case "shadow": return .init(type: "shadow", speed: 1.1, size: 7.0)
-        case "shadowclone": return .init(type: "shadowclone", speed: 1.0, size: 7.5)
-        case "tornado": return .init(type: "tornado", speed: 1.3, size: 8.0)
-        case "beamstrike": return .init(type: "beamstrike", speed: 1.5, size: 9.0)
-        default: return .init(type: "none", speed: 1.0, size: 5.0)
-        }
-    }
 
-    func background(for element: String) -> LinearGradient {
-        let g = gradient(for: element)
-        return LinearGradient(colors: [Color(hex: g.top), Color(hex: g.bottom)],
-                              startPoint: .topLeading, endPoint: .bottomTrailing)
-    }
-
-    func previewImageName(for element: String) -> String {
-        switch element {
-        case "fire": return "character1"
-        case "ice": return "character2"
-        case "void": return "character3"
-        case "thunder": return "character4"
-        case "nature": return "character5"
-        case "wind": return "character6"
-        case "water": return "character7"
-        case "shadow": return "character8"
-        case "shadowclone": return "character9"
-        case "tornado": return "character10"
-        case "beamstrike": return "character11"
-        default: return "character1"
+    func createCharacter() {
+        guard let id = selectedTemplateID,
+              let template = templateManager.template(id: id) else {
+            logger.error("createCharacter() → Template not found")
+            return
         }
+
+        logger.info("Creating character: \(selectedName) using \(template.id)")
+
+        let newChar = GameCharacter(
+            name: selectedName,
+            image: template.image,
+            element: template.element,
+            auraColor: template.auraColor,
+            gradient: template.gradient,
+            particle: template.particle,
+            skillIDs: template.skillIDs
+        )
+
+        characterManager.addCharacter(newChar)
+        showResult = true
     }
 }
+
+
+
+
+
 
 #Preview {
     CreateCharacterView()
         .environmentObject(CharacterManager.shared)
+        .environmentObject(CharacterTemplateManager.shared)
         .preferredColorScheme(.dark)
 }
 

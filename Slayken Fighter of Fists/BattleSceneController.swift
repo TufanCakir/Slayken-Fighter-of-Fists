@@ -32,7 +32,7 @@ final class BattleSceneController: ObservableObject {
         let name: String
         let style: EffectStyle
         enum EffectStyle: String {
-            case burst, ring, beam, spiral, wave, tornado, shadowclone, beamstrike
+            case burst, ring, beam, spiral, wave, tornado, shadowclone, beamstrike, tide_crash
         }
     }
 
@@ -157,6 +157,7 @@ extension BattleSceneController {
         case "nature": .ring
         case "wind": .beam
         case "beamstrike": .beamstrike
+        case "tide_crash": .tide_crash
         default: .burst
         }
     }
@@ -286,6 +287,7 @@ private extension BattleSceneController {
         case "tornado": .brown
         case "shadowclone": .indigo
         case "beamstrike": .green
+        case "tide_crash": .blue
         default: .clear
         }
     }

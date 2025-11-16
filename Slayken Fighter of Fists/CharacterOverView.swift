@@ -40,14 +40,18 @@ struct CharacterOverView: View {
                 .environmentObject(characterManager)
                 .presentationDetents([.medium, .large])
         }
-        .alert("Reset all progress?", isPresented: $showDeleteAlert) {
+        .alert("Delete this character?", isPresented: $showDeleteAlert) {
+
             Button("Cancel", role: .cancel) {}
-            Button("Reset", role: .destructive) {
-                characterManager.resetProgress()
-                selectedHeroID = nil
+
+            Button("Delete", role: .destructive) {
+                if let id = selectedHeroID {
+                    characterManager.deleteCharacter(id: id)
+                }
             }
+
         } message: {
-            Text("All character levels and EXP will be reset.")
+            Text("This hero will be permanently removed.")
         }
     }
 }
@@ -137,42 +141,62 @@ private extension CharacterOverView {
         let isSelected = selectedHeroID == hero.id
         let auraColor = Color(hex: hero.auraColor)
 
-        return ZStack(alignment: .bottom) {
+        return ZStack(alignment: .topTrailing) {
 
-            RoundedRectangle(cornerRadius: 20)
-                .fill(
-                    LinearGradient(
-                        colors: [
-                            Color(hex: hero.gradient.top),
-                            Color(hex: hero.gradient.bottom)
-                        ],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
+            // MARK: - Background + Image + Text wie bisher
+            ZStack(alignment: .bottom) {
+
+                RoundedRectangle(cornerRadius: 20)
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                Color(hex: hero.gradient.top),
+                                Color(hex: hero.gradient.bottom)
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
                     )
-                )
-                .overlay(
-                    RoundedRectangle(cornerRadius: 20)
-                        .stroke(isSelected ? auraColor : .clear, lineWidth: 3)
-                )
-                .shadow(color: auraColor.opacity(0.7), radius: isSelected ? 12 : 5)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 20)
+                            .stroke(isSelected ? auraColor : .clear, lineWidth: 3)
+                    )
+                    .shadow(color: auraColor.opacity(0.7), radius: isSelected ? 12 : 5)
 
-            VStack(spacing: 10) {
-                Image(hero.image)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(height: 120)
+                VStack(spacing: 10) {
+                    Image(hero.image)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: 120)
 
-                VStack(spacing: 4) {
-                    Text(hero.name)
-                        .foregroundColor(.white)
-                        .font(.headline)
+                    VStack(spacing: 4) {
+                        Text(hero.name)
+                            .foregroundColor(.white)
+                            .font(.headline)
 
-                    Text("Lv. \(hero.level)")
-                        .foregroundColor(.white.opacity(0.8))
-                        .font(.caption)
+                        Text("Lv. \(hero.level)")
+                            .foregroundColor(.white.opacity(0.8))
+                            .font(.caption)
+                    }
+                    .padding(.bottom, 8)
                 }
-                .padding(.bottom, 8)
             }
+
+            // MARK: - Delete Button
+            Button {
+                selectedHeroID = hero.id
+                showDeleteAlert = true
+            } label: {
+                Image(systemName: "trash.fill")
+                    .font(.system(size: 16, weight: .bold))
+                    .foregroundColor(.white)
+                    .padding(10)
+                    .background(Color.red.opacity(0.85))
+                    .clipShape(Circle())
+                    .shadow(color: .red.opacity(0.6), radius: 6)
+            }
+            .padding(10)
+
         }
         .frame(height: 200)
         .scaleEffect(isSelected ? 1.05 : 1.0)
