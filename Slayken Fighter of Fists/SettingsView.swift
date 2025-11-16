@@ -183,24 +183,31 @@ extension SettingsView {
     private func performReset() {
         let generator = UINotificationFeedbackGenerator()
         generator.notificationOccurred(.success)
-
+        
+        // Economy & Charaktere
         coinManager.reset()
         crystalManager.reset()
         accountManager.reset()
         CharacterManager.shared.resetProgress()
         StageProgressManager.shared.resetProgress()
-
+        
+        // NEU: Daily, Inventar, Gifts
+        DailyLoginManager.shared.reset()
+        InventoryManager.shared.reset()
+        GiftManager.shared.reset()
+        
+        // Erfolgs-Overlay
         withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
             showResetConfirmation = true
             resetAnimation = true
         }
-
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.8) {
             withAnimation {
                 showResetConfirmation = false
             }
         }
-
+        
         print("🧩 All saved data cleared successfully.")
     }
 }

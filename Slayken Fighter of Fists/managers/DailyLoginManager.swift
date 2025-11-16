@@ -44,6 +44,18 @@ final class DailyLoginManager: ObservableObject {
 
         save()
     }
+    
+    func reset() {
+        currentDay = 1
+        claimedToday = false
+        
+        UserDefaults.standard.removeObject(forKey: dayKey)
+        UserDefaults.standard.removeObject(forKey: claimedKey)
+        UserDefaults.standard.removeObject(forKey: lastLoginKey)
+        
+        print("🔄 DailyLoginManager reset!")
+    }
+
 
     // MARK: - Claim Logik
     func claim(reward: DailyReward) -> Bool {

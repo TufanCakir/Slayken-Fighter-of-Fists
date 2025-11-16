@@ -40,6 +40,14 @@ final class GiftManager: ObservableObject {
 
         return true
     }
+    
+    func reset() {
+        claimedGifts.removeAll()
+        UserDefaults.standard.removeObject(forKey: saveKey)
+
+        print("🔄 GiftManager reset! Alle abgeholten Geschenke gelöscht.")
+    }
+
 
     private func save() {
         UserDefaults.standard.set(Array(claimedGifts), forKey: saveKey)

@@ -55,6 +55,17 @@ final class InventoryManager: ObservableObject {
         ownedItems.contains(id)
     }
 
+    func reset() {
+        ownedItems.removeAll()
+        materials.removeAll()
+
+        UserDefaults.standard.removeObject(forKey: "owned_items")
+        UserDefaults.standard.removeObject(forKey: "materials")
+
+        print("🔄 InventoryManager reset! Alle Items & Materialien gelöscht.")
+        objectWillChange.send()
+    }
+
     // MARK: - Rückgabe fertiger EquipmentObjekte
     var ownedEquipment: [EventShopItem] {
         let items = ownedItems.compactMap { allEquipmentItems[$0] }
