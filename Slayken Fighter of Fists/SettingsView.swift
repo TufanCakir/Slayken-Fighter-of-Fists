@@ -31,6 +31,7 @@ struct SettingsView: View {
 
                 // MARK: - Hintergrund
                 backgroundLayer
+                    .ignoresSafeArea()
 
                 // MARK: - Content
                 ScrollView(showsIndicators: false) {
@@ -104,53 +105,23 @@ struct SettingsView: View {
 
     // MARK: - Background Layer
     extension SettingsView {
-        var backgroundLayer: some View {
-            ZStack {
+            var backgroundLayer: some View {
+                ZStack {
 
-                // MARK: Glow (soft + centered)
-                Circle()
-                    .fill(
-                        RadialGradient(
-                            colors: [.black, .white, .black],
-                            center: .center,
-                            startRadius: 10,
-                            endRadius: 160
-                        )
+                    // 🌑 DARK → BLUE → DARK Gradient
+                    LinearGradient(
+                        colors: [
+                            .black,
+                            Color.white.opacity(0.3),
+                            .black
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
                     )
-                    .scaleEffect(orbGlow ? 1.12 : 0.88)
-                    .blur(radius: 50)
-                    .drawingGroup() // bessere GPU Performance
-                    .animation(.easeInOut(duration: 3).repeatForever(), value: orbGlow)
 
-                // MARK: Main Orb (clean glass effect)
-                Circle()
-                    .fill(.ultraThinMaterial)
-                    .frame(width: 200, height: 200)
-                    .shadow(color: .white, radius: 25, y: 4)
-
-                // MARK: Rotating Ring
-                Circle()
-                    .stroke(
-                        AngularGradient(
-                            gradient: Gradient(colors: [.black, .white, .black]),
-                            center: .center
-                        ),
-                        lineWidth: 10
-                    )
-                    .frame(width: 260, height: 260)
-                    .blur(radius: 2)
-                    .rotationEffect(.degrees(orbRotation))
-                    .animation(.linear(duration: 6).repeatForever(autoreverses: false), value: orbRotation)
-
-                // MARK: Center Icon
-                Image(systemName: "sparkles")
-                    .font(.system(size: 55))
-                    .foregroundStyle(.white)
-                    .shadow(color: .white, radius: 12)
+                }
             }
-            .ignoresSafeArea()
         }
-    }
 
 // MARK: - Reset Confirmation Overlay
 extension SettingsView {

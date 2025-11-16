@@ -36,7 +36,8 @@ struct GiftView: View {
         NavigationStack {
             ZStack {
                 backgroundLayer
-
+                    .ignoresSafeArea()
+                
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 20) {
 
@@ -75,53 +76,24 @@ struct GiftView: View {
         }
     }
 
-    // MARK: - Background Orb
-    var backgroundLayer: some View {
-        ZStack {
+    // MARK: - Background Layer
+        var backgroundLayer: some View {
+            ZStack {
 
-            // Glow
-            Circle()
-                .fill(
-                    RadialGradient(
-                        colors: [.black, .white, .black],
-                        center: .center,
-                        startRadius: 15,
-                        endRadius: 140
-                    )
+                // 🌑 DARK → BLUE → DARK Gradient
+                LinearGradient(
+                    colors: [
+                        .black,
+                        Color.white.opacity(0.3),
+                        .black
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
                 )
-                .scaleEffect(orbGlow ? 1.1 : 0.9)
-                .blur(radius: 40)
-                .animation(.easeInOut(duration: 1.3).repeatForever(), value: orbGlow)
 
-            // Main Orb
-            Circle()
-                .fill(.ultraThinMaterial)
-                .frame(width: 180, height: 180)
-                .shadow(color: .white, radius: 20)
-
-            // Rotating Energy Ring (FIXED)
-            Circle()
-                .stroke(
-                    AngularGradient(
-                        gradient: Gradient(colors: [.black, .white, .black]),
-                        center: .center
-                    ),
-                    lineWidth: 10
-                )
-                .frame(width: 230, height: 230)
-                .blur(radius: 2)
-                .rotationEffect(.degrees(orbRotation))
-                .animation(.linear(duration: 3).repeatForever(autoreverses: false), value: orbRotation)
-
-            Image(systemName: "sparkles")
-                .font(.system(size: 55))
-                .foregroundStyle(.white)
+            }
         }
-        .onAppear {
-            orbGlow = true
-            orbRotation = 360
-        }
-    }
+
 
     // MARK: - Collect ALL Button
     private var allCollectButton: some View {

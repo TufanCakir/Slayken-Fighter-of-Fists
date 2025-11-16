@@ -14,10 +14,7 @@ struct InventoryView: View {
 
     var body: some View {
         ZStack {
-
-            // Hintergrund ORB + RING + ICON
-            RotatingOrbView()
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+backgroundLayer
                 .ignoresSafeArea()
             VStack(spacing: 20) {
 
@@ -47,6 +44,26 @@ struct InventoryView: View {
         }
         .onAppear {
             inventory.debugInventory()
+        }
+    }
+}
+
+// MARK: - Background Layer
+private extension InventoryView {
+    var backgroundLayer: some View {
+        ZStack {
+
+            // 🌑 DARK → BLUE → DARK Gradient
+            LinearGradient(
+                colors: [
+                    .black,
+                    Color.white.opacity(0.3),
+                    .black
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+
         }
     }
 }

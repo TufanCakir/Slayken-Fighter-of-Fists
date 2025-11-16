@@ -17,9 +17,7 @@ struct TutorialView: View {
 
     var body: some View {
         ZStack {
-            // Hintergrund ORB + RING + ICON
-            RotatingOrbView()
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+      backgroundLayer
                 .ignoresSafeArea()
             VStack {
                 Spacer()
@@ -51,6 +49,27 @@ struct TutorialView: View {
     }
 }
 
+// MARK: - Background Layer
+private extension TutorialView {
+    var backgroundLayer: some View {
+        ZStack {
+
+            // 🌑 DARK → BLUE → DARK Gradient
+            LinearGradient(
+                colors: [
+                    .black,
+                    Color.white.opacity(0.3),
+                    .black
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+
+        }
+    }
+}
+
+
 //
 // MARK: - Step Content
 //
@@ -71,7 +90,6 @@ private extension TutorialView {
                                        endPoint: .bottom)
                     )
                     .multilineTextAlignment(.center)
-                    .shadow(color: .white, radius: 10, y: 4)
                     .transition(.opacity.combined(with: .move(edge: .top)))
             }
 
@@ -105,11 +123,10 @@ private extension TutorialView {
                                    startPoint: .top,
                                    endPoint: .bottom)
                 )
-                .shadow(color: .orange.opacity(0.7), radius: 15)
 
             Text("Tap to begin your journey.")
                 .font(.title.weight(.bold))
-                .foregroundColor(.white.opacity(0.85))
+                .foregroundColor(.white)
         }
         .onTapGesture {
             withAnimation(.easeInOut(duration: 0.5)) {
@@ -131,7 +148,7 @@ private extension TutorialView {
 
                 Circle()
                     .fill(isActive ?
-                          AnyShapeStyle(LinearGradient(colors: [.black, .blue, .black],
+                          AnyShapeStyle(LinearGradient(colors: [.black, .white, .black],
                                                        startPoint: .topLeading,
                                                        endPoint: .bottomTrailing))
                           :
@@ -139,7 +156,7 @@ private extension TutorialView {
                     )
                     .frame(width: isActive ? 14 : 8,
                            height: isActive ? 14 : 8)
-                    .shadow(color: isActive ? .cyan.opacity(0.6) : .clear, radius: 6)
+                    .shadow(color: isActive ? .white : .clear, radius: 6)
                     .scaleEffect(isActive ? 1.3 : 1.0)
                     .animation(.spring(response: 0.4, dampingFraction: 0.8),
                                value: currentIndex)

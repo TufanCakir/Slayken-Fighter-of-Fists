@@ -16,10 +16,7 @@ struct HomeView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-
-                // Hintergrund ORB + RING + ICON
-                RotatingOrbView()
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+backgroundLayer
                     .ignoresSafeArea()
                 // CONTENT
                 VStack(spacing: 0) {
@@ -51,6 +48,25 @@ struct HomeView: View {
     }
 }
 
+// MARK: - Background Layer
+private extension HomeView {
+    var backgroundLayer: some View {
+        ZStack {
+
+            // 🌑 DARK → BLUE → DARK Gradient
+            LinearGradient(
+                colors: [
+                    .black,
+                    Color.white.opacity(0.3),
+                    .black
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+
+        }
+    }
+}
 #Preview {
     HomeView()
         .environmentObject(CoinManager.shared)

@@ -27,9 +27,7 @@ struct ShowdownView: View {
     // MARK: - Body
     var body: some View {
         ZStack {
-            // Hintergrund ORB + RING + ICON
-            RotatingOrbView()
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+       backgroundLayer
                 .ignoresSafeArea()
             
             VStack(spacing: 24) {
@@ -51,6 +49,25 @@ struct ShowdownView: View {
     }
 }
 
+// MARK: - Background Layer
+private extension ShowdownView {
+    var backgroundLayer: some View {
+        ZStack {
+
+            // 🌑 DARK → BLUE → DARK Gradient
+            LinearGradient(
+                colors: [
+                    .black,
+                    Color.white.opacity(0.3),
+                    .black
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+
+        }
+    }
+}
 //
 // MARK: - WORLD SELECTOR
 //

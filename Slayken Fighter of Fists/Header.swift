@@ -41,9 +41,9 @@ struct HeaderView: View {
                 .fill(.ultraThinMaterial)
                 .overlay(
                     RoundedRectangle(cornerRadius: 18)
-                        .stroke(.white.opacity(0.08), lineWidth: 1)
+                        .stroke(.white, lineWidth: 1)
                 )
-                .shadow(color: .blue.opacity(0.25), radius: 10, y: 4)
+                .shadow(color: .white, radius: 10, y: 4)
         )
         .padding(.horizontal)
         .onAppear {
