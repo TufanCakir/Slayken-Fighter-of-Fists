@@ -59,8 +59,6 @@ struct EventView: View {
 // MARK: - UI
 //
 private extension EventView {
-
-    // MARK: Background
     var backgroundLayer: some View {
         ZStack {
 
@@ -68,7 +66,7 @@ private extension EventView {
             Circle()
                 .fill(
                     RadialGradient(
-                        colors: [.black, .blue, .black],
+                        colors: [.black, .white, .black],
                         center: .center,
                         startRadius: 15,
                         endRadius: 140
@@ -82,13 +80,13 @@ private extension EventView {
             Circle()
                 .fill(.ultraThinMaterial)
                 .frame(width: 180, height: 180)
-                .shadow(color: .blue, radius: 20)
+                .shadow(color: .white, radius: 20)
 
             // Rotating Energy Ring (FIXED)
             Circle()
                 .stroke(
                     AngularGradient(
-                        gradient: Gradient(colors: [.black, .blue, .black]),
+                        gradient: Gradient(colors: [.black, .white, .black]),
                         center: .center
                     ),
                     lineWidth: 10
@@ -96,18 +94,17 @@ private extension EventView {
                 .frame(width: 230, height: 230)
                 .blur(radius: 2)
                 .rotationEffect(.degrees(orbRotation))
-                .animation(.linear(duration: 6).repeatForever(autoreverses: false), value: orbRotation)
+                .animation(.linear(duration: 3).repeatForever(autoreverses: false), value: orbRotation)
 
             Image(systemName: "sparkles")
                 .font(.system(size: 55))
-                .foregroundStyle(.cyan)
+                .foregroundStyle(.white)
         }
         .onAppear {
             orbGlow = true
             orbRotation = 360
         }
     }
-
     
 
     // MARK: Event Selection
@@ -129,12 +126,13 @@ private extension EventView {
                     .padding()
                     .background(.ultraThinMaterial)
                     .cornerRadius(18)
+                    .foregroundStyle(.linearGradient(colors: [.white, .white], startPoint: .top, endPoint: .bottom))
                 }
 
                 // ⭐ TITLE
                 Text("Select an Event")
                     .font(.system(size: 28, weight: .bold, design: .rounded))
-                    .foregroundStyle(.linearGradient(colors: [.white, .cyan], startPoint: .top, endPoint: .bottom))
+                    .foregroundStyle(.linearGradient(colors: [.white, .white], startPoint: .top, endPoint: .bottom))
                     .padding(.top, 10)
 
                 // ⭐ EVENT LIST

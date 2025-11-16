@@ -3,10 +3,8 @@
 //  Slayken Fighter of Fists
 //
 
-
 import SwiftUI
 import os
-
 
 @main
 struct Slayken_Fighter_of_FistsApp: App {
@@ -15,25 +13,24 @@ struct Slayken_Fighter_of_FistsApp: App {
     private let logger = Logger(subsystem: "Slayken", category: "App")
 
     // MARK: - Manager Instanzen (Singletons)
-    @StateObject private var eventShopManager        = EventShopManager.shared
-    @StateObject private var inventoryManager        = InventoryManager.shared
+    @StateObject private var eventShopManager = EventShopManager.shared
+    @StateObject private var inventoryManager = InventoryManager.shared
 
-    @StateObject private var coinManager             = CoinManager.shared
-    @StateObject private var crystalManager          = CrystalManager.shared
-    @StateObject private var accountManager          = AccountLevelManager.shared
-    @StateObject private var characterManager        = CharacterManager.shared
-    @StateObject private var templateManager         = CharacterTemplateManager.shared
-    @StateObject private var teamManager             = TeamManager.shared
+    @StateObject private var coinManager = CoinManager.shared
+    @StateObject private var crystalManager = CrystalManager.shared
+    @StateObject private var accountManager = AccountLevelManager.shared
+    @StateObject private var characterManager = CharacterManager.shared
+    @StateObject private var templateManager = CharacterTemplateManager.shared
+    @StateObject private var teamManager = TeamManager.shared
 
-    @StateObject private var progressManager         = StageProgressManager.shared
-    @StateObject private var skillManager            = SkillManager.shared
+    @StateObject private var progressManager = StageProgressManager.shared
+    @StateObject private var skillManager = SkillManager.shared
 
-    @StateObject private var giftManager             = GiftManager.shared
-    @StateObject private var dailyLoginManager       = DailyLoginManager.shared
+    @StateObject private var giftManager = GiftManager.shared
+    @StateObject private var dailyLoginManager = DailyLoginManager.shared
 
     // MARK: - Non-Singleton
-    @StateObject private var musicManager            = MusicManager()
-
+    @StateObject private var musicManager = MusicManager()
 
     // MARK: - Scene
     var body: some Scene {

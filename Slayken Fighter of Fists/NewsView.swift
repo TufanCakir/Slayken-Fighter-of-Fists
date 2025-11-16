@@ -34,10 +34,6 @@ struct NewsView: View {
                 .padding(.bottom, 60)
             }
         }
-        .onAppear {
-            orbGlow = true
-            orbRotation = 360
-        }
     }
 }
 
@@ -45,7 +41,6 @@ struct NewsView: View {
 // MARK: - Hintergrund Layer (Energy Orb)
 //
 private extension NewsView {
-
     var backgroundLayer: some View {
         ZStack {
 
@@ -53,7 +48,7 @@ private extension NewsView {
             Circle()
                 .fill(
                     RadialGradient(
-                        colors: [.black, .blue, .black],
+                        colors: [.black, .white, .black],
                         center: .center,
                         startRadius: 15,
                         endRadius: 140
@@ -67,13 +62,13 @@ private extension NewsView {
             Circle()
                 .fill(.ultraThinMaterial)
                 .frame(width: 180, height: 180)
-                .shadow(color: .blue, radius: 20)
+                .shadow(color: .white, radius: 20)
 
             // Rotating Energy Ring (FIXED)
             Circle()
                 .stroke(
                     AngularGradient(
-                        gradient: Gradient(colors: [.black, .blue, .black]),
+                        gradient: Gradient(colors: [.black, .white, .black]),
                         center: .center
                     ),
                     lineWidth: 10
@@ -81,11 +76,11 @@ private extension NewsView {
                 .frame(width: 230, height: 230)
                 .blur(radius: 2)
                 .rotationEffect(.degrees(orbRotation))
-                .animation(.linear(duration: 6).repeatForever(autoreverses: false), value: orbRotation)
+                .animation(.linear(duration: 3).repeatForever(autoreverses: false), value: orbRotation)
 
             Image(systemName: "sparkles")
                 .font(.system(size: 55))
-                .foregroundStyle(.cyan)
+                .foregroundStyle(.white)
         }
         .onAppear {
             orbGlow = true

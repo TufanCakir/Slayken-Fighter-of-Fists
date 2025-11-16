@@ -4,16 +4,21 @@ struct InventoryView: View {
 
     @EnvironmentObject var inventory: InventoryManager
 
+    // ORB Animation
+    @State private var orbGlow = false
+    @State private var orbRotation = 0.0
+
     private let columns = [
         GridItem(.adaptive(minimum: 120), spacing: 20)
     ]
 
     var body: some View {
         ZStack {
-            // BACKGROUND
-            LinearGradient(colors: [.black, .blue.opacity(0.35)], startPoint: .top, endPoint: .bottom)
-                .ignoresSafeArea()
 
+            // Hintergrund ORB + RING + ICON
+            RotatingOrbView()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .ignoresSafeArea()
             VStack(spacing: 20) {
 
                 // TITLE
@@ -133,4 +138,5 @@ private extension InventoryView {
 #Preview {
     InventoryView()
         .environmentObject(InventoryManager.shared)
+        .preferredColorScheme(.dark)
 }

@@ -52,11 +52,6 @@ struct CreateCharacterView: View {
     }
 }
 
-
-
-
-
-
 // MARK: - Main Content
 private extension CreateCharacterView {
 
@@ -78,38 +73,46 @@ private extension CreateCharacterView {
 
 // MARK: - Background
 private extension CreateCharacterView {
-
     var backgroundLayer: some View {
         ZStack {
+
+            // Glow
             Circle()
                 .fill(
                     RadialGradient(
-                        colors: [.black, .blue, .black],
+                        colors: [.black, .white, .black],
                         center: .center,
-                        startRadius: 20,
-                        endRadius: 180
+                        startRadius: 15,
+                        endRadius: 140
                     )
                 )
+                .scaleEffect(orbGlow ? 1.1 : 0.9)
                 .blur(radius: 40)
-                .scaleEffect(orbGlow ? 1.12 : 0.88)
-                .animation(.easeInOut(duration: 1.4).repeatForever(), value: orbGlow)
+                .animation(.easeInOut(duration: 1.3).repeatForever(), value: orbGlow)
 
+            // Main Orb
+            Circle()
+                .fill(.ultraThinMaterial)
+                .frame(width: 180, height: 180)
+                .shadow(color: .white, radius: 20)
+
+            // Rotating Energy Ring (FIXED)
             Circle()
                 .stroke(
                     AngularGradient(
-                        gradient: Gradient(colors: [.black, .blue, .black]),
+                        gradient: Gradient(colors: [.black, .white, .black]),
                         center: .center
                     ),
-                    lineWidth: 12
+                    lineWidth: 10
                 )
-                .frame(width: 250, height: 250)
+                .frame(width: 230, height: 230)
+                .blur(radius: 2)
                 .rotationEffect(.degrees(orbRotation))
-                .blur(radius: 1.5)
-                .animation(.linear(duration: 6).repeatForever(), value: orbRotation)
+                .animation(.linear(duration: 3).repeatForever(autoreverses: false), value: orbRotation)
 
             Image(systemName: "sparkles")
-                .font(.system(size: 52))
-                .foregroundColor(.cyan.opacity(0.8))
+                .font(.system(size: 55))
+                .foregroundStyle(.white)
         }
         .onAppear {
             orbGlow = true
@@ -117,11 +120,6 @@ private extension CreateCharacterView {
         }
     }
 }
-
-
-
-
-
 
 // MARK: - UI Sections
 private extension CreateCharacterView {

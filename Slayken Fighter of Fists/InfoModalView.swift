@@ -17,7 +17,7 @@ struct InfoModalView<Content: View>: View {
         if visible {
             ZStack {
                 Color.black.opacity(0.8).ignoresSafeArea()
-                LinearGradient(colors: [.black, .blue, .black],
+                LinearGradient(colors: [.black, .white, .black],
                                startPoint: .topLeading,
                                endPoint: .bottomTrailing)
                 .ignoresSafeArea()
@@ -32,7 +32,7 @@ struct InfoModalView<Content: View>: View {
                         .cornerRadius(12)
                         .overlay(
                             RoundedRectangle(cornerRadius: 12)
-                                .stroke(Color.blue, lineWidth: 1.4)
+                                .stroke(Color.white, lineWidth: 1.4)
                         )
                         .foregroundColor(.white)
                         .fontWeight(.semibold)
@@ -42,9 +42,9 @@ struct InfoModalView<Content: View>: View {
                 .cornerRadius(20)
                 .overlay(
                     RoundedRectangle(cornerRadius: 20)
-                        .stroke(Color.blue, lineWidth: 2)
+                        .stroke(Color.white, lineWidth: 2)
                 )
-                .shadow(color: .blue.opacity(0.4), radius: 20)
+                .shadow(color: .white.opacity(0.4), radius: 20)
             }
             .transition(.opacity)
             .animation(.easeInOut, value: visible)

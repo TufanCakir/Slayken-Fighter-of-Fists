@@ -3,22 +3,30 @@
     "id": "1",
     "title": "Home",
     "icon": "house.fill",
-    "color": "#00BFFF",
+    "color": "#FFFFFF",
     "destination": "HomeView"
   },
   {
     "id": "2",
     "title": "Create",
     "icon": "person.crop.circle.badge.plus",
-    "color": "#FF6A00",
+    "color": "#FFFFFF",
     "destination": "CreateCharacterView"
   },
   {
     "id": "3",
     "title": "Overview",
     "icon": "person.3.fill",
-    "color": "#0096FF",
+    "color": "#FFFFFF",
     "destination": "CharacterOverView"
   },
+  {
+    "id": "4",
+    "title": "Exchange",
+    "icon": "arrow.trianglehead.2.counterclockwise",
+    "color": "#FFFFFF",
+    "destination": "ExchangeView"
+  },
 ]
+ 
  

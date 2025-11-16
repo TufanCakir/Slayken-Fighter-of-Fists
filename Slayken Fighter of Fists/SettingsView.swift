@@ -111,7 +111,7 @@ struct SettingsView: View {
                 Circle()
                     .fill(
                         RadialGradient(
-                            colors: [.black, .blue, .black],
+                            colors: [.black, .white, .black],
                             center: .center,
                             startRadius: 10,
                             endRadius: 160
@@ -126,13 +126,13 @@ struct SettingsView: View {
                 Circle()
                     .fill(.ultraThinMaterial)
                     .frame(width: 200, height: 200)
-                    .shadow(color: .blue.opacity(0.6), radius: 25, y: 4)
+                    .shadow(color: .white, radius: 25, y: 4)
 
                 // MARK: Rotating Ring
                 Circle()
                     .stroke(
                         AngularGradient(
-                            gradient: Gradient(colors: [.black, .blue, .black]),
+                            gradient: Gradient(colors: [.black, .white, .black]),
                             center: .center
                         ),
                         lineWidth: 10
@@ -145,8 +145,8 @@ struct SettingsView: View {
                 // MARK: Center Icon
                 Image(systemName: "sparkles")
                     .font(.system(size: 55))
-                    .foregroundStyle(.cyan)
-                    .shadow(color: .cyan.opacity(0.5), radius: 12)
+                    .foregroundStyle(.white)
+                    .shadow(color: .white, radius: 12)
             }
             .ignoresSafeArea()
         }

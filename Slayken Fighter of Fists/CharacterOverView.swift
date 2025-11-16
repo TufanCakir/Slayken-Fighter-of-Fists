@@ -60,42 +60,46 @@ struct CharacterOverView: View {
 // MARK: - UI
 //
 private extension CharacterOverView {
-
-    // MARK: Background Layer
     var backgroundLayer: some View {
         ZStack {
-            LinearGradient(
-                colors: [.black, .blue.opacity(0.35), .black],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-            .ignoresSafeArea()
 
+            // Glow
             Circle()
                 .fill(
                     RadialGradient(
-                        colors: [.black, .blue, .black],
+                        colors: [.black, .white, .black],
                         center: .center,
-                        startRadius: 20,
-                        endRadius: 260
+                        startRadius: 15,
+                        endRadius: 140
                     )
                 )
                 .scaleEffect(orbGlow ? 1.1 : 0.9)
                 .blur(radius: 40)
-                .animation(.easeInOut(duration: 1.4).repeatForever(), value: orbGlow)
+                .animation(.easeInOut(duration: 1.3).repeatForever(), value: orbGlow)
 
+            // Main Orb
+            Circle()
+                .fill(.ultraThinMaterial)
+                .frame(width: 180, height: 180)
+                .shadow(color: .white, radius: 20)
+
+            // Rotating Energy Ring (FIXED)
             Circle()
                 .stroke(
                     AngularGradient(
-                        colors: [.black, .blue, .black],
+                        gradient: Gradient(colors: [.black, .white, .black]),
                         center: .center
                     ),
-                    lineWidth: 12
+                    lineWidth: 10
                 )
-                .frame(width: 330, height: 330)
-                .rotationEffect(.degrees(orbRotation))
+                .frame(width: 230, height: 230)
                 .blur(radius: 2)
-                .animation(.linear(duration: 6).repeatForever(), value: orbRotation)
+                .rotationEffect(.degrees(orbRotation))
+                .animation(.linear(duration: 3).repeatForever(autoreverses: false), value: orbRotation)
+
+            Image(systemName: "sparkles")
+                .font(.system(size: 55))
+                .foregroundStyle(.white)
         }
         .onAppear {
             orbGlow = true
@@ -109,10 +113,7 @@ private extension CharacterOverView {
             .font(.title3)
             .foregroundColor(.white)
     }
-
-
-
-
+    
     // MARK: Hero Grid
     var heroGridSection: some View {
         ScrollView(showsIndicators: false) {

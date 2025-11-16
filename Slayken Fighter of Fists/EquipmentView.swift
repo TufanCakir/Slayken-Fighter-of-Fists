@@ -21,7 +21,11 @@ struct EquipmentView: View {
 
     var body: some View {
         ZStack {
-            backgroundLayer
+            
+            // Hintergrund ORB + RING + ICON
+            RotatingOrbView()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .ignoresSafeArea()
 
             if let character = characterManager.activeCharacter {
                 VStack(spacing: 22) {
@@ -101,56 +105,6 @@ private extension EquipmentView {
     func itemsForSlot(_ slot: String?) -> [EventShopItem] {
         guard let slot else { return [] }
         return inventoryManager.ownedEquipment.filter { $0.slot == slot }
-    }
-}
-
-// MARK: - Background Layer
-private extension EquipmentView {
-    var backgroundLayer: some View {
-        ZStack {
-
-            // Glow
-            Circle()
-                .fill(
-                    RadialGradient(
-                        colors: [.black, .blue, .black],
-                        center: .center,
-                        startRadius: 15,
-                        endRadius: 140
-                    )
-                )
-                .scaleEffect(orbGlow ? 1.1 : 0.9)
-                .blur(radius: 40)
-                .animation(.easeInOut(duration: 1.3).repeatForever(), value: orbGlow)
-
-            // Main Orb
-            Circle()
-                .fill(.ultraThinMaterial)
-                .frame(width: 180, height: 180)
-                .shadow(color: .blue, radius: 20)
-
-            // Rotating Energy Ring (FIXED)
-            Circle()
-                .stroke(
-                    AngularGradient(
-                        gradient: Gradient(colors: [.black, .blue, .black]),
-                        center: .center
-                    ),
-                    lineWidth: 10
-                )
-                .frame(width: 230, height: 230)
-                .blur(radius: 2)
-                .rotationEffect(.degrees(orbRotation))
-                .animation(.linear(duration: 3).repeatForever(autoreverses: false), value: orbRotation)
-
-            Image(systemName: "sparkles")
-                .font(.system(size: 55))
-                .foregroundStyle(.cyan)
-        }
-        .onAppear {
-            orbGlow = true
-            orbRotation = 360
-        }
     }
 }
 

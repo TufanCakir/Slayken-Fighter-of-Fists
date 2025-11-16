@@ -58,6 +58,9 @@ struct FooterTabView: View {
         case "CreateCharacterView":
             CreateCharacterView()
 
+        case "ExchangeView":
+            ExchangeView()
+
         default:
             HomeView()
         }
