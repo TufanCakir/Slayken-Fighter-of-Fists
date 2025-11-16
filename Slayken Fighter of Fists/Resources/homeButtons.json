@@ -3,50 +3,57 @@
     "id": "1",
     "title": "Battle",
     "icon": "arcade.stick.console",
-    "color": "#0096FF",
+    "color": "#000000",
+    "iconColor": "#0000ff",
     "destination": "ShowdownView"
   },
   {
     "id": "2",
     "title": "Event",
     "icon": "gamecontroller",
-    "color": "#0096FF",
+    "color": "#000000",
+    "iconColor": "#FF3B3B",
     "destination": "EventView"
   },
   {
     "id": "3",
     "title": "News",
     "icon": "newspaper",
-    "color": "#0096FF",
+    "color": "#000000",
+    "iconColor": "#FFD500",
     "destination": "NewsView"
   },
+
   {
     "id": "4",
-    "title": "Settings",
-    "icon": "gear",
-    "color": "#0096FF",
-    "destination": "SettingsView"
-  },
-  {
-    "id": "5",
     "title": "Equipment",
     "icon": "slowmo",
-    "color": "#0096FF",
+    "color": "#000000",
+    "iconColor": "#7C4CFF",
     "destination": "EquipmentView"
   },
   {
-    "id": "6",
+    "id": "5",
     "title": "Gifts",
     "icon": "gift",
-    "color": "#0096FF",
+    "color": "#000000",
+    "iconColor": "#00FF9C",
     "destination": "GiftView"
   },
   {
-    "id": "7",
+    "id": "6",
     "title": "Daily Login Bonus",
     "icon": "giftcard",
-    "color": "#0096FF",
+    "color": "#000000",
+    "iconColor": "#FF66FF",
     "destination": "DailyLoginView"
   },
+  {
+    "id": "7",
+    "title": "Settings",
+    "icon": "gear",
+    "color": "#000000",
+    "iconColor": "#9B9B9B",
+    "destination": "SettingsView"
+  },
 ]
- 

@@ -7,13 +7,12 @@ struct HomeButtonView: View {
 
     var body: some View {
         VStack(spacing: 10) {
+
             // MARK: - Icon
             ZStack {
                 Circle()
-                    .fill(Color(hex: button.color))
-       
-                
-                    .shadow(color: Color(hex: button.color).opacity(0.6), radius: 14)
+                    .fill(Color(hex: button.color)) // Hintergrundfarbe aus JSON
+                    .shadow(color: Color(hex: button.iconColor).opacity(0.6), radius: 14)
                     .shadow(color: .white.opacity(0.15), radius: 4)
                     .scaleEffect(glowPulse ? 1.05 : 1.0)
                     .animation(
@@ -24,8 +23,8 @@ struct HomeButtonView: View {
 
                 Image(systemName: button.icon)
                     .font(.system(size: 38, weight: .semibold))
-                    .foregroundColor(.white)
-                    .shadow(color: .black.opacity(0.5), radius: 4, y: 2)
+                    .foregroundColor(Color(hex: button.iconColor))
+                    .shadow(color: Color(hex: button.iconColor).opacity(0.4), radius: 6)
             }
             .frame(width: 80, height: 80)
             .scaleEffect(isPressed ? 0.9 : 1.0)
@@ -40,8 +39,6 @@ struct HomeButtonView: View {
         }
         .frame(maxWidth: .infinity, minHeight: 130)
         .padding()
-
-
         .scaleEffect(isPressed ? 0.96 : 1.0)
         .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isPressed)
         .onLongPressGesture(minimumDuration: .infinity, pressing: { pressing in
@@ -51,4 +48,4 @@ struct HomeButtonView: View {
         }, perform: {})
     }
 }
-    
+

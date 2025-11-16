@@ -1,70 +1,91 @@
 import SwiftUI
 
-/// Universeller App-Header für Ressourcenanzeige.
-/// Zeigt Coins, Crystals und Account-Level aus den Managern.
 struct HeaderView: View {
+
     // MARK: - EnvironmentObjects
     @EnvironmentObject var coinManager: CoinManager
     @EnvironmentObject var crystalManager: CrystalManager
     @EnvironmentObject var accountManager: AccountLevelManager
 
-    // MARK: - Icons (optional aus JSON ladbar)
+    // MARK: - Icons aus JSON
     @State private var icons: HUDIconSet = Bundle.main.decode("hudIcons.json")
+
+    // MARK: - Glow Animation
+    @State private var glow = false
 
     var body: some View {
         HStack(spacing: 14) {
-            resourceItem(
+            hudItem(
                 symbol: icons.level.symbol,
                 color: Color(hex: icons.level.color),
                 value: accountManager.level,
                 label: "Lv."
             )
-            resourceItem(
+
+            hudItem(
                 symbol: icons.coin.symbol,
                 color: Color(hex: icons.coin.color),
                 value: coinManager.coins
             )
-            resourceItem(
+
+            hudItem(
                 symbol: icons.crystal.symbol,
                 color: Color(hex: icons.crystal.color),
                 value: crystalManager.crystals
             )
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 10)
+        .padding(.horizontal, 18)
+        .padding(.vertical, 12)
         .background(
-            LinearGradient(
-                colors: [.black, .blue, .black],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
+            RoundedRectangle(cornerRadius: 18)
+                .fill(.ultraThinMaterial)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 18)
+                        .stroke(.white.opacity(0.08), lineWidth: 1)
+                )
+                .shadow(color: .blue.opacity(0.25), radius: 10, y: 4)
         )
-        .clipShape(RoundedRectangle(cornerRadius: 12))
-        .shadow(color: .black.opacity(0.25), radius: 6, x: 0, y: 3)
         .padding(.horizontal)
-    }
-
-    // MARK: - Einzelnes Element
-    private func resourceItem(symbol: String, color: Color, value: Int, label: String? = nil) -> some View {
-        HStack(spacing: 6) {
-            Image(systemName: symbol)
-                .foregroundColor(color)
-                .font(.system(size: 20, weight: .semibold))
-            if let label = label {
-                Text("\(label) \(value)")
-                    .foregroundColor(color)
-                    .font(.headline.bold())
-            } else {
-                Text("\(value)")
-                    .foregroundColor(color)
-                    .font(.headline.bold())
+        .onAppear {
+            withAnimation(.easeInOut(duration: 1.6).repeatForever(autoreverses: true)) {
+                glow.toggle()
             }
         }
-        .padding(.horizontal, 10)
-        .padding(.vertical, 6)
-        .background(Color.white.opacity(0.05))
-        .clipShape(Capsule())
-        .shadow(color: color.opacity(0.4), radius: 3, x: 0, y: 1)
+    }
+
+    // MARK: - HUD Item (Verbessert)
+    private func hudItem(symbol: String, color: Color, value: Int, label: String? = nil) -> some View {
+        HStack(spacing: 6) {
+
+            // Animated Glow Icon
+            Image(systemName: symbol)
+                .font(.system(size: 20, weight: .bold))
+                .foregroundColor(color)
+                .shadow(color: color.opacity(glow ? 0.7 : 0.2), radius: glow ? 10 : 3)
+                .scaleEffect(glow ? 1.05 : 1.0)
+
+            // Label + Value
+            if let label = label {
+                Text("\(label) \(value)")
+                    .font(.headline.weight(.heavy))
+                    .foregroundColor(.white.opacity(0.9))
+            } else {
+                Text("\(value)")
+                    .font(.headline.weight(.heavy))
+                    .foregroundColor(.white.opacity(0.9))
+            }
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 8)
+        .background(
+            Capsule()
+                .fill(Color.white.opacity(0.05))
+                .overlay(
+                    Capsule()
+                        .stroke(color.opacity(0.3), lineWidth: 1)
+                )
+        )
+        .shadow(color: color.opacity(0.4), radius: 3, y: 1)
     }
 }
 
@@ -73,4 +94,5 @@ struct HeaderView: View {
         .environmentObject(CoinManager.shared)
         .environmentObject(CrystalManager.shared)
         .environmentObject(AccountLevelManager.shared)
+        .preferredColorScheme(.dark)
 }
